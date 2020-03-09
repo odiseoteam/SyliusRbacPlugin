@@ -111,6 +111,8 @@
             <argument type="service" id="sylius.factory.admin_user" />
             <argument type="service" id="sylius_rbac.repository.administration_role" />
             <argument>%locale%</argument>
+            <argument type="service" id="file_locator" />
+            <argument type="service" id="sylius.image_uploader" />
         </service>
 
         <service id="Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider" public="true">

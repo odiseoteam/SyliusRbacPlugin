@@ -6,7 +6,7 @@
         "sylius-plugin",
         "sylius-rbac"
     ],
-    "description": "Vendor plugin for Sylius. Add Vendor (Brand) to your products",
+    "description": "Sylius roles and permissions management plugin",
     "license": "MIT",
     "require": {
         "php": "^7.2",
