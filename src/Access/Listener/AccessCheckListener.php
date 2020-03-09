@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Listener;
+namespace Odiseo\SyliusRbacPlugin\Access\Listener;
 
 use Sylius\Component\Core\Model\AdminUserInterface;
-use Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
-use Sylius\RbacPlugin\Access\Checker\RouteNameCheckerInterface;
-use Sylius\RbacPlugin\Access\Creator\AccessRequestCreatorInterface;
-use Sylius\RbacPlugin\Access\Exception\InsecureRequestException;
-use Sylius\RbacPlugin\Access\Exception\UnresolvedRouteNameException;
-use Sylius\RbacPlugin\Access\Model\AccessRequest;
+use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface;
+use Odiseo\SyliusRbacPlugin\Access\Exception\InsecureRequestException;
+use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
+use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

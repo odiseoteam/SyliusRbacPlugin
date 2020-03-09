@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Element;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Element;
 
 interface AdminMainMenuElementInterface
 {

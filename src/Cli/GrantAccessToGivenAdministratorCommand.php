@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Cli;
+namespace Odiseo\SyliusRbacPlugin\Cli;
 
-use Sylius\RbacPlugin\Cli\Granter\AdministratorAccessGranterInterface;
+use Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranterInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

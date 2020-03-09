@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Creator;
+namespace Odiseo\SyliusRbacPlugin\Creator;
 
 use Prooph\Common\Messaging\Command;
-use Sylius\RbacPlugin\Command\CreateAdministrationRole;
-use Sylius\RbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInterface;
+use Odiseo\SyliusRbacPlugin\Command\CreateAdministrationRole;
+use Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class CreateAdministrationRoleCommandCreator implements CommandCreatorInterface

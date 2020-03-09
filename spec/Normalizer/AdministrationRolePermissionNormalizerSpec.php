@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Normalizer;
+namespace spec\Odiseo\SyliusRbacPlugin\Normalizer;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Model\Permission;
-use Sylius\RbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInterface;
 
 final class AdministrationRolePermissionNormalizerSpec extends ObjectBehavior
 {

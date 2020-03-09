@@ -9,82 +9,82 @@
     </imports>
 
     <services>
-        <service id="Sylius\RbacPlugin\Provider\AdminPermissionsProvider">
+        <service id="Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProvider">
             <argument>%sylius_rbac.configuration%</argument>
         </service>
 
-        <service id="Sylius\RbacPlugin\Menu\AdminMenuListener">
+        <service id="Odiseo\SyliusRbacPlugin\Menu\AdminMenuListener">
             <tag name="kernel.event_listener" event="sylius.menu.admin.main" method="addRbacMenu" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Form\Type\AdministrationRoleChoiceType">
+        <service id="Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleChoiceType">
             <argument type="service" id="sylius_rbac.repository.administration_role" />
             <tag name="form.type" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Form\Extension\AdminUserTypeExtension">
+        <service id="Odiseo\SyliusRbacPlugin\Form\Extension\AdminUserTypeExtension">
             <tag name="form.type_extension" extended-type="Sylius\Bundle\CoreBundle\Form\Type\User\AdminUserType" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Extractor\PermissionDataExtractor" />
+        <service id="Odiseo\SyliusRbacPlugin\Extractor\PermissionDataExtractor" />
 
         <service
              id="sylius_rbac.custom_factory.administration_role"
-             class="Sylius\RbacPlugin\Factory\AdministrationRoleFactory"
+             class="Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactory"
              decorates="sylius_rbac.factory.administration_role"
         >
             <argument type="service" id="sylius_rbac.custom_factory.administration_role.inner" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" class="Sylius\RbacPlugin\Access\Checker\AdministratorAccessChecker" />
-        <service id="Sylius\RbacPlugin\Access\Checker\RouteNameCheckerInterface" class="Sylius\RbacPlugin\Access\Checker\HardcodedRouteNameChecker" />
+        <service id="Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" class="Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessChecker" />
+        <service id="Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface" class="Odiseo\SyliusRbacPlugin\Access\Checker\HardcodedRouteNameChecker" />
 
-        <service id="Sylius\RbacPlugin\Access\Creator\AccessRequestCreatorInterface" class="Sylius\RbacPlugin\Access\Creator\AccessRequestCreator">
+        <service id="Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface" class="Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreator">
             <argument>%sylius_rbac.configuration%</argument>
         </service>
 
-        <service id="Sylius\RbacPlugin\Access\Listener\AccessCheckListener">
-            <argument type="service" id="Sylius\RbacPlugin\Access\Creator\AccessRequestCreatorInterface" />
-            <argument type="service" id="Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" />
+        <service id="Odiseo\SyliusRbacPlugin\Access\Listener\AccessCheckListener">
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface" />
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" />
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="router" />
             <argument type="service" id="session" />
-            <argument type="service" id="Sylius\RbacPlugin\Access\Checker\RouteNameCheckerInterface" />
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface" />
             <tag name="kernel.event_listener" event="kernel.request" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Access\Menu\AdminMenuAccessListener">
+        <service id="Odiseo\SyliusRbacPlugin\Access\Menu\AdminMenuAccessListener">
             <argument type="service" id="security.token_storage" />
-            <argument type="service" id="Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" />
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" />
             <argument>%sylius_rbac.configuration%</argument>
             <tag name="kernel.event_listener" event="sylius.menu.admin.main" method="removeInaccessibleAdminMenuParts" priority="-256" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
+        <service id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
 
-        <service id="Sylius\RbacPlugin\Cli\Granter\AdministratorAccessGranter">
+        <service id="Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter">
             <argument type="service" id="sylius.repository.admin_user" />
             <argument type="service" id="sylius_rbac.repository.administration_role" />
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Cli\GrantAccessCommand">
-            <argument type="service" id="Sylius\RbacPlugin\Cli\Granter\AdministratorAccessGranter" />
+        <service id="Odiseo\SyliusRbacPlugin\Cli\GrantAccessCommand">
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter" />
             <tag name="console.command" command="sylius-rbac:grant-access" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Cli\GrantAccessToGivenAdministratorCommand">
-            <argument type="service" id="Sylius\RbacPlugin\Cli\Granter\AdministratorAccessGranter" />
+        <service id="Odiseo\SyliusRbacPlugin\Cli\GrantAccessToGivenAdministratorCommand">
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter" />
             <tag name="console.command" command="sylius-rbac:grant-access-to-given-administrator" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Cli\InstallPluginCommand">
-            <argument type="service" id="Sylius\RbacPlugin\Provider\SyliusSectionsProvider"/>
+        <service id="Odiseo\SyliusRbacPlugin\Cli\InstallPluginCommand">
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider"/>
             <argument>%root_administrator_email%</argument>
             <tag name="console.command" command="sylius-rbac:install-plugin" />
         </service>
 
-        <service id="Sylius\RbacPlugin\Cli\NormalizeExistingAdministratorsCommand">
+        <service id="Odiseo\SyliusRbacPlugin\Cli\NormalizeExistingAdministratorsCommand">
             <argument type="service" id="sylius.repository.admin_user" />
             <argument type="service" id="sylius_rbac.repository.administration_role" />
             <argument type="service" id="doctrine.orm.entity_manager" />
@@ -93,7 +93,7 @@
 
         <service
                 id="sylius.rbac_plugin.fixture.administration_role_fixture"
-                class="Sylius\RbacPlugin\Fixture\AdministrationRoleFixture"
+                class="Odiseo\SyliusRbacPlugin\Fixture\AdministrationRoleFixture"
                 public="true"
         >
             <argument type="service" id="sylius_rbac.custom_factory.administration_role" />
@@ -101,19 +101,19 @@
             <tag name="sylius_fixtures.fixture"/>
         </service>
 
-        <service id="sylius.fixture.admin_user" class="Sylius\RbacPlugin\Fixture\AdminUserFixture">
+        <service id="sylius.fixture.admin_user" class="Odiseo\SyliusRbacPlugin\Fixture\AdminUserFixture">
             <argument type="service" id="sylius.manager.admin_user" />
             <argument type="service" id="sylius.fixture.example_factory.admin_user" />
             <tag name="sylius_fixtures.fixture" />
         </service>
 
-        <service id="sylius.fixture.example_factory.admin_user" class="Sylius\RbacPlugin\Factory\AdminUserExampleFactory">
+        <service id="sylius.fixture.example_factory.admin_user" class="Odiseo\SyliusRbacPlugin\Factory\AdminUserExampleFactory">
             <argument type="service" id="sylius.factory.admin_user" />
             <argument type="service" id="sylius_rbac.repository.administration_role" />
             <argument>%locale%</argument>
         </service>
 
-        <service id="Sylius\RbacPlugin\Provider\SyliusSectionsProvider" public="true">
+        <service id="Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider" public="true">
             <argument>%sylius_rbac.configuration%</argument>
         </service>
     </services>

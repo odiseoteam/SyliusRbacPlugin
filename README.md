@@ -1,14 +1,32 @@
 <p align="center">
-    <a href="https://sylius.com" target="_blank">
-        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
+    <a href="https://odiseo.com.ar/" target="_blank" title="Odiseo">
+        <img src="https://odiseo.io/assets/app/images/logo.png" alt="Sylius Rbac Plugin" />
+    </a>
+    <br />
+    <a href="https://packagist.org/packages/odiseoteam/sylius-rbac-plugin" title="License" target="_blank">
+        <img src="https://img.shields.io/packagist/l/odiseoteam/sylius-rbac-plugin.svg" />
+    </a>
+    <a href="https://packagist.org/packages/odiseoteam/sylius-rbac-plugin" title="Version" target="_blank">
+        <img src="https://img.shields.io/packagist/v/odiseoteam/sylius-rbac-plugin.svg" />
+    </a>
+    <a href="http://travis-ci.org/odiseoteam/SyliusRbacPlugin" title="Build status" target="_blank">
+        <img src="https://img.shields.io/travis/odiseoteam/SyliusRbacPlugin/master.svg" />
+    </a>
+    <a href="https://scrutinizer-ci.com/g/odiseoteam/SyliusRbacPlugin/" title="Scrutinizer" target="_blank">
+        <img src="https://img.shields.io/scrutinizer/g/odiseoteam/SyliusRbacrPlugin.svg" />
+    </a>
+    <a href="https://packagist.org/packages/odiseoteam/sylius-rbac-plugin" title="Total Downloads" target="_blank">
+        <img src="https://poser.pugx.org/odiseoteam/sylius-rbac-plugin/downloads" />
     </a>
 </p>
+<p align="center"><a href="https://sylius.com/plugins/" target="_blank"><img src="https://sylius.com/assets/badge-approved-by-sylius.png" width="100"></a></p>
 
-<h1 align="center">Rbac Plugin</h1>
+<h1 align="center">Odiseo Sylius Rbac Plugin</h1>
 
-<p align="center"><a href="https://sylius.com/plugins/" target="_blank"><img src="https://sylius.com/assets/badge-official-sylius-plugin.png" width="200"></a></p>
+## Description
 
-<p align="center">This plugin provides basic roles and permissions management functionality for Sylius application.</p>
+This plugin provides basic roles and permissions management functionality for Sylius application.
+It's highly inspired on the old [RbacPlugin](https://github.com/Sylius/RbacPlugin).
 
 #### Beware!
 
@@ -30,7 +48,7 @@ Write permission access means also updating and deleting.
     return [
        // ...
        Prooph\Bundle\ServiceBus\ProophServiceBusBundle::class => ['all' => true],
-       Sylius\RbacPlugin\SyliusRbacPlugin::class => ['all' => true],
+       Odiseo\SyliusRbacPlugin\SyliusRbacPlugin::class => ['all' => true],
     ];
     ```
 
@@ -42,8 +60,8 @@ a) Use AdministrationRoleAwareTrait and implement AdministrationRoleAwareInterfa
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Doctrine\ORM\Mapping\Table;
 use Sylius\Component\Core\Model\AdminUser as BaseAdminUser;
-use Sylius\RbacPlugin\Entity\AdministrationRoleAwareInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleAwareTrait;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareTrait;
 
 /**
  * @MappedSuperclass
@@ -70,14 +88,14 @@ sylius_user:
 
     ```yaml
     sylius_rbac:
-        resource: "@SyliusRbacPlugin/Resources/config/routing.yml"
+        resource: "@OdiseoSyliusRbacPlugin/Resources/config/routing.yml"
     ```
 
 5. Import configuration in `config/packages/sylius_rbac.yaml`:
 
     ```yaml
     imports:
-        - { resource: "@SyliusRbacPlugin/Resources/config/config.yml" }
+        - { resource: "@OdiseoSyliusRbacPlugin/Resources/config/config.yml" }
     ```
 
 6. Copy plugin migrations to your migrations directory (e.g. `src/Migrations`) and apply them to your database:
@@ -159,7 +177,7 @@ command in order to provide an email address as an input parameter.
 doctrine:
     orm:
         resolve_target_entities:
-            Sylius\RbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
+            Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
 ```
 
 ## Sections configuration
@@ -277,3 +295,7 @@ After these few simple steps, you can already give your custom permission to any
 
 If you think that you have found a security issue, please do not use the issue tracker and do not post it publicly.
 Instead, all security issues must be sent to `security@sylius.com`.
+
+## Credits
+
+This plugin is maintained by <a href="https://odiseo.com.ar">Odiseo</a>. Want us to help you with this plugin or any Sylius project? Contact us on <a href="mailto:team@odiseo.com.ar">team@odiseo.com.ar</a>.

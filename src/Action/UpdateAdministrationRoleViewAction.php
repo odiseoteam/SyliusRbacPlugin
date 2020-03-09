@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Action;
+namespace Odiseo\SyliusRbacPlugin\Action;
 
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\RbacPlugin\Extractor\PermissionDataExtractorInterface;
-use Sylius\RbacPlugin\Provider\AdminPermissionsProviderInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Extractor\PermissionDataExtractorInterface;
+use Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProviderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,7 +66,7 @@ final class UpdateAdministrationRoleViewAction
         }
 
         return new Response(
-            $this->twig->render('@SyliusRbacPlugin/AdministrationRole/update.html.twig', [
+            $this->twig->render('@OdiseoSyliusRbacPlugin/AdministrationRole/update.html.twig', [
                 'administration_role' => $administrationRole,
                 'permissions' => $this->adminPermissionsProvider->getPossiblePermissions(),
                 'rolePermissions' => $administrationRole->getPermissions(),

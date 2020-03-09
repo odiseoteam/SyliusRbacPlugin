@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Entity;
+namespace Odiseo\SyliusRbacPlugin\Entity;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\RbacPlugin\Model\PermissionInterface;
+use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 
 interface AdministrationRoleInterface extends ResourceInterface
 {

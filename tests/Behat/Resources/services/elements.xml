@@ -8,13 +8,13 @@
         </service>
 
         <service
-            id="Tests\Sylius\RbacPlugin\Behat\Element\AdministrationRolesElement"
+            id="Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdministrationRolesElement"
             parent="FriendsOfBehat\PageObjectExtension\Element\Element"
             public="true"
         />
 
         <service
-            id="Tests\Sylius\RbacPlugin\Behat\Element\AdminMainMenuElement"
+            id="Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdminMainMenuElement"
             parent="FriendsOfBehat\PageObjectExtension\Element\Element"
             public="true"
         />

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\DependencyInjection;
+namespace Odiseo\SyliusRbacPlugin\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Context\UI;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI;
 
 use Behat\Behat\Context\Context;
 use Sylius\Behat\Page\Admin\DashboardPageInterface;
-use Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker;
+use Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker;
 use Webmozart\Assert\Assert;
 
 final class ReadAccessRestrictionsContext implements Context

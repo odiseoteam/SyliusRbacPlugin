@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Provider;
+namespace Odiseo\SyliusRbacPlugin\Provider;
 
 final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
 {

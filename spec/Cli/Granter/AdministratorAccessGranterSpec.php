@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Cli\Granter;
+namespace spec\Odiseo\SyliusRbacPlugin\Cli\Granter;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\RbacPlugin\Cli\Granter\AdministratorAccessGranterInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Tests\Application\RbacPlugin\Entity\AdminUser;
+use Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranterInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Tests\Odiseo\SyliusRbacPlugin\Application\Entity\AdminUser;
 
 final class AdministratorAccessGranterSpec extends ObjectBehavior
 {

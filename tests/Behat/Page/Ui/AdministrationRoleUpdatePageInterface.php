@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Page\Ui;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui;
 
 use Sylius\Behat\Page\Admin\Crud\UpdatePageInterface;
 

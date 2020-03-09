@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\DependencyInjection;
+namespace Odiseo\SyliusRbacPlugin\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-final class SyliusRbacExtension extends Extension
+final class OdiseoSyliusRbacExtension extends Extension
 {
     /**
      * {@inheritdoc}

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Provider;
+namespace spec\Odiseo\SyliusRbacPlugin\Provider;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\RbacPlugin\Provider\AdminPermissionsProviderInterface;
+use Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProviderInterface;
 
 final class AdminPermissionsProviderSpec extends ObjectBehavior
 {

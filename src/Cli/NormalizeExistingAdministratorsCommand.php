@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Cli;
+namespace Odiseo\SyliusRbacPlugin\Cli;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleAwareInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

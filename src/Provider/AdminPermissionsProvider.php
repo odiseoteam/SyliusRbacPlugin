@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Provider;
+namespace Odiseo\SyliusRbacPlugin\Provider;
 
-use Sylius\RbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
 
 final class AdminPermissionsProvider implements AdminPermissionsProviderInterface
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Validator;
+namespace Odiseo\SyliusRbacPlugin\Validator;
 
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

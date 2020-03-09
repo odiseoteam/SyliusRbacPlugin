@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Creator;
+namespace Odiseo\SyliusRbacPlugin\Access\Creator;
 
-use Sylius\RbacPlugin\Access\Exception\UnresolvedRouteNameException;
-use Sylius\RbacPlugin\Access\Model\AccessRequest;
+use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
+use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 
 interface AccessRequestCreatorInterface
 {

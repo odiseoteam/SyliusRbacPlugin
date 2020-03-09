@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Cli;
+namespace Odiseo\SyliusRbacPlugin\Cli;
 
-use Sylius\RbacPlugin\Provider\SyliusSectionsProviderInterface;
+use Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProviderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;

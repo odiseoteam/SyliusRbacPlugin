@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Exception;
+namespace Odiseo\SyliusRbacPlugin\Access\Exception;
 
 final class UnresolvedRouteNameException extends \InvalidArgumentException
 {

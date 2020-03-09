@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Fixture;
+namespace Odiseo\SyliusRbacPlugin\Fixture;
 
 use Sylius\Bundle\CoreBundle\Fixture\AdminUserFixture as BaseAdminUserFixture;
 use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;

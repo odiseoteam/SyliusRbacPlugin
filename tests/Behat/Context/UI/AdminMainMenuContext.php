@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Context\UI;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI;
 
 use Behat\Behat\Context\Context;
-use Tests\Sylius\RbacPlugin\Behat\Element\AdminMainMenuElementInterface;
+use Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdminMainMenuElementInterface;
 
 final class AdminMainMenuContext implements Context
 {

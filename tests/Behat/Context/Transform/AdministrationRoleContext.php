@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Context\Transform;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Transform;
 
 use Behat\Behat\Context\Context;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Webmozart\Assert\Assert;
 
 final class AdministrationRoleContext implements Context

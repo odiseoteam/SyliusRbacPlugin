@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Service;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Service;
 
 use FriendsOfBehat\PageObjectExtension\Page\PageInterface;
 use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;

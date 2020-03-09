@@ -4,11 +4,11 @@
 
 {% block content %}
 
-{% include '@SyliusRbacPlugin/AdministrationRole/Update/_header.html.twig' %}
-{% include '@SyliusRbacPlugin/AdministrationRole/Update/_breadcrumb.html.twig' %}
+{% include '@OdiseoSyliusRbacPlugin/AdministrationRole/Update/_header.html.twig' %}
+{% include '@OdiseoSyliusRbacPlugin/AdministrationRole/Update/_breadcrumb.html.twig' %}
 
-{% set readOperationType = constant('Sylius\\RbacPlugin\\Access\\Model\\OperationType::READ') %}
-{% set writeOperationType = constant('Sylius\\RbacPlugin\\Access\\Model\\OperationType::WRITE') %}
+{% set readOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::READ') %}
+{% set writeOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::WRITE') %}
 
 <div class="ui segment">
     <form name="sylius_rbac_administration_role" method="POST" class="ui loadable form" novalidate="novalidate" action={{ path('sylius_rbac_admin_administration_role_update', {'id': administration_role.id}) }}>

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Checker;
+namespace Odiseo\SyliusRbacPlugin\Access\Checker;
 
 use Sylius\Component\Core\Model\AdminUserInterface;
-use Sylius\RbacPlugin\Access\Model\AccessRequest;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Access\Model\Section;
-use Sylius\RbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
 use Webmozart\Assert\Assert;
 
 final class AdministratorAccessChecker implements AdministratorAccessCheckerInterface

@@ -1,4 +1,4 @@
 suites:
-    sylius_rbac:
-        namespace: Sylius\RbacPlugin
-        psr4_prefix: Sylius\RbacPlugin
+    main:
+        namespace: Odiseo\SyliusRbacPlugin
+        psr4_prefix: Odiseo\SyliusRbacPlugin

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Extractor;
+namespace Odiseo\SyliusRbacPlugin\Extractor;
 
-use Sylius\RbacPlugin\Model\PermissionInterface;
+use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 
 final class PermissionDataExtractor implements PermissionDataExtractorInterface
 {

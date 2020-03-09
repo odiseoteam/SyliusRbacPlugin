@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Factory;
+namespace Odiseo\SyliusRbacPlugin\Factory;
 
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\RbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
 
 final class AdministrationRoleFactory implements AdministrationRoleFactoryInterface
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Menu;
+namespace Odiseo\SyliusRbacPlugin\Access\Menu;
 
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 use Sylius\Component\Core\Model\AdminUserInterface;
-use Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
-use Sylius\RbacPlugin\Access\Model\AccessRequest;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Access\Model\Section;
+use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Access\Model\Section;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Webmozart\Assert\Assert;
 

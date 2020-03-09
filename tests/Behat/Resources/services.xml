@@ -8,7 +8,7 @@
     </imports>
 
     <services>
-        <service id="sylius_rbac.behat.pages_availability_checker.catalog" class="Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker">
+        <service id="sylius_rbac.behat.pages_availability_checker.catalog" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker">
             <argument type="collection">
                 <argument type="service" id="sylius.behat.page.admin.taxon.create" />
                 <argument type="service" id="sylius.behat.page.admin.product.index" />
@@ -22,7 +22,7 @@
             </argument>
         </service>
 
-        <service id="sylius_rbac.behat.pages_availability_checker.configuration" class="Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker">
+        <service id="sylius_rbac.behat.pages_availability_checker.configuration" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker">
             <argument type="collection">
                 <argument type="service" id="sylius.behat.page.admin.channel.index" />
                 <argument type="service" id="sylius.behat.page.admin.channel.create" />
@@ -49,7 +49,7 @@
             </argument>
         </service>
 
-        <service id="sylius_rbac.behat.pages_availability_checker.customers" class="Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker">
+        <service id="sylius_rbac.behat.pages_availability_checker.customers" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker">
             <argument type="collection">
                 <argument type="service" id="sylius.behat.page.admin.customer.index" />
                 <argument type="service" id="sylius.behat.page.admin.customer.create" />
@@ -58,7 +58,7 @@
             </argument>
         </service>
 
-        <service id="sylius_rbac.behat.pages_availability_checker.marketing" class="Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker">
+        <service id="sylius_rbac.behat.pages_availability_checker.marketing" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker">
             <argument type="collection">
                 <argument type="service" id="sylius.behat.page.admin.promotion.index" />
                 <argument type="service" id="sylius.behat.page.admin.promotion.create" />
@@ -66,35 +66,35 @@
             </argument>
         </service>
 
-        <service id="sylius_rbac.behat.pages_availability_checker.sales" class="Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker">
+        <service id="sylius_rbac.behat.pages_availability_checker.sales" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker">
             <argument type="collection">
                 <argument type="service" id="sylius.behat.page.admin.order.index" />
             </argument>
         </service>
 
-        <service id="sylius_rbac.behat.pages_availability_checker.rbac" class="Tests\Sylius\RbacPlugin\Behat\Service\PagesAvailabilityChecker">
+        <service id="sylius_rbac.behat.pages_availability_checker.rbac" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker">
             <argument type="collection">
-                <argument type="service" id="Tests\Sylius\RbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePage" />
+                <argument type="service" id="Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePage" />
                 <argument type="service" id="sylius_rbac.behat.page.administration_role.index" />
             </argument>
         </service>
 
-        <service id="sylius_rbac.behat.modifying_availability_checker.configuration" class="Tests\Sylius\RbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
+        <service id="sylius_rbac.behat.modifying_availability_checker.configuration" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
             <argument type="service" id="sylius.behat.page.admin.channel.create" />
             <argument type="service" id="sylius.behat.notification_checker" />
         </service>
 
-        <service id="sylius_rbac.behat.modifying_availability_checker.catalog" class="Tests\Sylius\RbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
+        <service id="sylius_rbac.behat.modifying_availability_checker.catalog" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
             <argument type="service" id="sylius.behat.page.admin.taxon.create" />
             <argument type="service" id="sylius.behat.notification_checker" />
         </service>
 
-        <service id="sylius_rbac.behat.modifying_availability_checker.customers" class="Tests\Sylius\RbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
+        <service id="sylius_rbac.behat.modifying_availability_checker.customers" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
             <argument type="service" id="sylius.behat.page.admin.customer.create" />
             <argument type="service" id="sylius.behat.notification_checker" />
         </service>
 
-        <service id="sylius_rbac.behat.modifying_availability_checker.marketing" class="Tests\Sylius\RbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
+        <service id="sylius_rbac.behat.modifying_availability_checker.marketing" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker">
             <argument type="service" id="sylius.behat.page.admin.promotion.create" />
             <argument type="service" id="sylius.behat.notification_checker" />
         </service>

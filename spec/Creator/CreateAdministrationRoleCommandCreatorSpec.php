@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Creator;
+namespace spec\Odiseo\SyliusRbacPlugin\Creator;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\RbacPlugin\Command\CreateAdministrationRole;
-use Sylius\RbacPlugin\Creator\CommandCreatorInterface;
-use Sylius\RbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInterface;
+use Odiseo\SyliusRbacPlugin\Command\CreateAdministrationRole;
+use Odiseo\SyliusRbacPlugin\Creator\CommandCreatorInterface;
+use Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 

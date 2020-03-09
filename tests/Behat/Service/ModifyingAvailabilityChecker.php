@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Service;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Service;
 
 use Behat\Mink\Exception\ElementNotFoundException;
 use Sylius\Behat\Exception\NotificationExpectationMismatchException;

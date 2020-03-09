@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Access\Listener;
+namespace spec\Odiseo\SyliusRbacPlugin\Access\Listener;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Core\Model\AdminUserInterface;
-use Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
-use Sylius\RbacPlugin\Access\Checker\RouteNameCheckerInterface;
-use Sylius\RbacPlugin\Access\Creator\AccessRequestCreatorInterface;
-use Sylius\RbacPlugin\Access\Exception\UnresolvedRouteNameException;
-use Sylius\RbacPlugin\Access\Model\AccessRequest;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Access\Model\Section;
+use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface;
+use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
+use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Access\Model\Section;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;

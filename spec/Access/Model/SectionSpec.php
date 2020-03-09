@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Access\Model;
+namespace spec\Odiseo\SyliusRbacPlugin\Access\Model;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\RbacPlugin\Access\Model\Section;
+use Odiseo\SyliusRbacPlugin\Access\Model\Section;
 
 final class SectionSpec extends ObjectBehavior
 {

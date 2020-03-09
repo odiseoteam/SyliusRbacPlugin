@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Page\Ui;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui;
 
 use Behat\Mink\Element\NodeElement;
 use Sylius\Behat\Page\Admin\Crud\UpdatePage;
-use Sylius\RbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 
 final class AdministrationRoleUpdatePage extends UpdatePage implements AdministrationRoleUpdatePageInterface
 {

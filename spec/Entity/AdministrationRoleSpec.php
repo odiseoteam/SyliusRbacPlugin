@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Entity;
+namespace spec\Odiseo\SyliusRbacPlugin\Entity;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\RbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
 
 final class AdministrationRoleSpec extends ObjectBehavior
 {

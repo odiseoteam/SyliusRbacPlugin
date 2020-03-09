@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Extractor;
+namespace Odiseo\SyliusRbacPlugin\Extractor;
 
 interface PermissionDataExtractorInterface
 {

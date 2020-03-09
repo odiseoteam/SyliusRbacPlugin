@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\Access\Checker;
+namespace spec\Odiseo\SyliusRbacPlugin\Access\Checker;
 
 use PhpSpec\ObjectBehavior;
-use Sylius\RbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
-use Sylius\RbacPlugin\Access\Model\AccessRequest;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Access\Model\Section;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\RbacPlugin\Model\Permission;
-use Tests\Application\RbacPlugin\Entity\AdminUser;
+use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
+use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Tests\Odiseo\SyliusRbacPlugin\Application\Entity\AdminUser;
 
 final class AdministratorAccessCheckerSpec extends ObjectBehavior
 {

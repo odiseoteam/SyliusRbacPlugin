@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Behat\Context\Cli;
+namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Cli;
 
 use Behat\Behat\Context\Context;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\RbacPlugin\Cli\InstallPluginCommand;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\RbacPlugin\Model\PermissionInterface;
-use Sylius\RbacPlugin\Provider\SyliusSectionsProviderInterface;
+use Odiseo\SyliusRbacPlugin\Cli\InstallPluginCommand;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
+use Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Tests\Application\RbacPlugin\Entity\AdminUser;
+use Tests\Odiseo\SyliusRbacPlugin\Application\Entity\AdminUser;
 use Webmozart\Assert\Assert;
 
 final class InstallingPluginContext implements Context

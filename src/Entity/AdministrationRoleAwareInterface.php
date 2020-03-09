@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Entity;
+namespace Odiseo\SyliusRbacPlugin\Entity;
 
 interface AdministrationRoleAwareInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Sylius\RbacPlugin\Application;
+namespace Tests\Odiseo\SyliusRbacPlugin\Application;
 
 use PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -55,6 +55,7 @@ final class Kernel extends BaseKernel
         $container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir() . '/config';
+
         $loader->load($confDir . '/{packages}/*' . self::CONFIG_EXTS, 'glob');
         $loader->load($confDir . '/{packages}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
         $loader->load($confDir . '/{services}' . self::CONFIG_EXTS, 'glob');
@@ -64,6 +65,7 @@ final class Kernel extends BaseKernel
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
         $confDir = $this->getProjectDir() . '/config';
+
         $routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir . '/{routes}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, '/', 'glob');
@@ -74,6 +76,7 @@ final class Kernel extends BaseKernel
         if ($this->isTestEnvironment()) {
             return MockerContainer::class;
         }
+
         return parent::getContainerBaseClass();
     }
 
@@ -81,6 +84,7 @@ final class Kernel extends BaseKernel
     {
         /** @var ContainerBuilder $container */
         Assert::isInstanceOf($container, ContainerBuilder::class);
+
         $locator = new FileLocator($this, $this->getRootDir() . '/Resources');
         $resolver = new LoaderResolver(array(
             new XmlFileLoader($container, $locator),
@@ -91,6 +95,7 @@ final class Kernel extends BaseKernel
             new DirectoryLoader($container, $locator),
             new ClosureLoader($container),
         ));
+
         return new DelegatingLoader($resolver);
     }
 

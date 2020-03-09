@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Form\Type;
+namespace Odiseo\SyliusRbacPlugin\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\Form\AbstractType;

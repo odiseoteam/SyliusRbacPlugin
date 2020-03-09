@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Checker;
+namespace Odiseo\SyliusRbacPlugin\Access\Checker;
 
 final class HardcodedRouteNameChecker implements RouteNameCheckerInterface
 {

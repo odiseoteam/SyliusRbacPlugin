@@ -6,7 +6,7 @@ imports:
 
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
 
-    - { resource: "@SyliusRbacPlugin/Resources/config/config.yml" }
+    - { resource: "@OdiseoSyliusRbacPlugin/Resources/config/config.yml" }
 
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
@@ -19,24 +19,15 @@ sylius_resource:
     resources:
         sylius_rbac.administration_role:
             classes:
-                model: Sylius\RbacPlugin\Entity\AdministrationRole
-                form: Sylius\RbacPlugin\Form\Type\AdministrationRoleType
+                model: Odiseo\SyliusRbacPlugin\Entity\AdministrationRole
+                form: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleType
 
 sylius_user:
     resources:
         admin:
             user:
                 classes:
-                    model: Tests\Application\RbacPlugin\Entity\AdminUser
-
-doctrine:
-    orm:
-        mappings:
-            sylius_user:
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                is_bundle: false
-                prefix: Tests\Application\RbacPlugin\Entity
+                    model: Tests\Odiseo\SyliusRbacPlugin\Application\Entity\AdminUser
 
 sylius_grid:
     grids:
@@ -44,7 +35,7 @@ sylius_grid:
             driver:
                 name: doctrine/orm
                 options:
-                    class: Sylius\RbacPlugin\Entity\AdministrationRole
+                    class: Odiseo\SyliusRbacPlugin\Entity\AdministrationRole
             fields:
                 name:
                     type: string
@@ -63,4 +54,4 @@ sylius_grid:
                     label: sylius_rbac.ui.administration_role
                     sortable: true
                     options:
-                        template: '@SyliusRbacPlugin/AdministrationRole/Grid/Field/administrationRole.html.twig'
+                        template: '@OdiseoSyliusRbacPlugin/AdministrationRole/Grid/Field/administrationRole.html.twig'

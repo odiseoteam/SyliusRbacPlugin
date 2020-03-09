@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace spec\Sylius\RbacPlugin\CommandHandler;
+namespace spec\Odiseo\SyliusRbacPlugin\CommandHandler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\RbacPlugin\Access\Model\OperationType;
-use Sylius\RbacPlugin\Command\UpdateAdministrationRole;
-use Sylius\RbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\RbacPlugin\Factory\AdministrationRoleFactoryInterface;
-use Sylius\RbacPlugin\Model\Permission;
-use Sylius\RbacPlugin\Model\PermissionInterface;
-use Sylius\RbacPlugin\Validator\AdministrationRoleValidatorInterface;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Command\UpdateAdministrationRole;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
+use Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidatorInterface;
 
 final class UpdateAdministrationRoleHandlerSpec extends ObjectBehavior
 {

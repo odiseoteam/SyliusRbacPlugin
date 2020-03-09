@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Form\Extension;
+namespace Odiseo\SyliusRbacPlugin\Form\Extension;
 
 use Sylius\Bundle\CoreBundle\Form\Type\User\AdminUserType;
-use Sylius\RbacPlugin\Form\Type\AdministrationRoleChoiceType;
+use Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleChoiceType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 

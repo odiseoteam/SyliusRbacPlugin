@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\CommandHandler;
+namespace Odiseo\SyliusRbacPlugin\CommandHandler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Sylius\RbacPlugin\Command\CreateAdministrationRole;
-use Sylius\RbacPlugin\Factory\AdministrationRoleFactoryInterface;
-use Sylius\RbacPlugin\Validator\AdministrationRoleValidatorInterface;
+use Odiseo\SyliusRbacPlugin\Command\CreateAdministrationRole;
+use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
+use Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidatorInterface;
 
 final class CreateAdministrationRoleHandler
 {

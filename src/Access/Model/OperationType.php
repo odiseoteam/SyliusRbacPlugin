@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\RbacPlugin\Access\Model;
+namespace Odiseo\SyliusRbacPlugin\Access\Model;
 
 use Webmozart\Assert\Assert;
 
