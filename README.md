@@ -48,7 +48,7 @@ Write permission access means also updating and deleting.
     return [
        // ...
        Prooph\Bundle\ServiceBus\ProophServiceBusBundle::class => ['all' => true],
-       Odiseo\SyliusRbacPlugin\SyliusRbacPlugin::class => ['all' => true],
+       Odiseo\SyliusRbacPlugin\OdiseoSyliusRbacPlugin::class => ['all' => true],
     ];
     ```
 
@@ -101,7 +101,7 @@ sylius_user:
 6. Copy plugin migrations to your migrations directory (e.g. `src/Migrations`) and apply them to your database:
 
     ```bash
-    cp -R vendor/sylius/rbac-plugin/migrations/* src/Migrations/
+    cp -R vendor/odiseoteam/sylius-rbac-plugin/migrations/* src/Migrations/
     bin/console doctrine:migrations:migrate
     ```
 
@@ -109,7 +109,7 @@ sylius_user:
 
     ```bash
     mkdir templates/bundles/SyliusAdminBundle
-    cp -R vendor/sylius/rbac-plugin/src/Resources/views/SyliusAdminBundle/* templates/bundles/SyliusAdminBundle/
+    cp -R vendor/odiseoteam/sylius-rbac-plugin/src/Resources/views/SyliusAdminBundle/* templates/bundles/SyliusAdminBundle/
     ```
 
 8. Run installation command
