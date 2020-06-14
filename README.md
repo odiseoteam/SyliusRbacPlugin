@@ -108,7 +108,7 @@ sylius_user:
 7. Copy overwritten `SyliusAdminBundle` templates:
 
     ```bash
-    mkdir templates/bundles/SyliusAdminBundle
+    mkdir -p templates/bundles/SyliusAdminBundle
     cp -R vendor/odiseoteam/sylius-rbac-plugin/src/Resources/views/SyliusAdminBundle/* templates/bundles/SyliusAdminBundle/
     ```
 
