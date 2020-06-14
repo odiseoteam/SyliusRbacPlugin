@@ -202,7 +202,7 @@ If you don't know how to create and configure custom resource in Sylius applicat
 The only thing required to restrict Supplier-related routes with, for example, "Customer management" permission, is adding appropriate route prefix to customers section configuration:
 
 ```yaml
-sylius_rbac:
+odiseo_sylius_rbac:
     sylius_sections:
         customers:
             - app_admin_supplier
@@ -222,7 +222,7 @@ as no new section has been added to the RBAC configuration.
 What if you want to differentiate your new resources management permission? The other possibility is to define your own, custom section in a plugin configuration:
 
 ```yaml
-sylius_rbac:
+odiseo_sylius_rbac:
     custom_sections:
         suppliers:
             - app_admin_supplier
