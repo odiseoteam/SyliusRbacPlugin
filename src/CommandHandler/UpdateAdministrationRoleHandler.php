@@ -11,8 +11,9 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 use Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidatorInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class UpdateAdministrationRoleHandler
+final class UpdateAdministrationRoleHandler implements MessageHandlerInterface
 {
     /** @var ObjectManager */
     private $administrationRoleManager;

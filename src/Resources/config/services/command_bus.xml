@@ -9,6 +9,7 @@
             <argument type="service" id="sylius_rbac.custom_factory.administration_role"/>
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator" />
             <argument type="string">sylius_rbac_admin_administration_role_create</argument>
+            <tag name="messenger.message_handler" handles="Odiseo\SyliusRbacPlugin\Message\CreateAdministrationRole"/>
         </service>
 
         <service id="Odiseo\SyliusRbacPlugin\CommandHandler\UpdateAdministrationRoleHandler">
@@ -17,6 +18,7 @@
             <argument type="service" id="sylius_rbac.repository.administration_role"/>
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator"/>
             <argument type="string">sylius_rbac_admin_administration_role_update</argument>
+            <tag name="messenger.message_handler" handles="Odiseo\SyliusRbacPlugin\Message\UpdateAdministrationRole"/>
         </service>
     </services>
 </container>

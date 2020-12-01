@@ -19,7 +19,7 @@
         <img src="https://poser.pugx.org/odiseoteam/sylius-rbac-plugin/downloads" />
     </a>
 </p>
-<p align="center"><a href="https://sylius.com/partners/odiseo/" target="_blank"><img src="https://github.com/odiseoteam/SyliusReportPlugin/blob/master/badge-partner-by-sylius.png" width="140"></a></p>
+<p align="center"><a href="https://sylius.com/partners/odiseo/" target="_blank"><img src="https://github.com/odiseoteam/SyliusRbacPlugin/blob/master/badge-partner-by-sylius.png" width="140"></a></p>
 
 <h1 align="center">Odiseo Sylius Rbac Plugin</h1>
 
@@ -47,7 +47,6 @@ Write permission access means also updating and deleting.
     ```php
     return [
        // ...
-       Prooph\Bundle\ServiceBus\ProophServiceBusBundle::class => ['all' => true],
        Odiseo\SyliusRbacPlugin\OdiseoSyliusRbacPlugin::class => ['all' => true],
     ];
     ```
@@ -298,4 +297,4 @@ Instead, all security issues must be sent to `security@sylius.com`.
 
 ## Credits
 
-This plugin is maintained by <a href="https://odiseo.com.ar">Odiseo</a>. Want us to help you with this plugin or any Sylius project? Contact us on <a href="mailto:team@odiseo.com.ar">team@odiseo.com.ar</a>.
+This plugin is maintained by <a href="https://odiseo.io">Odiseo</a>. Want us to help you with this plugin or any Sylius project? Contact us on <a href="mailto:team@odiseo.com.ar">team@odiseo.com.ar</a>.
