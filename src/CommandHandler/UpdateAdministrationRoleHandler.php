@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\CommandHandler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Odiseo\SyliusRbacPlugin\Message\UpdateAdministrationRole;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Odiseo\SyliusRbacPlugin\Command\UpdateAdministrationRole;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
@@ -43,12 +43,12 @@ final class UpdateAdministrationRoleHandler
         $this->validationGroup = $validationGroup;
     }
 
-    public function __invoke(UpdateAdministrationRole $command): void
+    public function __invoke(UpdateAdministrationRole $message): void
     {
         /** @var AdministrationRoleInterface|null $administrationRole */
         $administrationRole = $this
             ->administrationRoleRepository
-            ->find($command->administrationRoleId())
+            ->find($message->administrationRoleId())
         ;
 
         if (null === $administrationRole) {
@@ -56,8 +56,8 @@ final class UpdateAdministrationRoleHandler
         }
 
         $administrationRoleUpdates = $this->administrationRoleFactory->createWithNameAndPermissions(
-            $command->administrationRoleName(),
-            $command->permissions()
+            $message->administrationRoleName(),
+            $message->permissions()
         );
 
         $this->validator->validate($administrationRoleUpdates, $this->validationGroup);

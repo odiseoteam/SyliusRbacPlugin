@@ -4,20 +4,11 @@
     <services>
         <defaults autowire="false" autoconfigure="false" public="true" />
 
-        <service id="Odiseo\SyliusRbacPlugin\Creator\CreateAdministrationRoleCommandCreator">
-            <argument type="service" id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
-        </service>
-
-        <service id="Odiseo\SyliusRbacPlugin\Creator\UpdateAdministrationRoleCommandCreator">
-            <argument type="service" id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
-        </service>
-
         <service id="Odiseo\SyliusRbacPlugin\CommandHandler\CreateAdministrationRoleHandler">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sylius_rbac.custom_factory.administration_role"/>
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator" />
             <argument type="string">sylius_rbac_admin_administration_role_create</argument>
-            <tag name="prooph_service_bus.sylius_rbac_command_bus.route_target" message-detection="true" />
         </service>
 
         <service id="Odiseo\SyliusRbacPlugin\CommandHandler\UpdateAdministrationRoleHandler">
@@ -26,7 +17,6 @@
             <argument type="service" id="sylius_rbac.repository.administration_role"/>
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator"/>
             <argument type="string">sylius_rbac_admin_administration_role_update</argument>
-            <tag name="prooph_service_bus.sylius_rbac_command_bus.route_target" message-detection="true" />
         </service>
     </services>
 </container>

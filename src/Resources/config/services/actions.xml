@@ -10,8 +10,8 @@
         </service>
 
         <service id="Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleAction">
-            <argument type="service" id="prooph_service_bus.sylius_rbac_command_bus" />
-            <argument type="service" id="Odiseo\SyliusRbacPlugin\Creator\CreateAdministrationRoleCommandCreator" />
+            <argument type="service" id="messenger.default_bus" />
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
             <argument type="service" id="session" />
             <argument type="service" id="router" />
         </service>
@@ -26,8 +26,8 @@
         </service>
 
         <service id="Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleAction">
-            <argument type="service" id="prooph_service_bus.sylius_rbac_command_bus" />
-            <argument type="service" id="Odiseo\SyliusRbacPlugin\Creator\UpdateAdministrationRoleCommandCreator" />
+            <argument type="service" id="messenger.default_bus" />
+            <argument type="service" id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
             <argument type="service" id="session" />
             <argument type="service" id="router" />
         </service>
