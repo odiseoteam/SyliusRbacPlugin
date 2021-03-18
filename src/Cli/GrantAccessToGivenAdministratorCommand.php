@@ -32,7 +32,7 @@ final class GrantAccessToGivenAdministratorCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->administratorAccessGranter->__invoke(
@@ -43,5 +43,7 @@ final class GrantAccessToGivenAdministratorCommand extends Command
         } catch (\InvalidArgumentException $exception) {
             $output->writeln($exception->getMessage());
         }
+
+        return 0;
     }
 }

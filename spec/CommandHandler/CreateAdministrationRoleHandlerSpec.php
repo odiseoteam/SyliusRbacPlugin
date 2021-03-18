@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Odiseo\SyliusRbacPlugin\CommandHandler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Command\CreateAdministrationRole;

@@ -11,7 +11,7 @@
     "require": {
         "php": "^7.3",
 
-        "sylius/sylius": "~1.7.5",
+        "sylius/sylius": "~1.8.0 || ~1.9.0",
         "symfony/messenger": "^4.4"
     },
     "require-dev": {

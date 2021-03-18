@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\CommandHandler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Message\CreateAdministrationRole;
 use Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidatorInterface;

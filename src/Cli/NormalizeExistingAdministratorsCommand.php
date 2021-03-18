@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Cli;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
@@ -40,7 +40,7 @@ final class NormalizeExistingAdministratorsCommand extends Command
         $this->setDescription('Assign no sections access role to all administrators in the database');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var AdministrationRoleInterface|null $noSectionsAccessRole */
         $noSectionsAccessRole = null;
@@ -55,7 +55,7 @@ final class NormalizeExistingAdministratorsCommand extends Command
         if (null === $noSectionsAccessRole) {
             $output->writeln('There is no role with no access to any section. Aborting.');
 
-            return;
+            return 0;
         }
 
         $administrators = $this->administratorRepository->findAll();
@@ -63,7 +63,7 @@ final class NormalizeExistingAdministratorsCommand extends Command
         if (count($administrators) === 0) {
             $output->writeln('No administrators found. No migration needed.');
 
-            return;
+            return 0;
         }
 
         $output->writeln(sprintf('Found %d administrator(s). Migrating them.', count($administrators)));
@@ -74,5 +74,7 @@ final class NormalizeExistingAdministratorsCommand extends Command
         }
 
         $this->objectManager->flush();
+
+        return 0;
     }
 }

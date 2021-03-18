@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Odiseo\SyliusRbacPlugin\CommandHandler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;

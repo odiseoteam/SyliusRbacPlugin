@@ -74,7 +74,7 @@ final class InstallPluginCommand extends Command
             ->setDescription('Installs RBAC plugin');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $outputStyle = new SymfonyStyle($input, $output);
         $outputStyle->writeln('<info>Installing RBAC plugin...</info>');
@@ -107,6 +107,8 @@ final class InstallPluginCommand extends Command
 
         $outputStyle->newLine(2);
         $outputStyle->success('RBAC has been successfully installed.');
+
+        return 0;
     }
 
     private function getCommandMessage(int $step, string $commandMessage): string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
 use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;

@@ -13,7 +13,7 @@ use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,7 +55,7 @@ final class AccessCheckListener
         $this->adminRouteChecker = $adminRouteChecker;
     }
 
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         try {
             $accessRequest = $this->createAccessRequestFromEvent($event);
@@ -72,7 +72,7 @@ final class AccessCheckListener
     }
 
     /** @throws InsecureRequestException */
-    private function createAccessRequestFromEvent(GetResponseEvent $event): AccessRequest
+    private function createAccessRequestFromEvent(RequestEvent $event): AccessRequest
     {
         if (!$event->isMasterRequest()) {
             throw new InsecureRequestException();

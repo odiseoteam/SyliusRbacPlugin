@@ -32,7 +32,7 @@ final class GrantAccessCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $administratorEmail = $this->getAdministratorEmail($input, $output);
 
@@ -45,6 +45,8 @@ final class GrantAccessCommand extends Command
         } catch (\InvalidArgumentException $exception) {
             $output->writeln($exception->getMessage());
         }
+
+        return 0;
     }
 
     private function getAdministratorEmail(InputInterface $input, OutputInterface $output): string

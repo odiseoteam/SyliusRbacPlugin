@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Odiseo\SyliusRbacPlugin\Cli\Granter;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
