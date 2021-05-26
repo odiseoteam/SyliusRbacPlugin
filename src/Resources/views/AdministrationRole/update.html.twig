@@ -1,4 +1,4 @@
-{% extends 'SyliusAdminBundle::layout.html.twig' %}
+{% extends '@SyliusAdmin/layout.html.twig' %}
 
 {% block title %}{{ 'sylius_rbac.ui.edit_administration_role'|trans }} {{ parent() }}{% endblock %}
 
@@ -57,7 +57,7 @@
             <div class="ui basic segment">
                 <div class="ui buttons">
                     <button id="sylius_save_changes_button" class="ui labeled icon primary button" type="submit"><i class="save icon"></i>{{ 'sylius.ui.save_changes'|trans }}</button>
-                    <a href={{ path('sylius_rbac_admin_administration_role_index') }} class="ui button">{{ 'sylius.ui.cancel'|trans }}</a>
+                    <a href="{{ path('sylius_rbac_admin_administration_role_index') }}" class="ui button">{{ 'sylius.ui.cancel'|trans }}</a>
                 </div>
             </div>
         </div>
