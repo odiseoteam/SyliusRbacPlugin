@@ -74,7 +74,7 @@ final class AccessCheckListener
     /** @throws InsecureRequestException */
     private function createAccessRequestFromEvent(RequestEvent $event): AccessRequest
     {
-        if (!$event->isMainRequest()) {
+        if (!$event->isMasterRequest()) {
             throw new InsecureRequestException();
         }
 

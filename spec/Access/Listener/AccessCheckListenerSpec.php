@@ -58,7 +58,7 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         AdminUserInterface $adminUser,
         FlashBagInterface $flashBag
     ): void {
-        $event->isMainRequest()->willReturn(true);
+        $event->isMasterRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
@@ -98,7 +98,7 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         TokenInterface $token,
         AdminUserInterface $adminUser
     ): void {
-        $event->isMainRequest()->willReturn(true);
+        $event->isMasterRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
@@ -128,7 +128,7 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         RequestEvent $event,
         Request $request
     ): void {
-        $event->isMainRequest()->willReturn(true);
+        $event->isMasterRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
@@ -152,7 +152,7 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         RequestEvent $event,
         Request $request
     ): void {
-        $event->isMainRequest()->willReturn(true);
+        $event->isMasterRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_shop_some_route']);
@@ -167,7 +167,7 @@ final class AccessCheckListenerSpec extends ObjectBehavior
 
     function it_does_nothing_if_request_is_not_master_request(RequestEvent $event): void
     {
-        $event->isMainRequest()->willReturn(false);
+        $event->isMasterRequest()->willReturn(false);
 
         $event->getRequest()->shouldNotBeCalled();
 

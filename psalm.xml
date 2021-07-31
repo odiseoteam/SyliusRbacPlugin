@@ -29,5 +29,6 @@
         <MixedArrayOffset errorLevel="info" />
         <MoreSpecificReturnType errorLevel="info" />
         <LessSpecificReturnStatement errorLevel="info" />
+        <DeprecatedMethod errorLevel="info" />
     </issueHandlers>
 </psalm>

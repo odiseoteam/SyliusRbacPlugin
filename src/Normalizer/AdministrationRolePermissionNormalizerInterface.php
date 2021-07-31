@@ -6,5 +6,5 @@ namespace Odiseo\SyliusRbacPlugin\Normalizer;
 
 interface AdministrationRolePermissionNormalizerInterface
 {
-    public function normalize(array $administrationRolePermissions): array;
+    public function normalize(?array $administrationRolePermissions): array;
 }
