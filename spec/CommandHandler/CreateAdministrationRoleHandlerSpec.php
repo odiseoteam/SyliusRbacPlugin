@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace spec\Odiseo\SyliusRbacPlugin\CommandHandler;
 
 use Doctrine\Persistence\ObjectManager;
+use Odiseo\SyliusRbacPlugin\Message\CreateAdministrationRole;
 use PhpSpec\ObjectBehavior;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
-use Odiseo\SyliusRbacPlugin\Command\CreateAdministrationRole;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;

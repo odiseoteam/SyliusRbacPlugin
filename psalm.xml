@@ -25,5 +25,9 @@
         <PossiblyUndefinedMethod errorLevel="info" />
         <MixedMethodCall errorLevel="info" />
         <PossiblyInvalidArgument errorLevel="info" />
+        <MixedArrayAssignment errorLevel="info" />
+        <MixedArrayOffset errorLevel="info" />
+        <MoreSpecificReturnType errorLevel="info" />
+        <LessSpecificReturnStatement errorLevel="info" />
     </issueHandlers>
 </psalm>

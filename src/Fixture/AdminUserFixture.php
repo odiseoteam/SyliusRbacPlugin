@@ -14,10 +14,9 @@ final class AdminUserFixture extends BaseAdminUserFixture implements FixtureInte
     {
         parent::configureResourceNode($resourceNode);
 
-        $resourceNode
-            ->children()
-                ->scalarNode('administration_role')->cannotBeEmpty()->end()
-        ;
+        $node = $resourceNode->children();
+
+        $node->scalarNode('administration_role')->cannotBeEmpty();
     }
 
     public function getName(): string

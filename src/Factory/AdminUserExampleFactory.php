@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Factory;
 
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AdminUserExampleFactory as BaseAdminUserExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
@@ -17,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class AdminUserExampleFactory extends BaseAdminUserExampleFactory implements ExampleFactoryInterface
 {
-    /** @var AdministrationRoleInterface $administrationRole */
+    /** @var RepositoryInterface */
     private $administrationRoleRepository;
 
     /** @var OptionsResolver */
@@ -60,7 +61,9 @@ final class AdminUserExampleFactory extends BaseAdminUserExampleFactory implemen
             return $user;
         }
 
-        $user->setAdministrationRole($options['administration_role']);
+        if ($user instanceof AdministrationRoleAwareInterface) {
+            $user->setAdministrationRole($options['administration_role']);
+        }
 
         return $user;
     }

@@ -51,15 +51,9 @@ final class AdministrationRoleFixture extends AbstractFixture implements Fixture
 
     protected function configureOptionsNode(ArrayNodeDefinition $optionsNode): void
     {
-        $optionsNode
-            ->children()
-                ->scalarNode('name')
-                    ->cannotBeEmpty()
-                ->end()
-                ->arrayNode('permissions')
-                    ->scalarPrototype()->defaultValue([])
-                ->end()
-            ->end()
-        ->end();
+        $node = $optionsNode->children();
+
+        $node->scalarNode('name')->cannotBeEmpty();
+        $node->arrayNode('permissions')->scalarPrototype()->defaultValue([]);
     }
 }

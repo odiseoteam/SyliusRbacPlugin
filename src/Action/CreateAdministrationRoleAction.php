@@ -42,13 +42,19 @@ final class CreateAdministrationRoleAction
     public function __invoke(Request $request): Response
     {
         try {
+            /** @var array $administrationRolePermissions */
+            $administrationRolePermissions = $request->request->get('permissions');
+
             $normalizedPermissions = $this
                 ->administrationRolePermissionNormalizer
-                ->normalize($request->request->get('permissions', []))
+                ->normalize($administrationRolePermissions)
             ;
 
+            /** @var string $administrationRoleName */
+            $administrationRoleName = $request->request->get('administration_role_name');
+
             $this->bus->dispatch(new CreateAdministrationRole(
-                $request->request->get('administration_role_name'),
+                $administrationRoleName,
                 $normalizedPermissions
             ));
 

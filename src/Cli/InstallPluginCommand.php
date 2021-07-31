@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Cli;
 
 use Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProviderInterface;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,6 +80,10 @@ final class InstallPluginCommand extends Command
         $outputStyle = new SymfonyStyle($input, $output);
         $outputStyle->writeln('<info>Installing RBAC plugin...</info>');
 
+        /**
+         * @var int $step
+         * @var array $command
+         */
         foreach ($this->commands as $step => $command) {
             if (!$this->shouldCommandBeExecuted($command)) {
                 continue;
@@ -95,7 +100,10 @@ final class InstallPluginCommand extends Command
                 $input = new ArrayInput($command['parameters']);
                 $input->setInteractive($command['interactive']);
 
-                $this->getApplication()
+                /** @var Application $application */
+                $application = $this->getApplication();
+
+                $application
                     ->find($command['command'])
                     ->run($input, $output)
                 ;
@@ -122,14 +130,11 @@ final class InstallPluginCommand extends Command
 
     private function shouldCommandBeExecuted(array $command): bool
     {
-        /** @var bool $isAdministratorEmailProvided */
         $isAdministratorEmailProvided = $this->isAdministratorEmailProvided();
 
-        /** @var bool $isGrantAccessToGivenAdministratorCurrentCommand */
         $isGrantAccessToGivenAdministratorCurrentCommand =
             $this->isGrantAccessToGivenAdministratorCurrentCommand($command['command']);
 
-        /** @var bool $isGrantAccessCurrentCommand */
         $isGrantAccessCurrentCommand = $this->isGrantAccessCurrentCommand($command['command']);
 
         return !(($isGrantAccessToGivenAdministratorCurrentCommand && !$isAdministratorEmailProvided) ||
@@ -165,6 +170,6 @@ final class InstallPluginCommand extends Command
 
     private function isAdministratorEmailProvided(): bool
     {
-        return !empty($this->administratorEmail);
+        return $this->administratorEmail !== '';
     }
 }

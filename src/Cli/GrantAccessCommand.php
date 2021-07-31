@@ -36,11 +36,16 @@ final class GrantAccessCommand extends Command
     {
         $administratorEmail = $this->getAdministratorEmail($input, $output);
 
+        /** @var string $roleName */
+        $roleName = $input->getArgument('roleName');
+        /** @var array $sections */
+        $sections = $input->getArgument('sections');
+
         try {
             $this->administratorAccessGranter->__invoke(
                 $administratorEmail,
-                $input->getArgument('roleName'),
-                $input->getArgument('sections')
+                $roleName,
+                $sections
             );
         } catch (\InvalidArgumentException $exception) {
             $output->writeln($exception->getMessage());
@@ -56,7 +61,6 @@ final class GrantAccessCommand extends Command
             'In order to permit access to admin panel sections for given administrator, please provide administrator\'s email address: '
         );
 
-        /** @var string $administratorEmail */
         return $helper->ask($input, $output, $question);
     }
 }

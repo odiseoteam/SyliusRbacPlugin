@@ -14,7 +14,7 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
     public function __construct(array $rbacConfiguration)
     {
         $configuration = [];
-        foreach ($rbacConfiguration['custom'] as $customSection => $customRoutes) {
+        foreach ($rbacConfiguration['custom'] as $customSection => $_customRoutes) {
             $configuration[$customSection] = $configuration;
         }
 

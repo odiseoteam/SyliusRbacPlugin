@@ -39,7 +39,6 @@ final class AdminMenuAccessListener
         $token = $this->tokenStorage->getToken();
         Assert::notNull($token, 'There is no logged in user');
 
-        /** @var AdminUserInterface $adminUser */
         $adminUser = $token->getUser();
         Assert::isInstanceOf($adminUser, AdminUserInterface::class, 'Logged in user should be an administrator');
 

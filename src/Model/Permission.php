@@ -66,6 +66,7 @@ final class Permission implements PermissionInterface
 
     public static function unserialize(string $serialized): self
     {
+        /** @var array $data */
         $data = json_decode($serialized, true);
 
         return new self($data['type'], array_map(function (string $operationType): OperationType {
@@ -95,7 +96,7 @@ final class Permission implements PermissionInterface
 
     public function addOperationType(OperationType $operationType): void
     {
-        if (in_array($operationType, $this->operationTypes)) {
+        if (in_array($operationType, $this->operationTypes, true)) {
             return;
         }
 
@@ -109,14 +110,12 @@ final class Permission implements PermissionInterface
 
     public function equals(self $permission): bool
     {
-        /** @var bool $isOfTheSameType */
         $isOfTheSameType = $permission->type() === $this->type();
 
-        /** @var bool $hasTheSameOperationsAllowed */
         $hasTheSameOperationsAllowed = true;
 
         foreach ($permission->operationTypes() as $operationType) {
-            if (!in_array($operationType, $this->operationTypes())) {
+            if (!in_array($operationType, $this->operationTypes(), true)) {
                 $hasTheSameOperationsAllowed = false;
             }
         }

@@ -34,11 +34,18 @@ final class GrantAccessToGivenAdministratorCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $administratorEmail */
+        $administratorEmail = $input->getArgument('administratorEmail');
+        /** @var string $roleName */
+        $roleName = $input->getArgument('roleName');
+        /** @var array $sections */
+        $sections = $input->getArgument('sections');
+
         try {
             $this->administratorAccessGranter->__invoke(
-                $input->getArgument('administratorEmail'),
-                $input->getArgument('roleName'),
-                $input->getArgument('sections')
+                $administratorEmail,
+                $roleName,
+                $sections
             );
         } catch (\InvalidArgumentException $exception) {
             $output->writeln($exception->getMessage());

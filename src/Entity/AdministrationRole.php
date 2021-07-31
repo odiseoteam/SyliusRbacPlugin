@@ -10,7 +10,7 @@ use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 /** @final */
 class AdministrationRole implements AdministrationRoleInterface
 {
-    /** @var int */
+    /** @var int|null */
     private $id;
 
     /** @var string|null */

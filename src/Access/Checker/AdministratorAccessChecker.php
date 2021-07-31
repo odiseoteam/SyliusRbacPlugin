@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Access\Checker;
 
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
@@ -15,17 +16,19 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
 {
     public function canAccessSection(AdminUserInterface $admin, AccessRequest $accessRequest): bool
     {
-        $administrationRole = $admin->getAdministrationRole();
-        Assert::notNull($administrationRole);
+        if ($admin instanceof AdministrationRoleAwareInterface) {
+            $administrationRole = $admin->getAdministrationRole();
+            Assert::notNull($administrationRole);
 
-        /** @var Permission $permission */
-        foreach ($administrationRole->getPermissions() as $permission) {
-            if ($this->getSectionForPermission($permission)->equals($accessRequest->section())) {
-                if (OperationType::READ === $accessRequest->operationType()->__toString()) {
-                    return true;
+            /** @var Permission $permission */
+            foreach ($administrationRole->getPermissions() as $permission) {
+                if ($this->getSectionForPermission($permission)->equals($accessRequest->section())) {
+                    if (OperationType::READ === $accessRequest->operationType()->__toString()) {
+                        return true;
+                    }
+
+                    return $this->canWriteAccess($permission);
                 }
-
-                return $this->canWriteAccess($permission);
             }
         }
 

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace spec\Odiseo\SyliusRbacPlugin\CommandHandler;
 
 use Doctrine\Persistence\ObjectManager;
+use Odiseo\SyliusRbacPlugin\Message\UpdateAdministrationRole;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
-use Odiseo\SyliusRbacPlugin\Command\UpdateAdministrationRole;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;

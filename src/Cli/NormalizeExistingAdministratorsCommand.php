@@ -47,7 +47,7 @@ final class NormalizeExistingAdministratorsCommand extends Command
 
         /** @var AdministrationRoleInterface $administrationRole */
         foreach ($this->administrationRoleRepository->findAll() as $administrationRole) {
-            if (empty($administrationRole->getPermissions())) {
+            if (count($administrationRole->getPermissions()) === 0) {
                 $noSectionsAccessRole = $administrationRole;
             }
         }

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -52,13 +52,13 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         TokenStorageInterface $tokenStorage,
         UrlGeneratorInterface $router,
         Session $session,
-        GetResponseEvent $event,
+        RequestEvent $event,
         Request $request,
         TokenInterface $token,
         AdminUserInterface $adminUser,
         FlashBagInterface $flashBag
     ): void {
-        $event->isMasterRequest()->willReturn(true);
+        $event->isMainRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
@@ -93,12 +93,12 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         AdministratorAccessCheckerInterface $administratorAccessChecker,
         RouteNameCheckerInterface $adminRouteChecker,
         TokenStorageInterface $tokenStorage,
-        GetResponseEvent $event,
+        RequestEvent $event,
         Request $request,
         TokenInterface $token,
         AdminUserInterface $adminUser
     ): void {
-        $event->isMasterRequest()->willReturn(true);
+        $event->isMainRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
@@ -125,10 +125,10 @@ final class AccessCheckListenerSpec extends ObjectBehavior
     function it_does_nothing_if_route_is_not_secured_with_rbac_system(
         AccessRequestCreatorInterface $accessRequestCreator,
         RouteNameCheckerInterface $adminRouteChecker,
-        GetResponseEvent $event,
+        RequestEvent $event,
         Request $request
     ): void {
-        $event->isMasterRequest()->willReturn(true);
+        $event->isMainRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
@@ -149,10 +149,10 @@ final class AccessCheckListenerSpec extends ObjectBehavior
     function it_does_nothing_if_route_is_not_from_admin_panel(
         AccessRequestCreatorInterface $accessRequestCreator,
         RouteNameCheckerInterface $adminRouteChecker,
-        GetResponseEvent $event,
+        RequestEvent $event,
         Request $request
     ): void {
-        $event->isMasterRequest()->willReturn(true);
+        $event->isMainRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_shop_some_route']);
@@ -165,9 +165,9 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         $this->onKernelRequest($event);
     }
 
-    function it_does_nothing_if_request_is_not_master_request(GetResponseEvent $event): void
+    function it_does_nothing_if_request_is_not_master_request(RequestEvent $event): void
     {
-        $event->isMasterRequest()->willReturn(false);
+        $event->isMainRequest()->willReturn(false);
 
         $event->getRequest()->shouldNotBeCalled();
 
