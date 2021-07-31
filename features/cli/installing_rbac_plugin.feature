@@ -7,6 +7,7 @@ Feature: Adding a new Administration role
     Background:
         Given there is an administrator "scary.terry@nightmare.com"
         And there is an administrator "rick.sanchez@gmail.com"
+        And there is already an Administration role "Configurator" in the system
 
     @cli
     Scenario: Installing RBAC plugin
