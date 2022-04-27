@@ -36,6 +36,16 @@ final class AdministrationRoleFactory implements AdministrationRoleFactoryInterf
         return $administrationRole;
     }
 
+    public function createWithName(string $name): AdministrationRoleInterface
+    {
+        /** @var AdministrationRoleInterface $administrationRole */
+        $administrationRole = $this->decoratedFactory->createNew();
+
+        $administrationRole->setName($name);
+
+        return $administrationRole;
+    }
+
     public function createNew(): AdministrationRoleInterface
     {
         /** @var AdministrationRoleInterface $administrationRole */

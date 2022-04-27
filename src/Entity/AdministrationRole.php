@@ -7,7 +7,6 @@ namespace Odiseo\SyliusRbacPlugin\Entity;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
 use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 
-/** @final */
 class AdministrationRole implements AdministrationRoleInterface
 {
     /** @var int|null */

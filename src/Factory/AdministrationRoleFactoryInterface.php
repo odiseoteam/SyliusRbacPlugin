@@ -10,4 +10,6 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 interface AdministrationRoleFactoryInterface extends TranslatableFactoryInterface
 {
     public function createWithNameAndPermissions(string $name, array $permissions): AdministrationRoleInterface;
+
+    public function createWithName(string $name): AdministrationRoleInterface;
 }
