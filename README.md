@@ -39,7 +39,7 @@ Write permission access means also updating and deleting.
 1. Require plugin with composer:
 
     ```bash
-    composer require odiseoteam/sylius-rbac-plugin
+    composer require odiseoteam/sylius-rbac-plugin --no-scripts
     ```
 
 2. Add plugin class and `ProophServiceBusBundle` to your `bundles.php`.
