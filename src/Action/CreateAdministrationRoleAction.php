@@ -21,21 +21,16 @@ final class CreateAdministrationRoleAction
     /** @var AdministrationRolePermissionNormalizerInterface */
     private $administrationRolePermissionNormalizer;
 
-    /** @var Session */
-    private $session;
-
     /** @var UrlGeneratorInterface */
     private $router;
 
     public function __construct(
         MessageBusInterface $bus,
         AdministrationRolePermissionNormalizerInterface $administrationRolePermissionNormalizer,
-        Session $session,
         UrlGeneratorInterface $router
     ) {
         $this->bus = $bus;
         $this->administrationRolePermissionNormalizer = $administrationRolePermissionNormalizer;
-        $this->session = $session;
         $this->router = $router;
     }
 
@@ -58,12 +53,12 @@ final class CreateAdministrationRoleAction
                 $normalizedPermissions
             ));
 
-            $this->session->getFlashBag()->add(
+            $request->getSession()->getFlashBag()->add(
                 'success',
                 'sylius_rbac.administration_role_successfully_created'
             );
         } catch (\Exception $exception) {
-            $this->session->getFlashBag()->add('error', $exception->getMessage());
+            $request->getSession()->getFlashBag()->add('error', $exception->getMessage());
         }
 
         return new RedirectResponse($this->router->generate('sylius_rbac_admin_administration_role_create_view', []));

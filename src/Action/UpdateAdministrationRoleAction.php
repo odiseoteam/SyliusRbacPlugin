@@ -21,21 +21,16 @@ final class UpdateAdministrationRoleAction
     /** @var AdministrationRolePermissionNormalizerInterface */
     private $administrationRolePermissionNormalizer;
 
-    /** @var Session */
-    private $session;
-
     /** @var UrlGeneratorInterface */
     private $router;
 
     public function __construct(
         MessageBusInterface $bus,
         AdministrationRolePermissionNormalizerInterface $administrationRolePermissionNormalizer,
-        Session $session,
         UrlGeneratorInterface $router
     ) {
         $this->bus = $bus;
         $this->administrationRolePermissionNormalizer = $administrationRolePermissionNormalizer;
-        $this->session = $session;
         $this->router = $router;
     }
 
@@ -59,12 +54,12 @@ final class UpdateAdministrationRoleAction
                 $normalizedPermissions
             ));
 
-            $this->session->getFlashBag()->add(
+            $request->getSession()->getFlashBag()->add(
                 'success',
                 'sylius_rbac.administration_role_successfully_updated'
             );
         } catch (\Exception $exception) {
-            $this->session->getFlashBag()->add('error', $exception->getMessage());
+            $request->getSession()->getFlashBag()->add('error', $exception->getMessage());
         }
 
         return new RedirectResponse(

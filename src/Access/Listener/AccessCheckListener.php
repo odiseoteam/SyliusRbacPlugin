@@ -12,7 +12,7 @@ use Odiseo\SyliusRbacPlugin\Access\Exception\InsecureRequestException;
 use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -33,9 +33,6 @@ final class AccessCheckListener
     /** @var UrlGeneratorInterface */
     private $router;
 
-    /** @var Session */
-    private $session;
-
     /** @var RouteNameCheckerInterface */
     private $adminRouteChecker;
 
@@ -44,14 +41,12 @@ final class AccessCheckListener
         AdministratorAccessCheckerInterface $administratorAccessChecker,
         TokenStorageInterface $tokenStorage,
         UrlGeneratorInterface $router,
-        Session $session,
         RouteNameCheckerInterface $adminRouteChecker
     ) {
         $this->accessRequestCreator = $accessRequestCreator;
         $this->administratorAccessChecker = $administratorAccessChecker;
         $this->tokenStorage = $tokenStorage;
         $this->router = $router;
-        $this->session = $session;
         $this->adminRouteChecker = $adminRouteChecker;
     }
 
@@ -66,15 +61,14 @@ final class AccessCheckListener
         if ($this->administratorAccessChecker->canAccessSection($this->getCurrentAdmin(), $accessRequest)) {
             return;
         }
-
-        $this->addAccessErrorFlash($event->getRequest()->getMethod());
+        $this->addAccessErrorFlash($event->getRequest()->getMethod(), $event->getRequest()->getSession());
         $event->setResponse($this->getRedirectResponse($event->getRequest()->headers->get('referer')));
     }
 
     /** @throws InsecureRequestException */
     private function createAccessRequestFromEvent(RequestEvent $event): AccessRequest
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             throw new InsecureRequestException();
         }
 
@@ -110,10 +104,10 @@ final class AccessCheckListener
         return $currentAdmin;
     }
 
-    private function addAccessErrorFlash(string $requestMethod): void
+    private function addAccessErrorFlash(string $requestMethod, SessionInterface $session): void
     {
         if ('GET' === $requestMethod || 'HEAD' === $requestMethod) {
-            $this->session->getFlashBag()->add('error', 'sylius_rbac.you_have_no_access_to_this_section');
+            $session->getFlashBag()->add('error', 'sylius_rbac.you_have_no_access_to_this_section');
 
             return;
         }
