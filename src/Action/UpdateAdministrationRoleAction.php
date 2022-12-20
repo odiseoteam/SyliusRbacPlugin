@@ -38,7 +38,7 @@ final class UpdateAdministrationRoleAction
     {
         try {
             /** @var array $administrationRolePermissions */
-            $administrationRolePermissions = $request->request->get('permissions');
+            $administrationRolePermissions = $request->request->all()['permissions'];
 
             $normalizedPermissions = $this
                 ->administrationRolePermissionNormalizer
