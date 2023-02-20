@@ -9,8 +9,8 @@
     "description": "Sylius roles and permissions management plugin",
     "license": "MIT",
     "require": {
-        "php": "^7.4 || ^8.0",
-        "sylius/sylius": "~1.9.0 || ~1.10.0 || ~1.11.0 || ~1.12.0",
+        "php": "^8.0",
+        "sylius/sylius": "~1.11.0 || ~1.12.0",
         "symfony/messenger": "^4.4 || ^5.2 || ^6.0"
     },
     "require-dev": {
