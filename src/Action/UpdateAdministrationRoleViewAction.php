@@ -32,23 +32,18 @@ final class UpdateAdministrationRoleViewAction
     /** @var UrlGeneratorInterface */
     private $router;
 
-    /** @var Session */
-    private $session;
-
     public function __construct(
         AdminPermissionsProviderInterface $adminPermissionsProvider,
         RepositoryInterface $administrationRoleRepository,
         PermissionDataExtractorInterface $permissionDataExtractor,
         Environment $twig,
-        UrlGeneratorInterface $router,
-        Session $session
+        UrlGeneratorInterface $router
     ) {
         $this->adminPermissionsProvider = $adminPermissionsProvider;
         $this->administrationRoleRepository = $administrationRoleRepository;
         $this->permissionDataExtractor = $permissionDataExtractor;
         $this->twig = $twig;
         $this->router = $router;
-        $this->session = $session;
     }
 
     public function __invoke(Request $request): Response
@@ -57,7 +52,7 @@ final class UpdateAdministrationRoleViewAction
         $administrationRole = $this->administrationRoleRepository->find($request->attributes->get('id'));
 
         if (null === $administrationRole) {
-            $this->session->getFlashBag()->add('error', [
+            $request->getSession()->getFlashBag()->add('error', [
                 'message' => 'sylius_rbac.administration_role_not_found',
                 'parameters' => ['%administration_role_id%' => $request->attributes->get('id')],
             ]);

@@ -48,7 +48,6 @@
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface" />
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="router" />
-            <argument type="service" id="session" />
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface" />
             <tag name="kernel.event_listener" event="kernel.request" />
         </service>
