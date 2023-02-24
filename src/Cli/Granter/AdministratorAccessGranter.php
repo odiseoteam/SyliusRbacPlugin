@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Cli\Granter;
 
 use Doctrine\Persistence\ObjectManager;
+use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
-use Odiseo\SyliusRbacPlugin\Entity\AdministrationRole;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
@@ -26,11 +26,13 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
     public function __construct(
         RepositoryInterface $administratorRepository,
         RepositoryInterface $administratorRoleRepository,
-        ObjectManager $objectManager
+        ObjectManager $objectManager,
+        AdministrationRoleFactoryInterface $administrationRoleFactory
     ) {
         $this->administratorRepository = $administratorRepository;
         $this->administratorRoleRepository = $administratorRoleRepository;
         $this->objectManager = $objectManager;
+        $this->administrationRoleFactory = $administrationRoleFactory;
     }
 
     public function __invoke(string $email, string $roleName, array $sections): void
@@ -67,8 +69,7 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
         $administrationRole = $this->administratorRoleRepository->findOneBy(['name' => $roleName]);
 
         if (null === $administrationRole) {
-            $administrationRole = new AdministrationRole();
-            $administrationRole->setName($roleName);
+            $administrationRole = $this->administrationRoleFactory->createWithName($roleName);
         }
 
         return $administrationRole;
