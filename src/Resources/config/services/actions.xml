@@ -12,7 +12,6 @@
         <service id="Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleAction">
             <argument type="service" id="messenger.default_bus" />
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
-            <argument type="service" id="session" />
             <argument type="service" id="router" />
         </service>
 
@@ -22,13 +21,11 @@
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Extractor\PermissionDataExtractor"/>
             <argument type="service" id="twig" />
             <argument type="service" id="router" />
-            <argument type="service" id="session" />
         </service>
 
         <service id="Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleAction">
             <argument type="service" id="messenger.default_bus" />
             <argument type="service" id="Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer" />
-            <argument type="service" id="session" />
             <argument type="service" id="router" />
         </service>
     </services>
