@@ -29,25 +29,25 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
             }
         }
 
-        foreach ($this->configuration['customers'] as $customersRoutePrefix) {
+        foreach ($this->configuration['customers_management'] as $customersRoutePrefix) {
             if (strpos($routeName, $customersRoutePrefix) === 0) {
                 return new AccessRequest(Section::customers(), $operationType);
             }
         }
 
-        foreach ($this->configuration['marketing'] as $marketingRoutePrefix) {
+        foreach ($this->configuration['marketing_management'] as $marketingRoutePrefix) {
             if (strpos($routeName, $marketingRoutePrefix) === 0) {
                 return new AccessRequest(Section::marketing(), $operationType);
             }
         }
 
-        foreach ($this->configuration['sales'] as $salesRoutePrefix) {
+        foreach ($this->configuration['sales_management'] as $salesRoutePrefix) {
             if (strpos($routeName, $salesRoutePrefix) === 0) {
                 return new AccessRequest(Section::sales(), $operationType);
             }
         }
 
-        foreach ($this->configuration['catalog'] as $catalogRoutePrefix) {
+        foreach ($this->configuration['catalog_management'] as $catalogRoutePrefix) {
             if (strpos($routeName, $catalogRoutePrefix) === 0) {
                 return new AccessRequest(Section::catalog(), $operationType);
             }

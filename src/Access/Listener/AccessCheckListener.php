@@ -112,7 +112,7 @@ final class AccessCheckListener
             return;
         }
 
-        $this->session->getFlashBag()->add('error', 'sylius_rbac.you_are_not_allowed_to_do_that');
+        $session->getFlashBag()->add('error', 'sylius_rbac.you_are_not_allowed_to_do_that');
     }
 
     private function getRedirectResponse(?string $referer): RedirectResponse
