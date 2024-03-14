@@ -15,6 +15,7 @@ services:
             - '%locale%'
             - '@file_locator'
             - '@sylius.image_uploader'
+            - '@sylius.factory.avatar_image'
 
     odiseo_sylius_rbac_plugin.fixture.administration_role:
         class: Odiseo\SyliusRbacPlugin\Fixture\AdministrationRoleFixture

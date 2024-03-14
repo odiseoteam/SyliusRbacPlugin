@@ -13,13 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class GrantAccessToGivenAdministratorCommand extends Command
 {
-    /** @var AdministratorAccessGranterInterface */
-    private $administratorAccessGranter;
-
-    public function __construct(AdministratorAccessGranterInterface $administratorAccessGranter)
-    {
+    public function __construct(
+        private AdministratorAccessGranterInterface $administratorAccessGranter
+    ) {
         parent::__construct('sylius-rbac:grant-access-to-given-administrator');
-        $this->administratorAccessGranter = $administratorAccessGranter;
     }
 
     protected function configure(): void

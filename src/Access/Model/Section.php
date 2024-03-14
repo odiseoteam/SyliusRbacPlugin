@@ -12,8 +12,7 @@ final class Section
     public const MARKETING = 'marketing';
     public const SALES = 'sales';
 
-    /** @var string */
-    private $type;
+    private string $type;
 
     public static function catalog(): self
     {

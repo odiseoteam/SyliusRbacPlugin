@@ -37,20 +37,14 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
 
     private function getSectionForPermission(Permission $permission): Section
     {
-        switch (true) {
-            case $permission->equals(Permission::configuration()):
-                return Section::configuration();
-            case $permission->equals(Permission::catalogManagement()):
-                return Section::catalog();
-            case $permission->equals(Permission::marketingManagement()):
-                return Section::marketing();
-            case $permission->equals(Permission::customerManagement()):
-                return Section::customers();
-            case $permission->equals(Permission::salesManagement()):
-                return Section::sales();
-        }
-
-        return Section::ofType($permission->type());
+        return match (true) {
+            $permission->equals(Permission::configuration()) => Section::configuration(),
+            $permission->equals(Permission::catalogManagement()) => Section::catalog(),
+            $permission->equals(Permission::marketingManagement()) => Section::marketing(),
+            $permission->equals(Permission::customerManagement()) => Section::customers(),
+            $permission->equals(Permission::salesManagement()) => Section::sales(),
+            default => Section::ofType($permission->type()),
+        };
     }
 
     private function canWriteAccess(Permission $permission): bool

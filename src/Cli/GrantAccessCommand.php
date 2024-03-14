@@ -14,13 +14,10 @@ use Symfony\Component\Console\Question\Question;
 
 final class GrantAccessCommand extends Command
 {
-    /** @var AdministratorAccessGranterInterface */
-    private $administratorAccessGranter;
-
-    public function __construct(AdministratorAccessGranterInterface $administratorAccessGranter)
-    {
+    public function __construct(
+        private AdministratorAccessGranterInterface $administratorAccessGranter
+    ) {
         parent::__construct('sylius-rbac:grant-access');
-        $this->administratorAccessGranter = $administratorAccessGranter;
     }
 
     protected function configure(): void

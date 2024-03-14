@@ -9,29 +9,16 @@ use Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInt
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CreateAdministrationRoleAction
 {
-    /** @var MessageBusInterface */
-    private $bus;
-
-    /** @var AdministrationRolePermissionNormalizerInterface */
-    private $administrationRolePermissionNormalizer;
-
-    /** @var UrlGeneratorInterface */
-    private $router;
-
     public function __construct(
-        MessageBusInterface $bus,
-        AdministrationRolePermissionNormalizerInterface $administrationRolePermissionNormalizer,
-        UrlGeneratorInterface $router
+        private MessageBusInterface $bus,
+        private AdministrationRolePermissionNormalizerInterface $administrationRolePermissionNormalizer,
+        private UrlGeneratorInterface $router
     ) {
-        $this->bus = $bus;
-        $this->administrationRolePermissionNormalizer = $administrationRolePermissionNormalizer;
-        $this->router = $router;
     }
 
     public function __invoke(Request $request): Response
@@ -55,12 +42,12 @@ final class CreateAdministrationRoleAction
 
             $request->getSession()->getFlashBag()->add(
                 'success',
-                'sylius_rbac.administration_role_successfully_created'
+                'odiseo_sylius_rbac_plugin.administration_role_successfully_created'
             );
         } catch (\Exception $exception) {
             $request->getSession()->getFlashBag()->add('error', $exception->getMessage());
         }
 
-        return new RedirectResponse($this->router->generate('sylius_rbac_admin_administration_role_create_view', []));
+        return new RedirectResponse($this->router->generate('odiseo_sylius_rbac_plugin_admin_administration_role_create_view'));
     }
 }

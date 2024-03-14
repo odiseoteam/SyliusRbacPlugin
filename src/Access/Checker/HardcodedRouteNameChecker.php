@@ -9,8 +9,8 @@ final class HardcodedRouteNameChecker implements RouteNameCheckerInterface
     public function isAdminRoute(string $routeName): bool
     {
         return
-            strpos($routeName, 'sylius_admin') !== false ||
-            strpos($routeName, 'sylius_rbac_admin') !== false
+            str_contains($routeName, 'sylius_admin') ||
+            str_contains($routeName, 'odiseo_sylius_rbac_plugin_admin')
         ;
     }
 }

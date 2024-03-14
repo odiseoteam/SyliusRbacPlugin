@@ -11,12 +11,9 @@ use Odiseo\SyliusRbacPlugin\Access\Model\Section;
 
 final class AccessRequestCreator implements AccessRequestCreatorInterface
 {
-    /** @var array */
-    private $configuration;
-
-    public function __construct(array $configuration)
-    {
-        $this->configuration = $configuration;
+    public function __construct(
+        private array $configuration
+    ) {
     }
 
     public function createFromRouteName(string $routeName, string $requestMethod): AccessRequest
@@ -24,38 +21,38 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
         $operationType = $this->resolveOperationType($requestMethod);
 
         foreach ($this->configuration['configuration'] as $configurationRoutePrefix) {
-            if (strpos($routeName, $configurationRoutePrefix) === 0) {
+            if (str_starts_with($routeName, $configurationRoutePrefix)) {
                 return new AccessRequest(Section::configuration(), $operationType);
             }
         }
 
         foreach ($this->configuration['customers_management'] as $customersRoutePrefix) {
-            if (strpos($routeName, $customersRoutePrefix) === 0) {
+            if (str_starts_with($routeName, $customersRoutePrefix)) {
                 return new AccessRequest(Section::customers(), $operationType);
             }
         }
 
         foreach ($this->configuration['marketing_management'] as $marketingRoutePrefix) {
-            if (strpos($routeName, $marketingRoutePrefix) === 0) {
+            if (str_starts_with($routeName, $marketingRoutePrefix)) {
                 return new AccessRequest(Section::marketing(), $operationType);
             }
         }
 
         foreach ($this->configuration['sales_management'] as $salesRoutePrefix) {
-            if (strpos($routeName, $salesRoutePrefix) === 0) {
+            if (str_starts_with($routeName, $salesRoutePrefix)) {
                 return new AccessRequest(Section::sales(), $operationType);
             }
         }
 
         foreach ($this->configuration['catalog_management'] as $catalogRoutePrefix) {
-            if (strpos($routeName, $catalogRoutePrefix) === 0) {
+            if (str_starts_with($routeName, $catalogRoutePrefix)) {
                 return new AccessRequest(Section::catalog(), $operationType);
             }
         }
 
         foreach ($this->configuration['custom'] as $sectionName => $sectionPrefixes) {
             foreach ($sectionPrefixes as $prefix) {
-                if (strpos($routeName, $prefix) === 0) {
+                if (str_starts_with($routeName, $prefix)) {
                     return new AccessRequest(Section::ofType($sectionName), $operationType);
                 }
             }

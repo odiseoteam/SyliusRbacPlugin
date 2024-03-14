@@ -10,12 +10,9 @@ use Odiseo\SyliusRbacPlugin\Model\Permission;
 
 final class AdministrationRoleFactory implements AdministrationRoleFactoryInterface
 {
-    /** @var FactoryInterface */
-    private $decoratedFactory;
-
-    public function __construct(FactoryInterface $decoratedFactory)
-    {
-        $this->decoratedFactory = $decoratedFactory;
+    public function __construct(
+        private FactoryInterface $decoratedFactory
+    ) {
     }
 
     public function createWithNameAndPermissions(string $name, array $permissions): AdministrationRoleInterface

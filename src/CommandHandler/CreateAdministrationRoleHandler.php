@@ -12,28 +12,12 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class CreateAdministrationRoleHandler implements MessageHandlerInterface
 {
-    /** @var ObjectManager */
-    private $administrationRoleManager;
-
-    /** @var AdministrationRoleFactoryInterface */
-    private $administrationRoleFactory;
-
-    /** @var AdministrationRoleValidatorInterface */
-    private $validator;
-
-    /** @var string */
-    private $validationGroup;
-
     public function __construct(
-        ObjectManager $objectManager,
-        AdministrationRoleFactoryInterface $administrationRoleFactory,
-        AdministrationRoleValidatorInterface $validator,
-        string $validationGroup
+        private ObjectManager $administrationRoleManager,
+        private AdministrationRoleFactoryInterface $administrationRoleFactory,
+        private AdministrationRoleValidatorInterface $validator,
+        private string $validationGroup
     ) {
-        $this->administrationRoleManager = $objectManager;
-        $this->administrationRoleFactory = $administrationRoleFactory;
-        $this->validator = $validator;
-        $this->validationGroup = $validationGroup;
     }
 
     public function __invoke(CreateAdministrationRole $message): void

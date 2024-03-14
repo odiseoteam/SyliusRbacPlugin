@@ -13,23 +13,12 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-final class AdministrationRoleFixture extends AbstractFixture implements FixtureInterface
+class AdministrationRoleFixture extends AbstractFixture implements FixtureInterface
 {
-    /** @var FactoryInterface */
-    private $administrationRoleFactory;
-
-    /** @var ObjectManager */
-    private $administrationRoleManager;
-
-    public function __construct(FactoryInterface $administrationRoleFactory, ObjectManager $administrationRoleManager)
-    {
-        $this->administrationRoleFactory = $administrationRoleFactory;
-        $this->administrationRoleManager = $administrationRoleManager;
-    }
-
-    public function getName(): string
-    {
-        return 'administration_role';
+    public function __construct(
+        protected FactoryInterface $administrationRoleFactory,
+        protected ObjectManager $administrationRoleManager
+    ) {
     }
 
     public function load(array $options): void
@@ -55,5 +44,10 @@ final class AdministrationRoleFixture extends AbstractFixture implements Fixture
 
         $node->scalarNode('name')->cannotBeEmpty();
         $node->arrayNode('permissions')->scalarPrototype()->defaultValue([]);
+    }
+
+    public function getName(): string
+    {
+        return 'administration_role';
     }
 }

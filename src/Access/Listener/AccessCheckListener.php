@@ -21,33 +21,13 @@ use Webmozart\Assert\Assert;
 
 final class AccessCheckListener
 {
-    /** @var AccessRequestCreatorInterface */
-    private $accessRequestCreator;
-
-    /** @var AdministratorAccessCheckerInterface */
-    private $administratorAccessChecker;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var UrlGeneratorInterface */
-    private $router;
-
-    /** @var RouteNameCheckerInterface */
-    private $adminRouteChecker;
-
     public function __construct(
-        AccessRequestCreatorInterface $accessRequestCreator,
-        AdministratorAccessCheckerInterface $administratorAccessChecker,
-        TokenStorageInterface $tokenStorage,
-        UrlGeneratorInterface $router,
-        RouteNameCheckerInterface $adminRouteChecker
+        private AccessRequestCreatorInterface $accessRequestCreator,
+        private AdministratorAccessCheckerInterface $administratorAccessChecker,
+        private TokenStorageInterface $tokenStorage,
+        private UrlGeneratorInterface $router,
+        private RouteNameCheckerInterface $adminRouteChecker
     ) {
-        $this->accessRequestCreator = $accessRequestCreator;
-        $this->administratorAccessChecker = $administratorAccessChecker;
-        $this->tokenStorage = $tokenStorage;
-        $this->router = $router;
-        $this->adminRouteChecker = $adminRouteChecker;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -61,6 +41,7 @@ final class AccessCheckListener
         if ($this->administratorAccessChecker->canAccessSection($this->getCurrentAdmin(), $accessRequest)) {
             return;
         }
+
         $this->addAccessErrorFlash($event->getRequest()->getMethod(), $event->getRequest()->getSession());
         $event->setResponse($this->getRedirectResponse($event->getRequest()->headers->get('referer')));
     }
@@ -107,12 +88,12 @@ final class AccessCheckListener
     private function addAccessErrorFlash(string $requestMethod, SessionInterface $session): void
     {
         if ('GET' === $requestMethod || 'HEAD' === $requestMethod) {
-            $session->getFlashBag()->add('error', 'sylius_rbac.you_have_no_access_to_this_section');
+            $session->getFlashBag()->add('error', 'odiseo_sylius_rbac_plugin.you_have_no_access_to_this_section');
 
             return;
         }
 
-        $session->getFlashBag()->add('error', 'sylius_rbac.you_are_not_allowed_to_do_that');
+        $session->getFlashBag()->add('error', 'odiseo_sylius_rbac_plugin.you_are_not_allowed_to_do_that');
     }
 
     private function getRedirectResponse(?string $referer): RedirectResponse

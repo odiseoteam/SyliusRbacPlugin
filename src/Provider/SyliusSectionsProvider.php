@@ -8,12 +8,9 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
 {
     private const CUSTOM_SECTION_CONFIGURATION_KEY = 'custom';
 
-    /** @var array */
-    private $rbacConfiguration;
-
-    public function __construct(array $rbacConfiguration)
-    {
-        $this->rbacConfiguration = $rbacConfiguration;
+    public function __construct(
+        private array $rbacConfiguration
+    ) {
     }
 
     public function __invoke(): array

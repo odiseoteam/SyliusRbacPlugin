@@ -15,8 +15,8 @@ final class AdminMenuListener
         $rbacSection = $menu->addChild('rbac')->setLabel('sylius_rbac.ui.rbac');
 
         $rbacSection
-            ->addChild('administration_roles', ['route' => 'sylius_rbac_admin_administration_role_index'])
-            ->setLabel('sylius_rbac.ui.administration_roles')
+            ->addChild('administration_roles', ['route' => 'odiseo_sylius_rbac_plugin_admin_administration_role_index'])
+            ->setLabel('odiseo_sylius_rbac_plugin.ui.administration_roles')
             ->setLabelAttribute('icon', 'address card')
         ;
     }

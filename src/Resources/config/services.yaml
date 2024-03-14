@@ -9,7 +9,6 @@ imports:
 
 services:
     Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer:
-    Odiseo\SyliusRbacPlugin\Extractor\PermissionDataExtractor:
 
     odiseo_sylius_rbac_plugin.custom_factory.administration_role:
         class: Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactory

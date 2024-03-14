@@ -11,12 +11,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class AdministrationRoleChoiceType extends AbstractType
 {
-    /** @var ObjectRepository */
-    private $administrationRoleRepository;
-
-    public function __construct(ObjectRepository $administrationRoleRepository)
-    {
-        $this->administrationRoleRepository = $administrationRoleRepository;
+    public function __construct(
+        private ObjectRepository $administrationRoleRepository
+    ) {
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -38,6 +35,6 @@ final class AdministrationRoleChoiceType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'odiseo_sylius_rbac_plugin_administration_role_choice';
+        return 'odiseo_sylius_administration_role_choice';
     }
 }

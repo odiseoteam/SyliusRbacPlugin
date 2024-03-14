@@ -6,42 +6,22 @@ namespace Odiseo\SyliusRbacPlugin\CommandHandler;
 
 use Doctrine\Persistence\ObjectManager;
 use Odiseo\SyliusRbacPlugin\Message\UpdateAdministrationRole;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 use Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidatorInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class UpdateAdministrationRoleHandler implements MessageHandlerInterface
 {
-    /** @var ObjectManager */
-    private $administrationRoleManager;
-
-    /** @var AdministrationRoleFactoryInterface */
-    private $administrationRoleFactory;
-
-    /** @var RepositoryInterface */
-    private $administrationRoleRepository;
-
-    /** @var AdministrationRoleValidatorInterface */
-    private $validator;
-
-    /** @var string */
-    private $validationGroup;
-
     public function __construct(
-        ObjectManager $administrationRoleManager,
-        AdministrationRoleFactoryInterface $administrationRoleFactory,
-        RepositoryInterface $administrationRoleRepository,
-        AdministrationRoleValidatorInterface $validator,
-        string $validationGroup
+        private ObjectManager $administrationRoleManager,
+        private AdministrationRoleFactoryInterface $administrationRoleFactory,
+        private RepositoryInterface $administrationRoleRepository,
+        private AdministrationRoleValidatorInterface $validator,
+        private string $validationGroup
     ) {
-        $this->administrationRoleManager = $administrationRoleManager;
-        $this->administrationRoleFactory = $administrationRoleFactory;
-        $this->administrationRoleRepository = $administrationRoleRepository;
-        $this->validator = $validator;
-        $this->validationGroup = $validationGroup;
     }
 
     public function __invoke(UpdateAdministrationRole $message): void
@@ -53,7 +33,7 @@ final class UpdateAdministrationRoleHandler implements MessageHandlerInterface
         ;
 
         if (null === $administrationRole) {
-            throw new \InvalidArgumentException('sylius_rbac.administration_role_does_not_exist');
+            throw new \InvalidArgumentException('odiseo_sylius_rbac_plugin.administration_role_does_not_exist');
         }
 
         $administrationRoleUpdates = $this->administrationRoleFactory->createWithNameAndPermissions(

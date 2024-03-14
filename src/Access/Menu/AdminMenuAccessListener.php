@@ -15,23 +15,11 @@ use Webmozart\Assert\Assert;
 
 final class AdminMenuAccessListener
 {
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var AdministratorAccessCheckerInterface */
-    private $accessChecker;
-
-    /** @var array */
-    private $configuration;
-
     public function __construct(
-        TokenStorageInterface $tokenStorage,
-        AdministratorAccessCheckerInterface $accessChecker,
-        array $configuration
+        private TokenStorageInterface $tokenStorage,
+        private AdministratorAccessCheckerInterface $accessChecker,
+        private array $configuration
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->accessChecker = $accessChecker;
-        $this->configuration = $configuration;
     }
 
     public function removeInaccessibleAdminMenuParts(MenuBuilderEvent $event): void

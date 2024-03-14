@@ -6,16 +6,10 @@ namespace Odiseo\SyliusRbacPlugin\Message;
 
 final class CreateAdministrationRole
 {
-    /** @var string */
-    private $administrationRoleName;
-
-    /** @var array */
-    private $permissions;
-
-    public function __construct(string $administrationRoleName, array $permissions = [])
-    {
-        $this->administrationRoleName = $administrationRoleName;
-        $this->permissions = $permissions;
+    public function __construct(
+        private string $administrationRoleName,
+        private array $permissions = []
+    ) {
     }
 
     public function administrationRoleName(): string

@@ -15,11 +15,9 @@ final class Permission implements PermissionInterface
     public const MARKETING_MANAGEMENT_PERMISSION = 'marketing_management';
     public const SALES_MANAGEMENT_PERMISSION = 'sales_management';
 
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var array */
-    private $operationTypes;
+    private array $operationTypes;
 
     public static function catalogManagement(array $operationTypes = []): self
     {

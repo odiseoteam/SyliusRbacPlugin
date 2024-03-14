@@ -14,8 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class InstallPluginCommand extends Command
 {
-    /** @var array */
-    private $commands = [
+    private array $commands = [
         [
             'command' => 'sylius:fixtures:load',
             'message' => 'Loads default no sections access role',
@@ -53,19 +52,11 @@ final class InstallPluginCommand extends Command
         ],
     ];
 
-    /** @var SyliusSectionsProviderInterface */
-    private $syliusSectionsProvider;
-
-    /** @var string */
-    private $administratorEmail;
-
     public function __construct(
-        SyliusSectionsProviderInterface $syliusSectionsProvider,
-        string $administratorEmail
+        private SyliusSectionsProviderInterface $syliusSectionsProvider,
+        private string $administratorEmail
     ) {
         parent::__construct();
-        $this->syliusSectionsProvider = $syliusSectionsProvider;
-        $this->administratorEmail = $administratorEmail;
     }
 
     protected function configure(): void

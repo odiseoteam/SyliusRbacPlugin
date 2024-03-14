@@ -1,5 +1,6 @@
 odiseo_sylius_rbac_plugin:
     administration_role_does_not_exist: 'Ce rôle n''existe pas'
+    administration_role_not_found: 'Le rôle avec l''ID %administration_role_id% est introuvable'
     administration_role_successfully_created: 'Le rôle a bien été créé'
     administration_role_successfully_updated: 'Le rôle a bien été modifié'
     you_are_not_allowed_to_do_that: 'Vous n''avez pas les droits suffisants pour effectuer cette action'

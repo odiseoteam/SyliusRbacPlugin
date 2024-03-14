@@ -6,7 +6,6 @@ namespace Odiseo\SyliusRbacPlugin\Factory;
 
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AdminUserExampleFactory as BaseAdminUserExampleFactory;
-use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Sylius\Component\Core\Uploader\ImageUploaderInterface;
@@ -16,44 +15,34 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class AdminUserExampleFactory extends BaseAdminUserExampleFactory implements ExampleFactoryInterface
+class AdminUserExampleFactory extends BaseAdminUserExampleFactory
 {
-    /** @var RepositoryInterface */
-    private $administrationRoleRepository;
-
-    /** @var OptionsResolver */
-    private $optionsResolver;
+    protected OptionsResolver $optionsResolver;
 
     public function __construct(
+        protected RepositoryInterface $administrationRoleRepository,
         FactoryInterface $userFactory,
-        RepositoryInterface $administrationRoleRepository,
         string $localeCode,
         FileLocatorInterface $fileLocator,
-        ImageUploaderInterface $imageUploader
+        ImageUploaderInterface $imageUploader,
+        FactoryInterface $avatarImageFactory
     ) {
-        $this->administrationRoleRepository = $administrationRoleRepository;
-
-        parent::__construct($userFactory, $localeCode, $fileLocator, $imageUploader);
-
         $this->optionsResolver = new OptionsResolver();
 
-        $this->configureOptions($this->optionsResolver);
-    }
-
-    protected function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
-
-        $resolver
-            ->setDefined('administration_role')
-            ->setAllowedTypes('administration_role', ['string', AdministrationRoleInterface::class, 'null'])
-            ->setNormalizer('administration_role', LazyOption::findOneBy($this->administrationRoleRepository, 'name'))
-        ;
+        parent::__construct(
+            $userFactory,
+            $localeCode,
+            $fileLocator,
+            $imageUploader,
+            $avatarImageFactory
+        );
     }
 
     public function create(array $options = []): AdminUserInterface
     {
         $user = parent::create($options);
+
+        $this->configureOptions($this->optionsResolver);
 
         $options = $this->optionsResolver->resolve($options);
 
@@ -66,5 +55,16 @@ final class AdminUserExampleFactory extends BaseAdminUserExampleFactory implemen
         }
 
         return $user;
+    }
+
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+
+        $resolver
+            ->setDefined('administration_role')
+            ->setAllowedTypes('administration_role', ['string', AdministrationRoleInterface::class, 'null'])
+            ->setNormalizer('administration_role', LazyOption::findOneBy($this->administrationRoleRepository, 'name'))
+        ;
     }
 }

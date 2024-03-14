@@ -17,7 +17,6 @@ services:
         arguments:
             - '@Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProvider'
             - '@odiseo_sylius_rbac_plugin.repository.administration_role'
-            - '@Odiseo\SyliusRbacPlugin\Extractor\PermissionDataExtractor'
             - '@twig'
             - '@router'
 
