@@ -1,0 +1,29 @@
+services:
+    Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleViewAction:
+        public: true
+        arguments:
+            - '@Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProvider'
+            - '@twig'
+
+    Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleAction:
+        public: true
+        arguments:
+            - '@messenger.default_bus'
+            - '@Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer'
+            - '@router'
+
+    Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleViewAction:
+        public: true
+        arguments:
+            - '@Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProvider'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@Odiseo\SyliusRbacPlugin\Extractor\PermissionDataExtractor'
+            - '@twig'
+            - '@router'
+
+    Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleAction:
+        public: true
+        arguments:
+            - '@messenger.default_bus'
+            - '@Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer'
+            - '@router'

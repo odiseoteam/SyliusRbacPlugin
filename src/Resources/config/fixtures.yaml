@@ -1,0 +1,10 @@
+sylius_fixtures:
+    suites:
+        default_rbac_fixtures:
+            fixtures:
+                administration_role:
+                    options:
+                        name: 'No sections access'
+
+            listeners:
+                logger: ~

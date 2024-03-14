@@ -8,7 +8,7 @@ use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
 {
-    public function addRbacMenu(MenuBuilderEvent $event): void
+    public function addAdminMenuItems(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
 

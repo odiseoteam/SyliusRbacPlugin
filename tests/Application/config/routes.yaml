@@ -1,2 +1,3 @@
-sylius_rbac_plugin:
-    resource: "@OdiseoSyliusRbacPlugin/Resources/config/routing.yml"
+odiseo_sylius_rbac_plugin_admin:
+    resource: "@OdiseoSyliusRbacPlugin/Resources/config/routing/admin.yaml"
+    prefix: /admin

@@ -38,6 +38,6 @@ final class AdministrationRoleChoiceType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'sylius_rbac_administration_role_choice';
+        return 'odiseo_sylius_rbac_plugin_administration_role_choice';
     }
 }

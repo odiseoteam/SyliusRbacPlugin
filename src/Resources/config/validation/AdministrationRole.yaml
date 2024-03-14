@@ -1,0 +1,11 @@
+Odiseo\SyliusRbacPlugin\Entity\AdministrationRole:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [name]
+            message: 'odiseo_sylius_rbac_plugin.administration_role.name.unique'
+            groups: ['odiseo_sylius_rbac_plugin_admin_administration_role_create']
+    properties:
+        name:
+            - NotBlank:
+                message: 'odiseo_sylius_rbac_plugin.administration_role.name.not_blank'
+                groups: ['odiseo_sylius_rbac_plugin_admin_administration_role_create', 'odiseo_sylius_rbac_plugin_admin_administration_role_update']

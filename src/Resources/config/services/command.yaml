@@ -1,0 +1,27 @@
+services:
+    Odiseo\SyliusRbacPlugin\Cli\GrantAccessCommand:
+        arguments:
+            - '@Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter'
+        tags:
+            - { name: console.command, command: sylius-rbac:grant-access }
+
+    Odiseo\SyliusRbacPlugin\Cli\GrantAccessToGivenAdministratorCommand:
+        arguments:
+            - '@Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter'
+        tags:
+            - { name: console.command, command: sylius-rbac:grant-access-to-given-administrator }
+
+    Odiseo\SyliusRbacPlugin\Cli\InstallPluginCommand:
+        arguments:
+            - '@Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider'
+            - '%root_administrator_email%'
+        tags:
+            - { name: console.command, command: sylius-rbac:install-plugin }
+
+    Odiseo\SyliusRbacPlugin\Cli\NormalizeExistingAdministratorsCommand:
+        arguments:
+            - '@sylius.repository.admin_user'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: console.command, command: sylius-rbac:normalize-administrators }

@@ -1,4 +1,4 @@
-sylius_rbac:
+odiseo_sylius_rbac_plugin:
     administration_role_does_not_exist: 'Administration role does not exist'
     administration_role_not_found: 'Administration role with id %administration_role_id% was not found'
     administration_role_successfully_created: 'Administration role has been successfully created'

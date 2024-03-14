@@ -1,0 +1,4 @@
+services:
+    Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator:
+        arguments:
+            - '@validator'
