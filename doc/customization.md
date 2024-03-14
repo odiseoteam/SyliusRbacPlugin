@@ -71,7 +71,7 @@ placed in the `HardcodedRouteNameChecker` class, which is the following:
     {
         return
             strpos($routeName, 'sylius_admin') !== false ||
-            strpos($routeName, 'sylius_rbac_admin') !== false
+            strpos($routeName, 'odiseo_sylius_rbac_plugin_admin') !== false
         ;
     }
 ``` 
@@ -84,7 +84,7 @@ Once you did so, you should override the checker placed above and customize it i
     {
         return
             strpos($routeName, 'sylius_admin') !== false ||
-            strpos($routeName, 'sylius_rbac_admin') !== false ||
+            strpos($routeName, 'odiseo_sylius_rbac_plugin_admin') !== false ||
             strpos($routeName, 'your_custom_phrase' !== false
         ;
     }
