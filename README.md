@@ -32,7 +32,6 @@
 ## Description
 
 This plugin provides basic roles and permissions management functionality for Sylius application.
-It's highly inspired on the old [RbacPlugin](https://github.com/Sylius/RbacPlugin).
 
 Support Sylius version 1.9+.
 
