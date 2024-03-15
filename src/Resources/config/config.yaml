@@ -7,7 +7,7 @@ imports:
 parameters:
     root_administrator_email: ''
 
-odiseo_sylius_rbac_plugin:
+odiseo_sylius_rbac:
     sylius_sections:
         catalog_management:
             - sylius_admin_inventory

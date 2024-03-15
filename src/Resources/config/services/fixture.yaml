@@ -10,8 +10,8 @@ services:
     sylius.fixture.example_factory.admin_user:
         class: Odiseo\SyliusRbacPlugin\Factory\AdminUserExampleFactory
         arguments:
-            - '@sylius.factory.admin_user'
             - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@sylius.factory.admin_user'
             - '%locale%'
             - '@file_locator'
             - '@sylius.image_uploader'

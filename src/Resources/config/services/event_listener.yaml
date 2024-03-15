@@ -1,10 +1,4 @@
 services:
-    Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface:
-        class: Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessChecker
-
-    Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface:
-        class: Odiseo\SyliusRbacPlugin\Access\Checker\HardcodedRouteNameChecker
-
     odiseo_sylius_rbac_plugin.event_listener.admin.menu_builder:
         class: Odiseo\SyliusRbacPlugin\Menu\AdminMenuListener
         tags:

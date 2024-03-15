@@ -62,7 +62,6 @@ final class AdministrationRoleAwareListener implements EventSubscriber
                 [
                     'name' => 'administration_role_id',
                     'referencedColumnName' => 'id',
-                    'nullable' => false,
                 ],
             ],
         ]);
