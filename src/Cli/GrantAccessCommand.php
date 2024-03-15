@@ -57,10 +57,10 @@ final class GrantAccessCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        $question = new Question(
-            'In order to permit access to admin panel sections for given administrator, 
-            please provide administrator\'s email address: ',
-        );
+        $message = 'In order to permit access to admin panel sections for given administrator, ';
+        $message .= 'please provide administrator\'s email address: ';
+
+        $question = new Question($message);
 
         /** @var string $administratorEmail */
         $administratorEmail = $helper->ask($input, $output, $question);
