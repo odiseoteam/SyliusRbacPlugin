@@ -24,13 +24,13 @@ final class InstallPluginCommand extends Command
             'interactive' => false,
         ],
         [
-            'command' => 'sylius-rbac:normalize-administrators',
+            'command' => 'odiseo:rbac:normalize-administrators',
             'message' => 'Assigns new, default role to all administrators in the system',
             'parameters' => [],
             'interactive' => false,
         ],
         [
-            'command' => 'sylius-rbac:grant-access',
+            'command' => 'odiseo:rbac:grant-access',
             'message' => 'Grants access to given sections to specified administrator (via cli)',
             'parameters' => [
                 'roleName' => 'Configurator',
@@ -40,7 +40,7 @@ final class InstallPluginCommand extends Command
             'interactive' => true,
         ],
         [
-            'command' => 'sylius-rbac:grant-access-to-given-administrator',
+            'command' => 'odiseo:rbac:grant-access-to-given-administrator',
             'message' => 'Grants access to given sections to specified administrator (via configuration)',
             'parameters' => [
                 'roleName' => 'Configurator',
@@ -54,7 +54,7 @@ final class InstallPluginCommand extends Command
 
     public function __construct(
         private SyliusSectionsProviderInterface $syliusSectionsProvider,
-        private string $administratorEmail
+        private string $administratorEmail,
     ) {
         parent::__construct();
     }
@@ -62,7 +62,7 @@ final class InstallPluginCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('sylius-rbac:install-plugin')
+            ->setName('odiseo:rbac:install')
             ->setDescription('Installs RBAC plugin');
     }
 
@@ -112,10 +112,11 @@ final class InstallPluginCommand extends Command
 
     private function getCommandMessage(int $step, string $commandMessage): string
     {
-        return sprintf('Step %d of %d. <info>%s</info>',
+        return sprintf(
+            'Step %d of %d. <info>%s</info>',
             $step + 1,
             count($this->commands),
-            $commandMessage
+            $commandMessage,
         );
     }
 
@@ -151,12 +152,12 @@ final class InstallPluginCommand extends Command
 
     private function isGrantAccessToGivenAdministratorCurrentCommand(string $commandName): bool
     {
-        return $commandName === 'sylius-rbac:grant-access-to-given-administrator';
+        return $commandName === 'odiseo:rbac:grant-access-to-given-administrator';
     }
 
     private function isGrantAccessCurrentCommand(string $commandName): bool
     {
-        return $commandName === 'sylius-rbac:grant-access';
+        return $commandName === 'odiseo:rbac:grant-access';
     }
 
     private function isAdministratorEmailProvided(): bool

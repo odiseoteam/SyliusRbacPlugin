@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Factory;
 
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 
 final class AdministrationRoleFactory implements AdministrationRoleFactoryInterface
 {
     public function __construct(
-        private FactoryInterface $decoratedFactory
+        private FactoryInterface $decoratedFactory,
     ) {
     }
 

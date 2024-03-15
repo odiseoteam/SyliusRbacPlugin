@@ -9,7 +9,7 @@ final class UpdateAdministrationRole
     public function __construct(
         private int $administrationRoleId,
         private string $administrationRoleName,
-        private array $permissions = []
+        private array $permissions = [],
     ) {
     }
 

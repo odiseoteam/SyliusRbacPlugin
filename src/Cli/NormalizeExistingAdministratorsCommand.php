@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Cli;
 
 use Doctrine\Persistence\ObjectManager;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,9 +17,9 @@ final class NormalizeExistingAdministratorsCommand extends Command
     public function __construct(
         private RepositoryInterface $administratorRepository,
         private RepositoryInterface $administratorRoleRepository,
-        private ObjectManager $objectManager
+        private ObjectManager $objectManager,
     ) {
-        parent::__construct('sylius-rbac:normalize-administrators');
+        parent::__construct('odiseo:rbac:normalize-administrators');
     }
 
     protected function configure(): void

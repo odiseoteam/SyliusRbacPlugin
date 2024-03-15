@@ -1,3 +1,112 @@
-#imports:
-#    - { resource: services/contexts.yaml }
-#    - { resource: services/pages.yaml }
+imports:
+    - { resource: services/contexts.yaml }
+    - { resource: services/elements.yaml }
+    - { resource: services/pages.yaml }
+
+services:
+    odiseo_sylius_rbac_plugin.behat.pages_availability_checker.catalog:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker
+        arguments:
+            -
+                [
+                    '@sylius.behat.page.admin.taxon.create',
+                    '@sylius.behat.page.admin.product.index',
+                    '@sylius.behat.page.admin.product.create_simple',
+                    '@sylius.behat.page.admin.inventory.index',
+                    '@sylius.behat.page.admin.product_attribute.index',
+                    '@sylius.behat.page.admin.product_option.index',
+                    '@sylius.behat.page.admin.product_option.create',
+                    '@sylius.behat.page.admin.product_association_type.index',
+                    '@sylius.behat.page.admin.product_association_type.create'
+                ]
+
+    odiseo_sylius_rbac_plugin.behat.pages_availability_checker.configuration:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker
+        arguments:
+            -
+                [
+                    '@sylius.behat.page.admin.channel.index',
+                    '@sylius.behat.page.admin.channel.create',
+                    '@sylius.behat.page.admin.country.index',
+                    '@sylius.behat.page.admin.country.create',
+                    '@sylius.behat.page.admin.zone.index',
+                    '@sylius.behat.page.admin.currency.index',
+                    '@sylius.behat.page.admin.currency.create',
+                    '@sylius.behat.page.admin.exchange_rate.index',
+                    '@sylius.behat.page.admin.exchange_rate.create',
+                    '@sylius.behat.page.admin.locale.index',
+                    '@sylius.behat.page.admin.locale.create',
+                    '@sylius.behat.page.admin.payment_method.index',
+                    '@sylius.behat.page.admin.shipping_method.index',
+                    '@sylius.behat.page.admin.shipping_method.create',
+                    '@sylius.behat.page.admin.shipping_category.index',
+                    '@sylius.behat.page.admin.shipping_category.create',
+                    '@sylius.behat.page.admin.tax_category.index',
+                    '@sylius.behat.page.admin.tax_category.create',
+                    '@sylius.behat.page.admin.tax_rate.index',
+                    '@sylius.behat.page.admin.tax_rate.create',
+                    '@sylius.behat.page.admin.administrator.index',
+                    '@sylius.behat.page.admin.administrator.create'
+                ]
+
+    odiseo_sylius_rbac_plugin.behat.pages_availability_checker.customers:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker
+        arguments:
+            -
+                [
+                    '@sylius.behat.page.admin.customer.index',
+                    '@sylius.behat.page.admin.customer.create',
+                    '@sylius.behat.page.admin.customer_group.index',
+                    '@sylius.behat.page.admin.customer_group.create'
+                ]
+
+    odiseo_sylius_rbac_plugin.behat.pages_availability_checker.marketing:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker
+        arguments:
+            -
+                [
+                    '@sylius.behat.page.admin.promotion.index',
+                    '@sylius.behat.page.admin.promotion.create',
+                    '@sylius.behat.page.admin.product_review.index'
+                ]
+
+    odiseo_sylius_rbac_plugin.behat.pages_availability_checker.sales:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker
+        arguments:
+            -
+                [
+                    '@sylius.behat.page.admin.order.index'
+                ]
+
+    odiseo_sylius_rbac_plugin.behat.pages_availability_checker.rbac:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\PagesAvailabilityChecker
+        arguments:
+            -
+                [
+                    '@Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePage',
+                    '@odiseo_sylius_rbac_plugin.behat.page.administration_role.index'
+                ]
+
+    odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.configuration:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
+        arguments:
+            - '@sylius.behat.page.admin.channel.create'
+            - '@sylius.behat.notification_checker'
+
+    odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.catalog:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
+        arguments:
+            - '@sylius.behat.page.admin.taxon.create'
+            - '@sylius.behat.notification_checker'
+
+    odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.customers:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
+        arguments:
+            - '@sylius.behat.page.admin.customer.create'
+            - '@sylius.behat.notification_checker'
+
+    odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.marketing:
+        class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
+        arguments:
+            - '@sylius.behat.page.admin.promotion.create'
+            - '@sylius.behat.notification_checker'

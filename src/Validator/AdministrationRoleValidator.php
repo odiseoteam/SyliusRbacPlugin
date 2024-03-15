@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class AdministrationRoleValidator implements AdministrationRoleValidatorInterface
 {
     public function __construct(
-        private ValidatorInterface $validator
+        private ValidatorInterface $validator,
     ) {
     }
 

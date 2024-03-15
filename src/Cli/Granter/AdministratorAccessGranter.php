@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Cli\Granter;
 
 use Doctrine\Persistence\ObjectManager;
-use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class AdministratorAccessGranter implements AdministratorAccessGranterInterface
 {
@@ -18,7 +18,7 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
         private RepositoryInterface $administratorRepository,
         private RepositoryInterface $administratorRoleRepository,
         private ObjectManager $objectManager,
-        private AdministrationRoleFactoryInterface $administrationRoleFactory
+        private AdministrationRoleFactoryInterface $administrationRoleFactory,
     ) {
     }
 
@@ -29,8 +29,8 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
 
         if (null === $admin) {
             throw new \InvalidArgumentException(
-                sprintf('Administrator with email address %s does not exist. Aborting.', $email))
-            ;
+                sprintf('Administrator with email address %s does not exist. Aborting.', $email),
+            );
         }
 
         $administrationRole = $this->getOrCreateAdministrationRole($roleName);
@@ -39,7 +39,8 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
             $administrationRole->addPermission(
                 Permission::ofType(
                     $section,
-                    [OperationType::read(), OperationType::write()])
+                    [OperationType::read(), OperationType::write()],
+                ),
             );
         }
 

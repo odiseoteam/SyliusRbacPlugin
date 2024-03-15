@@ -1,0 +1,15 @@
+services:
+    FriendsOfBehat\PageObjectExtension\Element\Element:
+        abstract: true
+        public: false
+        arguments:
+            - '@behat.mink.default_session'
+            - '@behat.mink.parameters'
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdministrationRolesElement:
+        parent: FriendsOfBehat\PageObjectExtension\Element\Element
+        public: true
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdminMainMenuElement:
+        parent: FriendsOfBehat\PageObjectExtension\Element\Element
+        public: true

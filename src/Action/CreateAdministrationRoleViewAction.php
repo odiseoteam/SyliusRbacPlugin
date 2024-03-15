@@ -12,7 +12,7 @@ final class CreateAdministrationRoleViewAction
 {
     public function __construct(
         private AdminPermissionsProviderInterface $adminPermissionsProvider,
-        private Environment $twig
+        private Environment $twig,
     ) {
     }
 
@@ -21,7 +21,7 @@ final class CreateAdministrationRoleViewAction
         return new Response(
             $this->twig->render('@OdiseoSyliusRbacPlugin/Admin/AdministrationRole/create.html.twig', [
                 'permissions' => $this->adminPermissionsProvider->getPossiblePermissions(),
-            ])
+            ]),
         );
     }
 }

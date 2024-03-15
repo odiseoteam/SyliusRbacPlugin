@@ -17,13 +17,13 @@ final class AdministrationRolePermissionNormalizer implements AdministrationRole
                 $hasReadOperationType = in_array(
                     OperationType::READ,
                     array_keys($administrationRolePermissions[$administrationRolePermission]),
-                    true
+                    true,
                 );
 
                 $hasWriteOperationType = in_array(
                     OperationType::WRITE,
                     array_keys($administrationRolePermissions[$administrationRolePermission]),
-                    true
+                    true,
                 );
 
                 if ($hasWriteOperationType) {

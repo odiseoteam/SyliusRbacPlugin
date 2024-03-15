@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class AdministrationRoleChoiceType extends AbstractType
 {
     public function __construct(
-        private ObjectRepository $administrationRoleRepository
+        private ObjectRepository $administrationRoleRepository,
     ) {
     }
 

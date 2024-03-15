@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Fixture;
 
 use Doctrine\Persistence\ObjectManager;
-use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
-use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
+use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class AdministrationRoleFixture extends AbstractFixture implements FixtureInterface
 {
     public function __construct(
         protected FactoryInterface $administrationRoleFactory,
-        protected ObjectManager $administrationRoleManager
+        protected ObjectManager $administrationRoleManager,
     ) {
     }
 

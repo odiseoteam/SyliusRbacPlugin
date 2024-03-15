@@ -9,6 +9,7 @@ use Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizerInt
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -17,12 +18,15 @@ final class CreateAdministrationRoleAction
     public function __construct(
         private MessageBusInterface $bus,
         private AdministrationRolePermissionNormalizerInterface $administrationRolePermissionNormalizer,
-        private UrlGeneratorInterface $router
+        private UrlGeneratorInterface $router,
     ) {
     }
 
     public function __invoke(Request $request): Response
     {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+
         try {
             /** @var array $administrationRolePermissions */
             $administrationRolePermissions = $request->request->all()['permissions'];
@@ -37,17 +41,19 @@ final class CreateAdministrationRoleAction
 
             $this->bus->dispatch(new CreateAdministrationRole(
                 $administrationRoleName,
-                $normalizedPermissions
+                $normalizedPermissions,
             ));
 
-            $request->getSession()->getFlashBag()->add(
+            $flashBag->add(
                 'success',
-                'odiseo_sylius_rbac_plugin.administration_role_successfully_created'
+                'odiseo_sylius_rbac_plugin.administration_role_successfully_created',
             );
         } catch (\Exception $exception) {
-            $request->getSession()->getFlashBag()->add('error', $exception->getMessage());
+            $flashBag->add('error', $exception->getMessage());
         }
 
-        return new RedirectResponse($this->router->generate('odiseo_sylius_rbac_plugin_admin_administration_role_create_view'));
+        return new RedirectResponse(
+            $this->router->generate('odiseo_sylius_rbac_plugin_admin_administration_role_create_view'),
+        );
     }
 }

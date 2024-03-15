@@ -61,10 +61,10 @@ final class InstallingPluginContext implements Context
         $this->application = new Application($this->kernel);
         $this->application->add($this->command);
 
-        $command = $this->application->find('sylius-rbac:install-plugin');
+        $command = $this->application->find('odiseo:rbac:install');
         $this->tester = new CommandTester($command);
 
-        $this->tester->execute(['command' => 'sylius-rbac:install-plugin']);
+        $this->tester->execute(['command' => 'odiseo:rbac:install']);
     }
 
     public function specifyRootAdministratorsEmailAs(string $email): void

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Access\Checker;
 
-use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Sylius\Component\Core\Model\AdminUserInterface;
 use Webmozart\Assert\Assert;
 
 final class AdministratorAccessChecker implements AdministratorAccessCheckerInterface

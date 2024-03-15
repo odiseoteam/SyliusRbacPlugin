@@ -8,7 +8,7 @@ final class AccessRequest
 {
     public function __construct(
         private Section $section,
-        private OperationType $operationType
+        private OperationType $operationType,
     ) {
     }
 

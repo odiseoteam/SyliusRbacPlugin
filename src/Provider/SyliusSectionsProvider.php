@@ -9,7 +9,7 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
     private const CUSTOM_SECTION_CONFIGURATION_KEY = 'custom';
 
     public function __construct(
-        private array $rbacConfiguration
+        private array $rbacConfiguration,
     ) {
     }
 
@@ -18,9 +18,9 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
         $mergedArray = array_diff(
             array_merge(
                 array_keys($this->rbacConfiguration),
-                array_keys($this->rbacConfiguration[self::CUSTOM_SECTION_CONFIGURATION_KEY])
+                array_keys($this->rbacConfiguration[self::CUSTOM_SECTION_CONFIGURATION_KEY]),
             ),
-            [self::CUSTOM_SECTION_CONFIGURATION_KEY]
+            [self::CUSTOM_SECTION_CONFIGURATION_KEY],
         );
 
         return $this->rearrangeArray($mergedArray);

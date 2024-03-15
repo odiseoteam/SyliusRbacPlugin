@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI;
 
 use Behat\Behat\Context\Context;
-use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;
 use Sylius\Behat\NotificationType;
 use Sylius\Behat\Page\Admin\Crud\IndexPageInterface;
 use Sylius\Behat\Service\NotificationCheckerInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePageInterface;
 use Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleUpdatePageInterface;
 use Webmozart\Assert\Assert;

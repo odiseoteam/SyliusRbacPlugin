@@ -1,0 +1,24 @@
+services:
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePage:
+        parent: sylius.behat.page.admin.crud.create
+        public: false
+        arguments:
+            - 'odiseo_sylius_rbac_plugin_admin_administration_role_create_view'
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleUpdatePage:
+        parent: sylius.behat.page.admin.crud.update
+        public: false
+        arguments:
+            - 'odiseo_sylius_rbac_plugin_admin_administration_role_update_view'
+
+    odiseo_sylius_rbac_plugin.behat.page.administration_role.index:
+        class: Sylius\Behat\Page\Admin\Crud\IndexPage
+        parent: sylius.behat.symfony_page
+        public: false
+        arguments:
+            - '@sylius.behat.table_accessor'
+            - 'odiseo_sylius_rbac_plugin_admin_administration_role_index'
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdminUserIndexPage:
+        parent: sylius.behat.page.admin.administrator.index
+        public: false

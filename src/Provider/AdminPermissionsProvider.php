@@ -9,9 +9,14 @@ use Odiseo\SyliusRbacPlugin\Model\Permission;
 final class AdminPermissionsProvider implements AdminPermissionsProviderInterface
 {
     public function __construct(
-        private array $rbacConfiguration
+        private array $rbacConfiguration,
     ) {
         $configuration = [];
+
+        /**
+         * @var string $customSection
+         * @var array $_customRoutes
+         */
         foreach ($rbacConfiguration['custom'] as $customSection => $_customRoutes) {
             $configuration[$customSection] = $configuration;
         }
@@ -24,7 +29,7 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
                 Permission::CUSTOMERS_MANAGEMENT_PERMISSION,
                 Permission::MARKETING_MANAGEMENT_PERMISSION,
                 Permission::SALES_MANAGEMENT_PERMISSION,
-            ]
+            ],
         );
 
         sort($rbacConfiguration);

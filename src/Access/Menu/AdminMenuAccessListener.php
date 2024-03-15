@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Access\Menu;
 
-use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
+use Sylius\Component\Core\Model\AdminUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Webmozart\Assert\Assert;
 
@@ -18,7 +18,7 @@ final class AdminMenuAccessListener
     public function __construct(
         private TokenStorageInterface $tokenStorage,
         private AdministratorAccessCheckerInterface $accessChecker,
-        private array $configuration
+        private array $configuration,
     ) {
     }
 
@@ -64,7 +64,7 @@ final class AdminMenuAccessListener
     {
         return !$this->accessChecker->canAccessSection(
             $adminUser,
-            new AccessRequest($section, OperationType::read())
+            new AccessRequest($section, OperationType::read()),
         );
     }
 }

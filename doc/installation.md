@@ -67,7 +67,7 @@ php bin/console cache:clear
 7. Run installation command
 
     ```
-    php bin/console sylius-rbac:install-plugin
+    php bin/console odiseo:rbac:install
     ```
 
    Which consists of:
@@ -82,11 +82,11 @@ php bin/console cache:clear
       If you want to install RBAC plugin again on the same environment you will have to remove all roles manually
       via administration panel or run all commands except `sylius:fixtures:load` separately.
 
-    * `sylius-rbac:normalize-administrators`
+    * `odiseo:rbac:normalize-administrators`
 
       Assigns role created in a previous step to all already existent administrators.
 
-    * `sylius-rbac:grant-access <roleName> <adminSections>`
+    * `odiseo:rbac:grant-access <roleName> <adminSections>`
 
       Where `adminSections` can be a space-separated list of any of these:
         * catalogManagement
@@ -109,7 +109,7 @@ php bin/console cache:clear
 
         * Provide it via CLI
 
-      e.g. `bin/console sylius-rbac:grant-access administrator configuration catalogManagement`
+      e.g. `bin/console odiseo:rbac:grant-access administrator configuration catalogManagement`
 
       `In order to permit access to admin panel sections, please provide administrator's email address: sylius@example.com`
 
@@ -117,7 +117,7 @@ php bin/console cache:clear
 
 #### Beware!
 
-You can also use `bin/console sylius-rbac:grant-access-to-given-administrator <email> <roleName> <adminSections>`
+You can also use `bin/console odiseo:rbac:grant-access-to-given-administrator <email> <roleName> <adminSections>`
 command in order to provide an email address as an input parameter.
 
 #### Beware!

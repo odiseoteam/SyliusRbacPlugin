@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace spec\Odiseo\SyliusRbacPlugin\Access\Checker;
 
-use PhpSpec\ObjectBehavior;
 use Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface;
+use PhpSpec\ObjectBehavior;
 
 final class HardcodedRouteNameCheckerSpec extends ObjectBehavior
 {
@@ -21,7 +21,7 @@ final class HardcodedRouteNameCheckerSpec extends ObjectBehavior
 
     function it_returns_true_if_passed_route_is_prefixed_with_sylius_rbac_admin(): void
     {
-        $this->isAdminRoute('sylius_rbac_admin_administration_role_index')->shouldReturn(true);
+        $this->isAdminRoute('odiseo_sylius_rbac_plugin_admin_administration_role_index')->shouldReturn(true);
     }
 
     function it_returns_false_if_route_has_no_prefix_sylius_admin_or_sylius_rbac_admin(): void

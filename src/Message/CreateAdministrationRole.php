@@ -8,7 +8,7 @@ final class CreateAdministrationRole
 {
     public function __construct(
         private string $administrationRoleName,
-        private array $permissions = []
+        private array $permissions = [],
     ) {
     }
 

@@ -14,9 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class GrantAccessToGivenAdministratorCommand extends Command
 {
     public function __construct(
-        private AdministratorAccessGranterInterface $administratorAccessGranter
+        private AdministratorAccessGranterInterface $administratorAccessGranter,
     ) {
-        parent::__construct('sylius-rbac:grant-access-to-given-administrator');
+        parent::__construct('odiseo:rbac:grant-access-to-given-administrator');
     }
 
     protected function configure(): void
@@ -42,7 +42,7 @@ final class GrantAccessToGivenAdministratorCommand extends Command
             $this->administratorAccessGranter->__invoke(
                 $administratorEmail,
                 $roleName,
-                $sections
+                $sections,
             );
         } catch (\InvalidArgumentException $exception) {
             $output->writeln($exception->getMessage());

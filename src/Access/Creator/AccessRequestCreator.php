@@ -12,7 +12,7 @@ use Odiseo\SyliusRbacPlugin\Access\Model\Section;
 final class AccessRequestCreator implements AccessRequestCreatorInterface
 {
     public function __construct(
-        private array $configuration
+        private array $configuration,
     ) {
     }
 

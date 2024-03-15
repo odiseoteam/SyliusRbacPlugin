@@ -91,7 +91,7 @@ To be able to setup a plugin's database, remember to configure you database cred
 
     ```bash
     $ (cd tests/Application && APP_ENV=test bin/console sylius:fixtures:load)
-    $ (cd tests/Application && APP_ENV=test bin/console sylius-rbac:install-plugin)
+    $ (cd tests/Application && APP_ENV=test bin/console odiseo:rbac:install)
     $ (cd tests/Application && APP_ENV=test symfony server:start --document-root=public -d)
     ```
 
@@ -99,6 +99,6 @@ To be able to setup a plugin's database, remember to configure you database cred
 
     ```bash
     $ (cd tests/Application && APP_ENV=dev bin/console sylius:fixtures:load)
-    $ (cd tests/Application && APP_ENV=dev bin/console sylius-rbac:install-plugin)
+    $ (cd tests/Application && APP_ENV=dev bin/console odiseo:rbac:install)
     $ (cd tests/Application && APP_ENV=dev symfony server:start --document-root=public -d)
     ```
