@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Access\Checker;
 
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
+use Sylius\Component\Core\Model\AdminUserInterface;
 
 interface AdministratorAccessCheckerInterface
 {

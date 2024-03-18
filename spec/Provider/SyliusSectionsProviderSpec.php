@@ -12,7 +12,7 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
     public function let(): void
     {
         $this->beConstructedWith([
-                'catalog' => [
+                'catalog_management' => [
                     'sylius_admin_inventory',
                     'sylius_admin_product',
                     'sylius_admin_product_association_type',
@@ -35,21 +35,21 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
                     'sylius_admin_tax_rate',
                     'sylius_admin_zone',
                 ],
-                'customers' => [
+                'customers_management' => [
                     'sylius_admin_customer',
                     'sylius_admin_customer_group',
                     'sylius_admin_shop_user',
                 ],
-                'marketing' => [
+                'marketing_management' => [
                     'sylius_admin_product_review',
                     'sylius_admin_promotion',
                 ],
-                'sales' => [
+                'sales_management' => [
                     'sylius_admin_order',
                 ],
                 'custom' => [
                     'rbac' => [
-                        'sylius_rbac',
+                        'odiseo_sylius_rbac_plugin',
                     ],
                 ],
             ]
@@ -64,11 +64,11 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
     public function it_returns_both_standard_and_custom_sylius_sections_combined(): void
     {
         $this->__invoke()->shouldReturn([
-            'catalog',
+            'catalog_management',
             'configuration',
-            'customers',
-            'marketing',
-            'sales',
+            'customers_management',
+            'marketing_management',
+            'sales_management',
             'rbac',
         ]);
     }

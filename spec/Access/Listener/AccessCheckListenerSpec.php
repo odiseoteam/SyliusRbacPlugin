@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace spec\Odiseo\SyliusRbacPlugin\Access\Listener;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
 use Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface;
@@ -14,6 +12,8 @@ use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,7 +32,6 @@ final class AccessCheckListenerSpec extends ObjectBehavior
         AdministratorAccessCheckerInterface $administratorAccessChecker,
         TokenStorageInterface $tokenStorage,
         UrlGeneratorInterface $router,
-        Session $session,
         RouteNameCheckerInterface $adminRouteChecker
     ): void {
         $this->beConstructedWith(
@@ -40,7 +39,6 @@ final class AccessCheckListenerSpec extends ObjectBehavior
             $administratorAccessChecker,
             $tokenStorage,
             $router,
-            $session,
             $adminRouteChecker
         );
     }
@@ -60,6 +58,7 @@ final class AccessCheckListenerSpec extends ObjectBehavior
     ): void {
         $event->isMainRequest()->willReturn(true);
         $event->getRequest()->willReturn($request);
+        $request->getSession()->willReturn($session);
         $request->getMethod()->willReturn('GET');
         $request->attributes = new ParameterBag(['_route' => 'sylius_admin_some_route']);
         $request->headers = new HeaderBag(['referer' => null]);
@@ -82,8 +81,8 @@ final class AccessCheckListenerSpec extends ObjectBehavior
             return $response->getTargetUrl() === 'http://sylius.dev/admin/';
         }))->shouldBeCalled();
 
-        $session->getFlashBag()->willReturn($flashBag);
-        $flashBag->add('error', 'sylius_rbac.you_have_no_access_to_this_section')->shouldBeCalled();
+        $session->getBag('flashes')->willReturn($flashBag);
+        $flashBag->add('error', 'odiseo_sylius_rbac_plugin.you_have_no_access_to_this_section')->shouldBeCalled();
 
         $this->onKernelRequest($event);
     }

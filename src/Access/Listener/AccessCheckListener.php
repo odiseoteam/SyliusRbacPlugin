@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Access\Listener;
 
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
 use Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface;
 use Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface;
 use Odiseo\SyliusRbacPlugin\Access\Exception\InsecureRequestException;
 use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
+use Sylius\Component\Core\Model\AdminUserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -21,33 +22,13 @@ use Webmozart\Assert\Assert;
 
 final class AccessCheckListener
 {
-    /** @var AccessRequestCreatorInterface */
-    private $accessRequestCreator;
-
-    /** @var AdministratorAccessCheckerInterface */
-    private $administratorAccessChecker;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var UrlGeneratorInterface */
-    private $router;
-
-    /** @var RouteNameCheckerInterface */
-    private $adminRouteChecker;
-
     public function __construct(
-        AccessRequestCreatorInterface $accessRequestCreator,
-        AdministratorAccessCheckerInterface $administratorAccessChecker,
-        TokenStorageInterface $tokenStorage,
-        UrlGeneratorInterface $router,
-        RouteNameCheckerInterface $adminRouteChecker
+        private AccessRequestCreatorInterface $accessRequestCreator,
+        private AdministratorAccessCheckerInterface $administratorAccessChecker,
+        private TokenStorageInterface $tokenStorage,
+        private UrlGeneratorInterface $router,
+        private RouteNameCheckerInterface $adminRouteChecker,
     ) {
-        $this->accessRequestCreator = $accessRequestCreator;
-        $this->administratorAccessChecker = $administratorAccessChecker;
-        $this->tokenStorage = $tokenStorage;
-        $this->router = $router;
-        $this->adminRouteChecker = $adminRouteChecker;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -61,6 +42,7 @@ final class AccessCheckListener
         if ($this->administratorAccessChecker->canAccessSection($this->getCurrentAdmin(), $accessRequest)) {
             return;
         }
+
         $this->addAccessErrorFlash($event->getRequest()->getMethod(), $event->getRequest()->getSession());
         $event->setResponse($this->getRedirectResponse($event->getRequest()->headers->get('referer')));
     }
@@ -72,6 +54,7 @@ final class AccessCheckListener
             throw new InsecureRequestException();
         }
 
+        /** @var string|null $routeName */
         $routeName = $event->getRequest()->attributes->get('_route');
         $requestMethod = $event->getRequest()->getMethod();
 
@@ -106,13 +89,16 @@ final class AccessCheckListener
 
     private function addAccessErrorFlash(string $requestMethod, SessionInterface $session): void
     {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $session->getBag('flashes');
+
         if ('GET' === $requestMethod || 'HEAD' === $requestMethod) {
-            $session->getFlashBag()->add('error', 'sylius_rbac.you_have_no_access_to_this_section');
+            $flashBag->add('error', 'odiseo_sylius_rbac_plugin.you_have_no_access_to_this_section');
 
             return;
         }
 
-        $session->getFlashBag()->add('error', 'sylius_rbac.you_are_not_allowed_to_do_that');
+        $flashBag->add('error', 'odiseo_sylius_rbac_plugin.you_are_not_allowed_to_do_that');
     }
 
     private function getRedirectResponse(?string $referer): RedirectResponse

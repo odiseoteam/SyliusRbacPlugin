@@ -8,15 +8,15 @@ use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
 {
-    public function addRbacMenu(MenuBuilderEvent $event): void
+    public function addAdminMenuItems(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
 
-        $rbacSection = $menu->addChild('rbac')->setLabel('sylius_rbac.ui.rbac');
+        $rbacSection = $menu->addChild('rbac')->setLabel('odiseo_sylius_rbac_plugin.ui.rbac');
 
         $rbacSection
-            ->addChild('administration_roles', ['route' => 'sylius_rbac_admin_administration_role_index'])
-            ->setLabel('sylius_rbac.ui.administration_roles')
+            ->addChild('administration_roles', ['route' => 'odiseo_sylius_rbac_plugin_admin_administration_role_index'])
+            ->setLabel('odiseo_sylius_rbac_plugin.ui.administration_roles')
             ->setLabelAttribute('icon', 'address card')
         ;
     }

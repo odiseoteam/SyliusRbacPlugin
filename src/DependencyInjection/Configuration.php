@@ -10,11 +10,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritdoc}
+     * @psalm-suppress UndefinedMethod
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('sylius_rbac');
+        $treeBuilder = new TreeBuilder('odiseo_sylius_rbac_plugin');
+
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode

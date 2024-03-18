@@ -7,7 +7,7 @@ imports:
 
     - { resource: "@SyliusApiBundle/Resources/config/app/config.yaml" }
 
-    - { resource: "@OdiseoSyliusRbacPlugin/Resources/config/config.yml" }
+    - { resource: "@OdiseoSyliusRbacPlugin/Resources/config/config.yaml" }
 
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
@@ -19,43 +19,9 @@ sylius_shop:
 sylius_api:
     enabled: true
 
-sylius_resource:
-    resources:
-        sylius_rbac.administration_role:
-            classes:
-                model: Odiseo\SyliusRbacPlugin\Entity\AdministrationRole
-                form: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleType
-
 sylius_user:
     resources:
         admin:
             user:
                 classes:
                     model: Tests\Odiseo\SyliusRbacPlugin\Application\Entity\AdminUser
-
-sylius_grid:
-    grids:
-        sylius_rbac_administration_role:
-            driver:
-                name: doctrine/orm
-                options:
-                    class: Odiseo\SyliusRbacPlugin\Entity\AdministrationRole
-            fields:
-                name:
-                    type: string
-                    label: sylius.ui.name
-            actions:
-                main:
-                    create:
-                        type: create
-                item:
-                    update:
-                        type: update
-        sylius_admin_admin_user:
-            fields:
-                administration_role:
-                    type: twig
-                    label: sylius_rbac.ui.administration_role
-                    sortable: true
-                    options:
-                        template: '@OdiseoSyliusRbacPlugin/AdministrationRole/Grid/Field/administrationRole.html.twig'

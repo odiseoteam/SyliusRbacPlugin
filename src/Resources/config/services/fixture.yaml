@@ -1,0 +1,26 @@
+services:
+    sylius.fixture.admin_user:
+        class: Odiseo\SyliusRbacPlugin\Fixture\AdminUserFixture
+        arguments:
+            - '@sylius.manager.admin_user'
+            - '@sylius.fixture.example_factory.admin_user'
+        tags:
+            - { name: sylius_fixtures.fixture }
+ 
+    sylius.fixture.example_factory.admin_user:
+        class: Odiseo\SyliusRbacPlugin\Factory\AdminUserExampleFactory
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@sylius.factory.admin_user'
+            - '%locale%'
+            - '@file_locator'
+            - '@sylius.image_uploader'
+            - '@sylius.factory.avatar_image'
+
+    odiseo_sylius_rbac_plugin.fixture.administration_role:
+        class: Odiseo\SyliusRbacPlugin\Fixture\AdministrationRoleFixture
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: sylius_fixtures.fixture }

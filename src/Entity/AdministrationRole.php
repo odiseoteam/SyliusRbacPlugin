@@ -6,17 +6,17 @@ namespace Odiseo\SyliusRbacPlugin\Entity;
 
 use Odiseo\SyliusRbacPlugin\Model\Permission;
 use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
+use Sylius\Component\Resource\Model\TimestampableTrait;
 
 class AdministrationRole implements AdministrationRoleInterface
 {
-    /** @var int|null */
-    private $id;
+    use TimestampableTrait;
 
-    /** @var string|null */
-    private $name;
+    protected ?int $id = null;
 
-    /** @var array|string[] */
-    private $permissions = [];
+    protected ?string $name = null;
+
+    protected array $permissions = [];
 
     public function getId(): ?int
     {

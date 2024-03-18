@@ -5,34 +5,21 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Cli;
 
 use Doctrine\Persistence\ObjectManager;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class NormalizeExistingAdministratorsCommand extends Command
 {
-    /** @var RepositoryInterface */
-    private $administratorRepository;
-
-    /** @var RepositoryInterface */
-    private $administrationRoleRepository;
-
-    /** @var ObjectManager */
-    private $objectManager;
-
     public function __construct(
-        RepositoryInterface $administratorRepository,
-        RepositoryInterface $administratorRoleRepository,
-        ObjectManager $objectManager
+        private RepositoryInterface $administratorRepository,
+        private RepositoryInterface $administratorRoleRepository,
+        private ObjectManager $objectManager,
     ) {
-        parent::__construct('sylius-rbac:normalize-administrators');
-
-        $this->administratorRepository = $administratorRepository;
-        $this->administrationRoleRepository = $administratorRoleRepository;
-        $this->objectManager = $objectManager;
+        parent::__construct('odiseo:rbac:normalize-administrators');
     }
 
     protected function configure(): void
@@ -46,7 +33,7 @@ final class NormalizeExistingAdministratorsCommand extends Command
         $noSectionsAccessRole = null;
 
         /** @var AdministrationRoleInterface $administrationRole */
-        foreach ($this->administrationRoleRepository->findAll() as $administrationRole) {
+        foreach ($this->administratorRoleRepository->findAll() as $administrationRole) {
             if (count($administrationRole->getPermissions()) === 0) {
                 $noSectionsAccessRole = $administrationRole;
             }

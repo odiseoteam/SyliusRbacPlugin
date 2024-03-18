@@ -10,16 +10,18 @@ use Webmozart\Assert\Assert;
 final class Permission implements PermissionInterface
 {
     public const CATALOG_MANAGEMENT_PERMISSION = 'catalog_management';
+
     public const CONFIGURATION_PERMISSION = 'configuration';
+
     public const CUSTOMERS_MANAGEMENT_PERMISSION = 'customers_management';
+
     public const MARKETING_MANAGEMENT_PERMISSION = 'marketing_management';
+
     public const SALES_MANAGEMENT_PERMISSION = 'sales_management';
 
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var array */
-    private $operationTypes;
+    private array $operationTypes;
 
     public static function catalogManagement(array $operationTypes = []): self
     {
@@ -76,13 +78,17 @@ final class Permission implements PermissionInterface
 
     private function __construct(string $type, array $operationTypes = [])
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         Assert::allOneOf(
             array_map(function (OperationType $operationType): string {
                 return $operationType->__toString();
-            }, $operationTypes), [
+            }, $operationTypes),
+            [
                 OperationType::read()->__toString(),
                 OperationType::write()->__toString(),
-            ]
+            ],
         );
 
         $this->type = $type;

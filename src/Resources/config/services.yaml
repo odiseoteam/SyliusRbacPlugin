@@ -1,0 +1,43 @@
+imports:
+    - { resource: services/action.yaml }
+    - { resource: services/command.yaml }
+    - { resource: services/command_bus.yaml }
+    - { resource: services/event_listener.yaml }
+    - { resource: services/fixture.yaml }
+    - { resource: services/form.yaml }
+    - { resource: services/validator.yaml }
+
+services:
+    Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer:
+
+    odiseo_sylius_rbac_plugin.custom_factory.administration_role:
+        class: Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactory
+        decorates: odiseo_sylius_rbac_plugin.factory.administration_role
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role.inner'
+
+    Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProvider:
+        arguments:
+            - '%odiseo_sylius_rbac_plugin.configuration%'
+
+    Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider:
+        arguments:
+            - '%odiseo_sylius_rbac_plugin.configuration%'
+
+    Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface:
+        class: Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessChecker
+
+    Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface:
+        class: Odiseo\SyliusRbacPlugin\Access\Checker\HardcodedRouteNameChecker
+
+    Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface:
+        class: Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreator
+        arguments:
+            - '%odiseo_sylius_rbac_plugin.configuration%'
+
+    Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter:
+        arguments:
+            - '@sylius.repository.admin_user'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@doctrine.orm.entity_manager'
+            - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role'

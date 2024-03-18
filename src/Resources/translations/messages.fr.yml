@@ -1,4 +1,4 @@
-sylius_rbac:
+odiseo_sylius_rbac_plugin:
     ui:
         access: 'Accès'
         administration_role: 'Rôle'

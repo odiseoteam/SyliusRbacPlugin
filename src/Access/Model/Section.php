@@ -7,13 +7,16 @@ namespace Odiseo\SyliusRbacPlugin\Access\Model;
 final class Section
 {
     public const CATALOG = 'catalog';
+
     public const CONFIGURATION = 'configuration';
+
     public const CUSTOMERS = 'customers';
+
     public const MARKETING = 'marketing';
+
     public const SALES = 'sales';
 
-    /** @var string */
-    private $type;
+    private string $type;
 
     public static function catalog(): self
     {

@@ -28,7 +28,7 @@ final class UpdateAdministrationRoleHandlerSpec extends ObjectBehavior
             $administrationRoleFactory,
             $administrationRoleRepository,
             $administrationRoleValidator,
-            'sylius_rbac_admin_administration_role_update'
+            'odiseo_sylius_rbac_plugin_admin_administration_role_update'
         );
     }
 
@@ -74,7 +74,7 @@ final class UpdateAdministrationRoleHandlerSpec extends ObjectBehavior
         ;
 
         $administrationRoleValidator
-            ->validate($administrationRoleUpdates, 'sylius_rbac_admin_administration_role_update')
+            ->validate($administrationRoleUpdates, 'odiseo_sylius_rbac_plugin_admin_administration_role_update')
             ->shouldBeCalled()
         ;
 
@@ -119,7 +119,7 @@ final class UpdateAdministrationRoleHandlerSpec extends ObjectBehavior
             )->willReturn($administrationRole);
 
         $administrationRoleValidator
-            ->validate($administrationRole, 'sylius_rbac_admin_administration_role_update')
+            ->validate($administrationRole, 'odiseo_sylius_rbac_plugin_admin_administration_role_update')
             ->willThrow(new \InvalidArgumentException())
         ;
 

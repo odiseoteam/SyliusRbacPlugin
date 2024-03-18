@@ -1,0 +1,34 @@
+odiseo_sylius_rbac_plugin_admin_administration_role:
+    resource: |
+        alias: odiseo_sylius_rbac_plugin.administration_role
+        section: admin
+        templates: "@SyliusAdmin/Crud"
+        only: ['index']
+        redirect: update
+        grid: odiseo_sylius_rbac_plugin_admin_administration_role
+        permission: true
+    type: sylius.resource
+
+odiseo_sylius_rbac_plugin_admin_administration_role_create_view:
+    path: /administration-roles/new
+    methods: [GET]
+    defaults:
+        _controller: Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleViewAction
+
+odiseo_sylius_rbac_plugin_admin_administration_role_create:
+    path: /administration-roles/new
+    methods: [PUT, PATCH]
+    defaults:
+        _controller: Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleAction
+
+odiseo_sylius_rbac_plugin_admin_administration_role_update_view:
+    path: /administration-roles/{id}/update
+    methods: [GET]
+    defaults:
+        _controller: Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleViewAction
+
+odiseo_sylius_rbac_plugin_admin_administration_role_update:
+    path: /administration-roles/{id}/update
+    methods: [POST]
+    defaults:
+        _controller: Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleAction

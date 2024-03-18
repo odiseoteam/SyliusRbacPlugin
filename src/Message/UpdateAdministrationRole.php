@@ -6,20 +6,11 @@ namespace Odiseo\SyliusRbacPlugin\Message;
 
 final class UpdateAdministrationRole
 {
-    /** @var int */
-    private $administrationRoleId;
-
-    /** @var string */
-    private $administrationRoleName;
-
-    /** @var array */
-    private $permissions;
-
-    public function __construct(int $administrationRoleId, string $administrationRoleName, array $permissions = [])
-    {
-        $this->administrationRoleId = $administrationRoleId;
-        $this->administrationRoleName = $administrationRoleName;
-        $this->permissions = $permissions;
+    public function __construct(
+        private int $administrationRoleId,
+        private string $administrationRoleName,
+        private array $permissions = [],
+    ) {
     }
 
     public function administrationRoleId(): int

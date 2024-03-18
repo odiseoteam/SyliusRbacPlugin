@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace spec\Odiseo\SyliusRbacPlugin\Access\Creator;
 
-use PhpSpec\ObjectBehavior;
 use Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface;
 use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use PhpSpec\ObjectBehavior;
 
 final class AccessRequestCreatorSpec extends ObjectBehavior
 {
@@ -17,11 +17,11 @@ final class AccessRequestCreatorSpec extends ObjectBehavior
     {
         $this->beConstructedWith(
             [
-                'catalog' => ['sylius_admin_weapons'],
+                'catalog_management' => ['sylius_admin_weapons'],
                 'configuration' => [],
-                'customers' => ['sylius_admin_customers'],
-                'marketing' => [],
-                'sales' => [],
+                'customers_management' => ['sylius_admin_customers'],
+                'marketing_management' => [],
+                'sales_management' => [],
                 'custom' => ['custom_section' => ['sylius_custom_section_route']],
             ],
             'GET'

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Factory;
 
-use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Sylius\Component\Resource\Factory\TranslatableFactoryInterface;
 
 interface AdministrationRoleFactoryInterface extends TranslatableFactoryInterface
 {

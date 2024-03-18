@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Form\Extension;
 
-use Sylius\Bundle\CoreBundle\Form\Type\User\AdminUserType;
 use Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleChoiceType;
+use Sylius\Bundle\CoreBundle\Form\Type\User\AdminUserType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 

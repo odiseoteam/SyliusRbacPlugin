@@ -9,10 +9,10 @@ use Webmozart\Assert\Assert;
 final class OperationType
 {
     public const READ = 'read';
+
     public const WRITE = 'write';
 
-    /** @var string */
-    private $type;
+    private string $type;
 
     public static function read(): self
     {

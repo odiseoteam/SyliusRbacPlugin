@@ -1,0 +1,94 @@
+services:
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Setup\AdministrationRolesContext:
+        public: true
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.factory.administration_role'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@odiseo_sylius_rbac_plugin.manager.administration_role'
+            - '@sylius.behat.shared_storage'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Setup\AdminUserContext:
+        public: true
+        arguments:
+            - '@sylius.manager.admin_user'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Transform\AdministrationRoleContext:
+        public: true
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI\ManagingAdministrationRolesContext:
+        public: true
+        arguments:
+            - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePage'
+            - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleUpdatePage'
+            - '@odiseo_sylius_rbac_plugin.behat.page.administration_role.index'
+            - '@sylius.behat.notification_checker'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI\ManagingAdministratorsContext:
+        public: true
+        arguments:
+            - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdministrationRolesElement'
+            - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdminUserIndexPage'
+            - '@sylius.behat.page.admin.administrator.update'
+            - '@sylius.repository.admin_user'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Domain\ManagingAdministratorsContext:
+        public: true
+        arguments:
+            - '@sylius.repository.admin_user'
+            - '@sylius.fixture.example_factory.admin_user'
+            - '@sylius.behat.shared_storage'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI\AdminMainMenuContext:
+        public: true
+        arguments:
+            - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Element\AdminMainMenuElement'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI\ReadAccessRestrictionsContext:
+        public: true
+        arguments:
+            - '@sylius.behat.page.admin.dashboard'
+            - '@odiseo_sylius_rbac_plugin.behat.pages_availability_checker.catalog'
+            - '@odiseo_sylius_rbac_plugin.behat.pages_availability_checker.configuration'
+            - '@odiseo_sylius_rbac_plugin.behat.pages_availability_checker.customers'
+            - '@odiseo_sylius_rbac_plugin.behat.pages_availability_checker.marketing'
+            - '@odiseo_sylius_rbac_plugin.behat.pages_availability_checker.sales'
+            - '@odiseo_sylius_rbac_plugin.behat.pages_availability_checker.rbac'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\UI\WriteAccessRestrictionsContext:
+        public: true
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.catalog'
+            - '@odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.configuration'
+            - '@odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.customers'
+            - '@odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.marketing'
+        tags:
+            - { name: fob.context_service }
+
+    Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Cli\InstallingPluginContext:
+        public: true
+        arguments:
+            - '@kernel'
+            - '@Odiseo\SyliusRbacPlugin\Cli\InstallPluginCommand'
+            - '@sylius.repository.admin_user'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider'
+        tags:
+            - { name: fob.context_service }

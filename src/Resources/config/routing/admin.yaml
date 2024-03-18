@@ -1,0 +1,2 @@
+odiseo_sylius_rbac_plugin_admin_administration_role:
+    resource: admin/administration_role.yaml

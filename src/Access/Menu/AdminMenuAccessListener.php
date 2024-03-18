@@ -4,34 +4,22 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Access\Menu;
 
-use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Access\Model\Section;
+use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
+use Sylius\Component\Core\Model\AdminUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Webmozart\Assert\Assert;
 
 final class AdminMenuAccessListener
 {
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var AdministratorAccessCheckerInterface */
-    private $accessChecker;
-
-    /** @var array */
-    private $configuration;
-
     public function __construct(
-        TokenStorageInterface $tokenStorage,
-        AdministratorAccessCheckerInterface $accessChecker,
-        array $configuration
+        private TokenStorageInterface $tokenStorage,
+        private AdministratorAccessCheckerInterface $accessChecker,
+        private array $configuration,
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->accessChecker = $accessChecker;
-        $this->configuration = $configuration;
     }
 
     public function removeInaccessibleAdminMenuParts(MenuBuilderEvent $event): void
@@ -76,7 +64,7 @@ final class AdminMenuAccessListener
     {
         return !$this->accessChecker->canAccessSection(
             $adminUser,
-            new AccessRequest($section, OperationType::read())
+            new AccessRequest($section, OperationType::read()),
         );
     }
 }

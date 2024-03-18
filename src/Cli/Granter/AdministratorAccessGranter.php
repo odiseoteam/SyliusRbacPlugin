@@ -5,34 +5,21 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Cli\Granter;
 
 use Doctrine\Persistence\ObjectManager;
-use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactoryInterface;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class AdministratorAccessGranter implements AdministratorAccessGranterInterface
 {
-    /** @var RepositoryInterface */
-    private $administratorRepository;
-
-    /** @var RepositoryInterface */
-    private $administratorRoleRepository;
-
-    /** @var ObjectManager */
-    private $objectManager;
-
     public function __construct(
-        RepositoryInterface $administratorRepository,
-        RepositoryInterface $administratorRoleRepository,
-        ObjectManager $objectManager,
-        AdministrationRoleFactoryInterface $administrationRoleFactory
+        private RepositoryInterface $administratorRepository,
+        private RepositoryInterface $administratorRoleRepository,
+        private ObjectManager $objectManager,
+        private AdministrationRoleFactoryInterface $administrationRoleFactory,
     ) {
-        $this->administratorRepository = $administratorRepository;
-        $this->administratorRoleRepository = $administratorRoleRepository;
-        $this->objectManager = $objectManager;
-        $this->administrationRoleFactory = $administrationRoleFactory;
     }
 
     public function __invoke(string $email, string $roleName, array $sections): void
@@ -42,8 +29,8 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
 
         if (null === $admin) {
             throw new \InvalidArgumentException(
-                sprintf('Administrator with email address %s does not exist. Aborting.', $email))
-            ;
+                sprintf('Administrator with email address %s does not exist. Aborting.', $email),
+            );
         }
 
         $administrationRole = $this->getOrCreateAdministrationRole($roleName);
@@ -52,7 +39,8 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
             $administrationRole->addPermission(
                 Permission::ofType(
                     $section,
-                    [OperationType::read(), OperationType::write()])
+                    [OperationType::read(), OperationType::write()],
+                ),
             );
         }
 

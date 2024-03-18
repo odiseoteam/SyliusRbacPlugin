@@ -1,0 +1,19 @@
+services:
+    Odiseo\SyliusRbacPlugin\CommandHandler\CreateAdministrationRoleHandler:
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.manager.administration_role'
+            - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role'
+            - '@Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator'
+            - 'odiseo_sylius_rbac_plugin_admin_administration_role_create'
+        tags:
+            - { name: messenger.message_handler, handles: Odiseo\SyliusRbacPlugin\Message\CreateAdministrationRole }
+
+    Odiseo\SyliusRbacPlugin\CommandHandler\UpdateAdministrationRoleHandler:
+        arguments:
+            - '@odiseo_sylius_rbac_plugin.manager.administration_role'
+            - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'
+            - '@Odiseo\SyliusRbacPlugin\Validator\AdministrationRoleValidator'
+            - 'odiseo_sylius_rbac_plugin_admin_administration_role_update'
+        tags:
+            - { name: messenger.message_handler, handles: Odiseo\SyliusRbacPlugin\Message\UpdateAdministrationRole }

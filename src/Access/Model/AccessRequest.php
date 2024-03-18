@@ -6,16 +6,10 @@ namespace Odiseo\SyliusRbacPlugin\Access\Model;
 
 final class AccessRequest
 {
-    /** @var Section */
-    private $section;
-
-    /** @var OperationType */
-    private $operationType;
-
-    public function __construct(Section $section, OperationType $operationType)
-    {
-        $this->section = $section;
-        $this->operationType = $operationType;
+    public function __construct(
+        private Section $section,
+        private OperationType $operationType,
+    ) {
     }
 
     public function section(): Section

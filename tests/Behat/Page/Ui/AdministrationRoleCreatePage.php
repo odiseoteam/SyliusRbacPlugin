@@ -17,7 +17,7 @@ final class AdministrationRoleCreatePage extends CreatePage implements Administr
     {
         return $this
             ->getDocument()
-            ->find('css', '#sylius_rbac_administration_role_name ~ .sylius-validation-error')
+            ->find('css', '#odiseo_sylius_rbac_plugin_administration_role_name ~ .sylius-validation-error')
             ->getText()
         ;
     }
