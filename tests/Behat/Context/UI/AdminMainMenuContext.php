@@ -24,6 +24,14 @@ final class AdminMainMenuContext implements Context
     {
         $availableSections = $this->adminMainMenuElement->getAvailableSections();
 
+        $pos = array_search('Official support', $availableSections, true);
+
+        if ($pos !== false) {
+            unset($availableSections[$pos]);
+
+            $availableSections = array_values($availableSections);
+        }
+
         if (count($availableSections) !== 1 || $availableSections[0] !== $sectionName) {
             throw new \Exception(sprintf('There should be only one section available in main menu, named "%s"', $sectionName));
         }
@@ -36,6 +44,14 @@ final class AdminMainMenuContext implements Context
     public function someSectionsShouldBeAvailableInTheMainMenu(string ...$sections): void
     {
         $availableSections = $this->adminMainMenuElement->getAvailableSections();
+
+        $pos = array_search('Official support', $availableSections, true);
+
+        if ($pos !== false) {
+            unset($availableSections[$pos]);
+
+            $availableSections = array_values($availableSections);
+        }
 
         if (count($availableSections) !== count($sections)) {
             throw new \Exception(sprintf('There should be %d sections available in main menu', count($availableSections)));
