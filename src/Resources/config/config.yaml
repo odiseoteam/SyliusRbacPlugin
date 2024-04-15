@@ -37,8 +37,11 @@ odiseo_sylius_rbac:
         marketing_management:
             - sylius_admin_product_review
             - sylius_admin_promotion
+            - sylius_admin_catalog_promotion
         sales_management:
             - sylius_admin_order
+            - sylius_admin_payment
+            - sylius_admin_shipment
     custom_sections:
         rbac:
             - odiseo_sylius_rbac_plugin
