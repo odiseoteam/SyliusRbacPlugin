@@ -91,22 +91,22 @@ services:
         class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
         arguments:
             - '@sylius.behat.page.admin.channel.create'
-            - '@sylius.behat.notification_checker'
+            - '@sylius.behat.notification_checker.admin'
 
     odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.catalog:
         class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
         arguments:
             - '@sylius.behat.page.admin.taxon.create'
-            - '@sylius.behat.notification_checker'
+            - '@sylius.behat.notification_checker.admin'
 
     odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.customers:
         class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
         arguments:
             - '@sylius.behat.page.admin.customer.create'
-            - '@sylius.behat.notification_checker'
+            - '@sylius.behat.notification_checker.admin'
 
     odiseo_sylius_rbac_plugin.behat.modifying_availability_checker.marketing:
         class: Tests\Odiseo\SyliusRbacPlugin\Behat\Service\ModifyingAvailabilityChecker
         arguments:
             - '@sylius.behat.page.admin.promotion.create'
-            - '@sylius.behat.notification_checker'
+            - '@sylius.behat.notification_checker.admin'

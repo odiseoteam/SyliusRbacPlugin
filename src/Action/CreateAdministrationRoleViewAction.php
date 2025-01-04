@@ -19,7 +19,7 @@ final class CreateAdministrationRoleViewAction
     public function __invoke(): Response
     {
         return new Response(
-            $this->twig->render('@OdiseoSyliusRbacPlugin/Admin/AdministrationRole/create.html.twig', [
+            $this->twig->render('@OdiseoSyliusRbacPlugin/admin/administration_role/create.html.twig', [
                 'permissions' => $this->adminPermissionsProvider->getPossiblePermissions(),
             ]),
         );

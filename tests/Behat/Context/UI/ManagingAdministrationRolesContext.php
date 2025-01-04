@@ -71,7 +71,7 @@ final class ManagingAdministrationRolesContext implements Context
     {
         $this->notificationChecker->checkNotification(
             'Administration role with id 999 was not found',
-            NotificationType::failure()
+            NotificationType::error()
         );
     }
 
@@ -219,7 +219,7 @@ final class ManagingAdministrationRolesContext implements Context
     {
         $this->notificationChecker->checkNotification(
             'This name is already taken',
-            NotificationType::failure()
+            NotificationType::error()
         );
     }
 }

@@ -2,7 +2,7 @@ odiseo_sylius_rbac_plugin_admin_administration_role:
     resource: |
         alias: odiseo_sylius_rbac_plugin.administration_role
         section: admin
-        templates: "@SyliusAdmin/Crud"
+        templates: "@SyliusAdmin\\shared\\crud"
         only: ['index']
         redirect: update
         grid: odiseo_sylius_rbac_plugin_admin_administration_role

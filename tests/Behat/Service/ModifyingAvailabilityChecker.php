@@ -33,7 +33,7 @@ final class ModifyingAvailabilityChecker
         try {
             $this->notificationChecker->checkNotification(
                 'You are not allowed to do that',
-                NotificationType::failure()
+                NotificationType::error()
             );
         } catch (ElementNotFoundException $exception) {
             return true;
