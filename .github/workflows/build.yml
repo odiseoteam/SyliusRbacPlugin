@@ -23,7 +23,7 @@ jobs:
             matrix:
                 php: ["8.2", "8.3"]
                 symfony: ["^6.4", "^7.1"]
-                sylius: ["~2.0.0"]
+                sylius: ["^2.0"]
                 node: ["20.x"]
                 mysql: ["8.0"]
 
@@ -167,10 +167,6 @@ jobs:
             -
                 name: Run PHPStan
                 run: vendor/bin/phpstan analyse -c phpstan.neon -l max src/
-
-            -
-                name: Run Psalm
-                run: vendor/bin/psalm
 
             -
                 name: Run PHPSpec

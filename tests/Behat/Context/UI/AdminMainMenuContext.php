@@ -24,6 +24,14 @@ final class AdminMainMenuContext implements Context
     {
         $availableSections = $this->adminMainMenuElement->getAvailableSections();
 
+        $pos = array_search('Dashboard', $availableSections, true);
+
+        if ($pos !== false) {
+            unset($availableSections[$pos]);
+
+            $availableSections = array_values($availableSections);
+        }
+
         $pos = array_search('Official support', $availableSections, true);
 
         if ($pos !== false) {
@@ -44,6 +52,14 @@ final class AdminMainMenuContext implements Context
     public function someSectionsShouldBeAvailableInTheMainMenu(string ...$sections): void
     {
         $availableSections = $this->adminMainMenuElement->getAvailableSections();
+
+        $pos = array_search('Dashboard', $availableSections, true);
+
+        if ($pos !== false) {
+            unset($availableSections[$pos]);
+
+            $availableSections = array_values($availableSections);
+        }
 
         $pos = array_search('Official support', $availableSections, true);
 

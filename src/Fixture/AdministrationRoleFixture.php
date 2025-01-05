@@ -26,9 +26,14 @@ class AdministrationRoleFixture extends AbstractFixture implements FixtureInterf
         /** @var AdministrationRoleInterface $administrationRole */
         $administrationRole = $this->administrationRoleFactory->createNew();
 
-        $administrationRole->setName($options['name']);
+        /** @var string $name */
+        $name = $options['name'];
+        /** @var array $permissions */
+        $permissions = $options['permissions'];
 
-        foreach ($options['permissions'] as $permissionName) {
+        $administrationRole->setName($name);
+
+        foreach ($permissions as $permissionName) {
             $administrationRole
                 ->addPermission(Permission::ofType($permissionName, [OperationType::read(), OperationType::write()]))
             ;
