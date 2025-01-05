@@ -17,7 +17,7 @@ odiseo_sylius_rbac_plugin_admin_administration_role_create_view:
 
 odiseo_sylius_rbac_plugin_admin_administration_role_create:
     path: /administration-roles/new
-    methods: [PUT, PATCH]
+    methods: [POST]
     defaults:
         _controller: Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleAction
 
@@ -29,6 +29,6 @@ odiseo_sylius_rbac_plugin_admin_administration_role_update_view:
 
 odiseo_sylius_rbac_plugin_admin_administration_role_update:
     path: /administration-roles/{id}/update
-    methods: [POST]
+    methods: [PUT, PATCH]
     defaults:
         _controller: Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleAction
