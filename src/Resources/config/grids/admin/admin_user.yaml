@@ -7,4 +7,4 @@ sylius_grid:
                     label: odiseo_sylius_rbac_plugin.ui.administration_role
                     sortable: true
                     options:
-                        template: "@OdiseoSyliusRbacPlugin/Admin/AdministrationRole/Grid/Field/administration_role.html.twig"
+                        template: "@OdiseoSyliusRbacPlugin/admin/administration_role/grid/field/administration_role.html.twig"

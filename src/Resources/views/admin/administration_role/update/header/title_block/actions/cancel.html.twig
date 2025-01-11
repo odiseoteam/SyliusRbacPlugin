@@ -1,0 +1,5 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+
+{% set index_url = sylius_generate_redirect_path(path('odiseo_sylius_rbac_plugin_admin_administration_role_index')) %}
+
+{{ button.cancel({text: 'sylius.ui.cancel'|trans, url: index_url, class: 'btn'}) }}

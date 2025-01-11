@@ -1,7 +1,0 @@
-sylius_ui:
-    events:
-        sylius.admin.admin_user.form.second_column:
-            blocks:
-                administration_role:
-                    template: "@OdiseoSyliusRbacPlugin/Admin/User/_administration_role.html.twig"
-                    priority: 5

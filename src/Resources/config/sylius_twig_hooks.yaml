@@ -1,0 +1,103 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_admin.admin_user.create.content.form.sections.account':
+            administration_role:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/_administration_role.html.twig'
+                priority: 50
+
+        'sylius_admin.admin_user.update.content.form.sections.account':
+            administration_role:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/_administration_role.html.twig'
+                priority: 50
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.create':
+            sidebar:
+                template: '@SyliusAdmin/shared/crud/common/sidebar.html.twig'
+                priority: 200
+            navbar:
+                template: '@SyliusAdmin/shared/crud/common/navbar.html.twig'
+                priority: 100
+            content:
+                template: '@SyliusAdmin/shared/crud/common/content.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.create.content':
+            flashes:
+                template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+                priority: 300
+            header:
+                template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+                priority: 200
+            form:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/create/form.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.create.content.header':
+            breadcrumbs:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/create/header/breadcrumbs.html.twig'
+                priority: 100
+            title_block:
+                template: '@SyliusAdmin/shared/crud/common/content/header/title_block.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.create.content.header.title_block':
+            title:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/create/header/title_block/title.html.twig'
+                priority: 100
+            actions:
+                template: '@SyliusAdmin/shared/crud/update/content/header/title_block/actions.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.create.content.header.title_block.actions':
+            cancel:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/create/header/title_block/actions/cancel.html.twig'
+                priority: 100
+            create:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/create/header/title_block/actions/create.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.update':
+            sidebar:
+                template: '@SyliusAdmin/shared/crud/common/sidebar.html.twig'
+                priority: 200
+            navbar:
+                template: '@SyliusAdmin/shared/crud/common/navbar.html.twig'
+                priority: 100
+            content:
+                template: '@SyliusAdmin/shared/crud/common/content.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.update.content':
+            flashes:
+                template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+                priority: 300
+            header:
+                template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+                priority: 200
+            form:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/update/form.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.update.content.header':
+            breadcrumbs:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/update/header/breadcrumbs.html.twig'
+                priority: 100
+            title_block:
+                template: '@SyliusAdmin/shared/crud/common/content/header/title_block.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.update.content.header.title_block':
+            title:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/update/header/title_block/title.html.twig'
+                priority: 100
+            actions:
+                template: '@SyliusAdmin/shared/crud/update/content/header/title_block/actions.html.twig'
+                priority: 0
+
+        'odiseo_sylius_rbac_plugin_admin.administration_role.update.content.header.title_block.actions':
+            cancel:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/update/header/title_block/actions/cancel.html.twig'
+                priority: 100
+            update:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/update/header/title_block/actions/update.html.twig'
+                priority: 0

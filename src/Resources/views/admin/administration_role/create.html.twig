@@ -1,0 +1,9 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}
+    {{ 'odiseo_sylius_rbac_plugin.ui.new_administration_role'|trans }} {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% hook 'odiseo_sylius_rbac_plugin_admin.administration_role.create' with { permissions } %}
+{% endblock %}

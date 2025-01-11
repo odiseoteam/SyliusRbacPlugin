@@ -1,0 +1,10 @@
+{% from '@SyliusAdmin/shared/helper/breadcrumbs.html.twig' import breadcrumbs %}
+
+{% set administration_role = hookable_metadata.context.administration_role %}
+
+{{ breadcrumbs([
+    { name: 'sylius.ui.dashboard'|trans, url: path('sylius_admin_dashboard'), active: false },
+    { name: 'odiseo_sylius_rbac_plugin.ui.administration_roles'|trans, url: path('odiseo_sylius_rbac_plugin_admin_administration_role_index'), active: false },
+    { name: administration_role.id, active: false },
+    { name: 'sylius.ui.edit'|trans, active: true },
+]) }}

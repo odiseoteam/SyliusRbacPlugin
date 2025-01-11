@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://odiseo.com.ar/" target="_blank" title="Odiseo">
+    <a href="https://odiseo.io/" target="_blank" title="Odiseo">
         <img src="https://odiseo.io/build/website/images/favicon-196x196.8548b933.png" alt="Sylius Rbac Plugin" />
     </a>
     <br />

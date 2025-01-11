@@ -1,0 +1,55 @@
+{% set readOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::READ') %}
+{% set writeOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::WRITE') %}
+
+{% set permissions = hookable_metadata.context.permissions %}
+
+<div class="container-xl">
+    <form id="odiseo_sylius_rbac_plugin_administration_role" name="odiseo_sylius_rbac_plugin_administration_role" method="POST" novalidate="novalidate" action={{ path('odiseo_sylius_rbac_plugin_admin_administration_role_create') }}>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="mb-3 field">
+                                    <label for="odiseo_sylius_rbac_plugin_administration_role_name" class="form-label required">{{ 'sylius.ui.name'|trans }}</label>
+                                    <input type="text" class="form-control" id="odiseo_sylius_rbac_plugin_administration_role_name" name="administration_role_name" required="required">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <table class="ui celled table" id="permission_table">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'odiseo_sylius_rbac_plugin.ui.permissions'|trans }}</th>
+                                            <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.read'|trans }}</th>
+                                            <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.write'|trans }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for permission in permissions %}
+                                            <tr>
+                                                <td data-label={{ 'odiseo_sylius_rbac_plugin.ui.permissions'|trans }}>{{ ('odiseo_sylius_rbac_plugin.ui.permission.' ~ permission)|trans }}</td>
+                                                <td data-label={{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.read'|trans }}>
+                                                    <div class="ui toggle checkbox">
+                                                        {% set permissionReadOperationType = "permissions[" ~ permission ~ "][" ~ readOperationType ~ "]" %}
+                                                        <input type="checkbox" id={{ permissionReadOperationType }} name={{ permissionReadOperationType }}>
+                                                    </div>
+                                                </td>
+                                                <td data-label={{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.write'|trans }}>
+                                                    <div class="ui toggle checkbox">
+                                                        {% set permissionWriteOperationType = "permissions[" ~ permission ~ "][" ~ writeOperationType ~ "]" %}
+                                                        <input type="checkbox" id={{ permissionWriteOperationType }} name={{ permissionWriteOperationType }}>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -14,7 +14,7 @@ services:
             - '@sylius.factory.admin_user'
             - '%locale%'
             - '@file_locator'
-            - '@sylius.image_uploader'
+            - '@sylius.uploader.image'
             - '@sylius.factory.avatar_image'
 
     odiseo_sylius_rbac_plugin.fixture.administration_role:

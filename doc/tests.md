@@ -1,6 +1,6 @@
 ## Test the plugin
 
-We are using PHPStan, Psalm, Behat, PHPSpec and PHPUnit to test this plugin.
+We are using PHPStan, Behat, PHPSpec and PHPUnit to test this plugin.
 
 ### How to run the tests
 
@@ -62,12 +62,6 @@ To be able to setup a plugin's database, remember to configure you database cred
       ```
 
   - Static Analysis
-
-    - Psalm
-
-      ```bash
-      $ vendor/bin/psalm
-      ```
 
     - PHPStan
 

@@ -44,7 +44,7 @@ final class UpdateAdministrationRoleViewAction
         }
 
         return new Response(
-            $this->twig->render('@OdiseoSyliusRbacPlugin/Admin/AdministrationRole/update.html.twig', [
+            $this->twig->render('@OdiseoSyliusRbacPlugin/admin/administration_role/update.html.twig', [
                 'administration_role' => $administrationRole,
                 'permissions' => $this->adminPermissionsProvider->getPossiblePermissions(),
                 'rolePermissions' => $administrationRole->getPermissions(),

@@ -29,7 +29,7 @@ services:
             - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleCreatePage'
             - '@Tests\Odiseo\SyliusRbacPlugin\Behat\Page\Ui\AdministrationRoleUpdatePage'
             - '@odiseo_sylius_rbac_plugin.behat.page.administration_role.index'
-            - '@sylius.behat.notification_checker'
+            - '@sylius.behat.notification_checker.admin'
         tags:
             - { name: fob.context_service }
 

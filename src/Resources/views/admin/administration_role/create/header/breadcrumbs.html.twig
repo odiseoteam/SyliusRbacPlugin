@@ -1,0 +1,7 @@
+{% from '@SyliusAdmin/shared/helper/breadcrumbs.html.twig' import breadcrumbs %}
+
+{{ breadcrumbs([
+    { name: 'sylius.ui.dashboard'|trans, url: path('sylius_admin_dashboard'), active: false },
+    { name: 'odiseo_sylius_rbac_plugin.ui.administration_roles'|trans, url: path('odiseo_sylius_rbac_plugin_admin_administration_role_index'), active: false },
+    { name: 'sylius.ui.new'|trans, active: true },
+]) }}

@@ -11,7 +11,7 @@ final class AdministrationRolesElement extends Element implements Administration
 {
     public function selectAdministrationRole(string $administrationRoleName): void
     {
-        $this->getDocument()->selectFieldOption('sylius_admin_user_administrationRole', $administrationRoleName);
+        $this->getDocument()->selectFieldOption('sylius_admin_admin_user_administrationRole', $administrationRoleName);
     }
 
     public function canRemoveAdministrationRole(): bool
@@ -19,7 +19,7 @@ final class AdministrationRolesElement extends Element implements Administration
         /** @var NodeElement $administrationRole */
         $administrationRole = $this
             ->getDocument()
-            ->findById('sylius_admin_user_administrationRole')
+            ->findById('sylius_admin_admin_user_administrationRole')
             ->find('named', ['option', ''])
         ;
 
