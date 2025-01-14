@@ -21,11 +21,3 @@ services:
             - '@Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface'
         tags:
             - { name: kernel.event_listener, event: kernel.request }
-
-    odiseo_sylius_rbac_plugin.event_listener.administration_role_aware_listener:
-        class: Odiseo\SyliusRbacPlugin\Mapping\AdministrationRoleAwareListener
-        arguments:
-            - '@sylius.resource_registry'
-            - '%odiseo_sylius_rbac_plugin.model.administration_role.class%'
-        tags:
-            - { name: doctrine.event_subscriber, connection: default, priority: 99 }
