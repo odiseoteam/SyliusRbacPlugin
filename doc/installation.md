@@ -44,10 +44,8 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareTrait;
 use Sylius\Component\Core\Model\AdminUser as BaseAdminUser;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="sylius_admin_user")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_admin_user')]
 class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterface
 {
     use AdministrationRoleAwareTrait;
