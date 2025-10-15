@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
+use Sylius\Bundle\CoreBundle\Doctrine\Migrations\AbstractMigration;
 
 final class Version20240315112759 extends AbstractMigration
 {

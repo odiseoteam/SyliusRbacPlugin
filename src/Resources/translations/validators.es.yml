@@ -1,0 +1,5 @@
+odiseo_sylius_rbac_plugin:
+    administration_role:
+        name:
+            not_blank: 'El Rol no puede estar vacío'
+            unique: 'El nombre ya está en uso'

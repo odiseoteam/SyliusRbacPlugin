@@ -1,0 +1,20 @@
+odiseo_sylius_rbac_plugin:
+    ui:
+        access: 'Acceso'
+        administration_role: 'Roles'
+        administration_roles: 'Roles'
+        edit_administration_role: 'Editar roles'
+        new_administration_role: 'Nuevo rol'
+        permission:
+            catalog_management: 'Catálogo'
+            configuration: 'Configuración'
+            customers_management: 'Clientes'
+            marketing_management: 'Marketing'
+            operation_type:
+                read: 'Leer'
+                write: 'Escribir'
+            rbac: 'Administración de roles'
+            sales_management: 'Ventas'
+        permissions: 'Permisos'
+        rbac: 'Administración de roles'
+        rbac_role: 'Administración de role'
