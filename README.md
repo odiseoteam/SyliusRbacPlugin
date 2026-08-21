@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://odiseo.io/" target="_blank" title="Odiseo">
+    <a href="https://odiseo.io/en?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin" target="_blank" title="Odiseo">
         <img src="https://odiseo.io/build/website/images/favicon-196x196.8548b933.png" alt="Sylius Rbac Plugin" />
     </a>
     <br />
@@ -20,9 +20,6 @@
     </a>
     <a href="https://sylius-devs.slack.com" title="Slack" target="_blank">
         <img src="https://img.shields.io/badge/community%20chat-slack-FF1493.svg" />
-    </a>
-    <a href="https://odiseo.io/contact-us" title="Support" target="_blank">
-        <img src="https://img.shields.io/badge/support-contact%20author-blue" />
     </a>
 </p>
 <p align="center"><a href="https://sylius.com/partners/odiseo/" target="_blank"><img src="https://github.com/odiseoteam/SyliusRbacPlugin/blob/master/badge-partner-by-sylius.png" width="140"></a></p>
@@ -47,6 +44,10 @@ Write permission access means also updating and deleting.
 - [Customization](doc/customization.md)
 - [Tests](doc/tests.md)
 
+## Demo
+
+Want a live walkthrough of this plugin? [Get in touch](https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin) — or browse all our Sylius plugins at [odiseo.io](https://odiseo.io/en/products/sylius-plugins?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin).
+
 ## Credits
 
-This plugin is maintained by <a href="https://odiseo.io">Odiseo</a>. Want us to help you with this plugin or any Sylius project? Contact us on <a href="mailto:team@odiseo.com.ar">team@odiseo.com.ar</a>.
+This plugin is maintained by [Odiseo](https://odiseo.io/en?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin). Want us to help you with this plugin or any Sylius project? [Get in touch](https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin).
