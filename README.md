@@ -22,7 +22,6 @@
         <img src="https://img.shields.io/badge/community%20chat-slack-FF1493.svg" />
     </a>
 </p>
-<p align="center"><a href="https://sylius.com/partners/odiseo/" target="_blank"><img src="https://github.com/odiseoteam/SyliusRbacPlugin/blob/master/badge-partner-by-sylius.png" width="140"></a></p>
 
 <h1 align="center">Odiseo Sylius Rbac Plugin</h1>
 
@@ -51,3 +50,5 @@ Want a live walkthrough of this plugin? [Get in touch](https://odiseo.io/en/cont
 ## Credits
 
 This plugin is maintained by [Odiseo](https://odiseo.io/en?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin). Want us to help you with this plugin or any Sylius project? [Get in touch](https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin).
+
+Running a marketplace? Vendor role separation is one of the things a [multi-vendor marketplace for Sylius](https://odiseo.io/en/products/sylius-marketplace-plugin?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin) has to get right, and this plugin is how we do it.
