@@ -11,6 +11,7 @@
 !/etc/build/.gitignore
 
 /.phpunit.result.cache
+/.deptrac.cache
 /behat.yml
 /phpunit.xml
 /compose.override.yml
