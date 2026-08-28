@@ -1,0 +1,7 @@
+odiseo_rbac:
+    administration_role:
+        name:
+            not_blank: 'El nombre del rol de administración no puede estar vacío'
+            unique: 'Ese nombre ya está en uso'
+            min_length: 'El nombre del rol de administración debe tener al menos {{ limit }} caracteres'
+            max_length: 'El nombre del rol de administración no puede superar los {{ limit }} caracteres'

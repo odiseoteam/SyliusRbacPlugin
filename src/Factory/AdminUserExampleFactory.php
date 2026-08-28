@@ -19,6 +19,7 @@ class AdminUserExampleFactory extends BaseAdminUserExampleFactory
 {
     protected OptionsResolver $optionsResolver;
 
+    /** @param RepositoryInterface<AdministrationRoleInterface> $administrationRoleRepository */
     public function __construct(
         protected RepositoryInterface $administrationRoleRepository,
         FactoryInterface $userFactory,

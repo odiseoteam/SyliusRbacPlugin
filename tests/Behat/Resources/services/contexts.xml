@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true" />
+
+        <!-- Setup contexts -->
+        <service id="odiseo_rbac.behat.context.setup.administration_role" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Setup\AdministrationRoleContext">
+            <argument type="service" id="sylius.behat.shared_storage" />
+            <argument type="service" id="odiseo_rbac.factory.administration_role" />
+            <argument type="service" id="odiseo_rbac.repository.administration_role" />
+            <tag name="fob.context_service" />
+        </service>
+
+        <!-- Transform contexts -->
+        <service id="odiseo_rbac.behat.context.transform.administration_role" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Transform\AdministrationRoleContext">
+            <argument type="service" id="odiseo_rbac.repository.administration_role" />
+            <tag name="fob.context_service" />
+        </service>
+
+        <!-- UI Admin contexts -->
+        <service id="odiseo_rbac.behat.context.ui.admin.managing_administration_roles" class="Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Ui\Admin\ManagingAdministrationRolesContext">
+            <argument type="service" id="sylius.behat.current_page_resolver" />
+            <argument type="service" id="odiseo_rbac.behat.page.admin.administration_role.index" />
+            <argument type="service" id="odiseo_rbac.behat.page.admin.administration_role.create" />
+            <argument type="service" id="odiseo_rbac.behat.page.admin.administration_role.update" />
+            <tag name="fob.context_service" />
+        </service>
+    </services>
+</container>

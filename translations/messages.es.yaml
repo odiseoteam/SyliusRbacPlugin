@@ -1,0 +1,5 @@
+odiseo_rbac:
+    ui:
+        administration_role: 'Rol de administración'
+        administration_roles: 'Roles de administración'
+        rbac_role: 'Rol RBAC'

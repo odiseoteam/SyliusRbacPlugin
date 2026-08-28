@@ -18,14 +18,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
-
-        $configuration = $config['sylius_sections'];
-        $configuration['custom'] = $config['custom_sections'];
-
-        $container->setParameter('odiseo_sylius_rbac_plugin.configuration', $configuration);
-
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
 
         $loader->load('services.yaml');
     }
@@ -47,7 +40,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
 
     protected function getMigrationsDirectory(): string
     {
-        return '@OdiseoSyliusRbacPlugin/Migrations';
+        return '@OdiseoSyliusRbacPlugin/src/Migrations';
     }
 
     protected function getNamespacesOfMigrationsExecutedBefore(): array

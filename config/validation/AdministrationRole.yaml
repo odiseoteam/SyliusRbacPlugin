@@ -1,0 +1,17 @@
+Odiseo\SyliusRbacPlugin\Entity\AdministrationRole:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [name]
+            message: 'odiseo_rbac.administration_role.name.unique'
+            groups: ['odiseo']
+    properties:
+        name:
+            - NotBlank:
+                message: 'odiseo_rbac.administration_role.name.not_blank'
+                groups: ['odiseo']
+            - Length:
+                min: 2
+                max: 250
+                minMessage: 'odiseo_rbac.administration_role.name.min_length'
+                maxMessage: 'odiseo_rbac.administration_role.name.max_length'
+                groups: ['odiseo']

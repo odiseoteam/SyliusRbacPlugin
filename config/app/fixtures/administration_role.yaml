@@ -1,0 +1,7 @@
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                administration_role:
+                    options:
+                        name: 'Administrator'

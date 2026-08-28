@@ -1,4 +1,0 @@
-suites:
-    main:
-        namespace: Odiseo\SyliusRbacPlugin
-        psr4_prefix: Odiseo\SyliusRbacPlugin

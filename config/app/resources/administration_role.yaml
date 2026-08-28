@@ -1,0 +1,11 @@
+sylius_resource:
+    resources:
+        odiseo_rbac.administration_role:
+            driver: doctrine/orm
+            classes:
+                model: Odiseo\SyliusRbacPlugin\Entity\AdministrationRole
+                interface: Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface
+                form: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleType
+                repository: Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository
+                controller: Sylius\Bundle\ResourceBundle\Controller\ResourceController
+                factory: Sylius\Component\Resource\Factory\Factory

@@ -1,0 +1,11 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_admin.admin_user.create.content.form.sections.account':
+            administration_role:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/_administration_role.html.twig'
+                priority: 50
+
+        'sylius_admin.admin_user.update.content.form.sections.account':
+            administration_role:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/_administration_role.html.twig'
+                priority: 50

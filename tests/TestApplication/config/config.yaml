@@ -1,0 +1,27 @@
+imports:
+    - { resource: "@OdiseoSyliusRbacPlugin/config/config.yaml" }
+    - { resource: "services_test.php" }
+
+twig:
+    paths:
+        '%kernel.project_dir%/../../../tests/TestApplication/templates': ~
+
+# The plugin requires the application's AdminUser to implement
+# AdministrationRoleAwareInterface, exactly as in a real installation.
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    TestApplication:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/../../../tests/TestApplication/src/Entity'
+                        prefix: Tests\Odiseo\SyliusRbacPlugin
+
+sylius_user:
+    resources:
+        admin:
+            user:
+                classes:
+                    model: Tests\Odiseo\SyliusRbacPlugin\Entity\AdminUser

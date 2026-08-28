@@ -1,0 +1,23 @@
+sylius_twig_hooks:
+    hooks:
+        'odiseo_rbac.admin.administration_role.create.content':
+            form:
+                template: '@SyliusAdmin/shared/crud/common/content/form.html.twig'
+                priority: 0
+
+        'odiseo_rbac.admin.administration_role.create.content.form':
+            sections:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/sections.html.twig'
+                priority: 0
+
+        'odiseo_rbac.admin.administration_role.create.content.form.sections':
+            general:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/sections/general.html.twig'
+                priority: 100
+
+        'odiseo_rbac.admin.administration_role.create.content.form.sections.general':
+            default:
+                enabled: false
+            name:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/sections/general/name.html.twig'
+                priority: 100

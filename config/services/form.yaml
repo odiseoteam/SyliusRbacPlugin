@@ -1,0 +1,20 @@
+services:
+    odiseo_rbac.form.extension.type.admin_user:
+        class: Odiseo\SyliusRbacPlugin\Form\Extension\AdminUserTypeExtension
+        tags:
+            - { name: form.type_extension, extended_type: Sylius\Bundle\CoreBundle\Form\Type\User\AdminUserType }
+
+    odiseo_rbac.form.type.administration_role:
+        class: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleType
+        arguments:
+            - '%odiseo_rbac.model.administration_role.class%'
+            - ['odiseo']
+        tags:
+            - { name: form.type, alias: odiseo_rbac_administration_role }
+
+    odiseo_rbac.form.type.administration_role_choice:
+        class: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleChoiceType
+        arguments:
+            - '@odiseo_rbac.repository.administration_role'
+        tags:
+            - { name: form.type , alias: odiseo_rbac_administration_role_choice }

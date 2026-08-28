@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Form\Type;
 
 use Doctrine\Persistence\ObjectRepository;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class AdministrationRoleChoiceType extends AbstractType
 {
+    /** @param ObjectRepository<AdministrationRoleInterface> $administrationRoleRepository */
     public function __construct(
         private ObjectRepository $administrationRoleRepository,
     ) {
@@ -35,6 +37,6 @@ final class AdministrationRoleChoiceType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'odiseo_sylius_administration_role_choice';
+        return 'odiseo_sylius_rbac_administration_role_choice';
     }
 }

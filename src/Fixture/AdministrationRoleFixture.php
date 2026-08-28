@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Fixture;
 
 use Doctrine\Persistence\ObjectManager;
-use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
-use Odiseo\SyliusRbacPlugin\Model\Permission;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
 use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
@@ -28,16 +26,8 @@ class AdministrationRoleFixture extends AbstractFixture implements FixtureInterf
 
         /** @var string $name */
         $name = $options['name'];
-        /** @var array $permissions */
-        $permissions = $options['permissions'];
 
         $administrationRole->setName($name);
-
-        foreach ($permissions as $permissionName) {
-            $administrationRole
-                ->addPermission(Permission::ofType($permissionName, [OperationType::read(), OperationType::write()]))
-            ;
-        }
 
         $this->administrationRoleManager->persist($administrationRole);
         $this->administrationRoleManager->flush();
@@ -48,7 +38,6 @@ class AdministrationRoleFixture extends AbstractFixture implements FixtureInterf
         $node = $optionsNode->children();
 
         $node->scalarNode('name')->cannotBeEmpty();
-        $node->arrayNode('permissions')->scalarPrototype()->defaultValue([]);
     }
 
     public function getName(): string

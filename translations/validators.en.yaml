@@ -1,0 +1,7 @@
+odiseo_rbac:
+    administration_role:
+        name:
+            not_blank: 'Administration role name cannot be blank'
+            unique: 'This name is already taken'
+            min_length: 'Administration role name must be at least {{ limit }} characters long'
+            max_length: 'Administration role name cannot be longer than {{ limit }} characters'
