@@ -21,6 +21,46 @@ final class Version20260828120000 extends AbstractMigration
         return 'Administration roles: stable code, translatable name, permission patterns, many roles per administrator';
     }
 
+    /**
+     * The schema alone leaves every role granting nothing.
+     *
+     * `permissions` starts empty and the old grants stay in `legacy_permissions` until
+     * `odiseo:rbac:migrate-permissions` translates them, so between the two steps every
+     * administrator is denied everything — including access to the screen that would fix it.
+     * Recovery is by console, which is why this says so here rather than leaving it to the
+     * upgrade notes nobody reads mid-deploy.
+     */
+    public function postUp(Schema $schema): void
+    {
+        $count = $this->connection->fetchOne(
+            "SELECT COUNT(*) FROM odiseo_rbac_administration_role WHERE legacy_permissions NOT IN ('[]', '{}', '')",
+        );
+
+        $pending = is_numeric($count) ? (int) $count : 0;
+
+        if (0 === $pending) {
+            return;
+        }
+
+        $message = sprintf(
+            '%d administration role(s) still hold pre-v3 permissions and currently grant nothing. ' .
+            'Run "odiseo:rbac:migrate-permissions --dry-run" to review the translation, then the ' .
+            'same command without --dry-run to apply it, before anyone signs in to the admin.',
+            $pending,
+        );
+
+        $this->warnIf(true, $message);
+
+        /**
+         * Also written straight to the console, because `warnIf()` only reaches a logger. The
+         * standard Symfony configuration wires a console handler in dev but not in prod, which
+         * is precisely where migrations run and where this warning has to be read.
+         */
+        if (\PHP_SAPI === 'cli' && defined('STDERR')) {
+            fwrite(\STDERR, \PHP_EOL . '[WARNING] ' . $message . \PHP_EOL . \PHP_EOL);
+        }
+    }
+
     public function up(Schema $schema): void
     {
         // The old blob keeps its data under a name that says what it is. Dropped in 4.0.
