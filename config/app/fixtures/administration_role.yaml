@@ -4,4 +4,5 @@ sylius_fixtures:
             fixtures:
                 administration_role:
                     options:
+                        code: 'administrator'
                         name: 'Administrator'

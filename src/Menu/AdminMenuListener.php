@@ -23,10 +23,10 @@ final class AdminMenuListener
         $administration = $this->resolveAdministrationItem($menu);
 
         /**
-         * Sylius ships this item as a placeholder linking to the paid Sylius Plus RBAC module.
-         * It is dropped rather than overwritten so both items below can be appended in the
-         * intended order, and so the external URI, the `_blank` target and the `plus_logo` badge
-         * that come with it cannot survive.
+         * Sylius ships this item as a placeholder pointing at an external product. It is dropped
+         * rather than overwritten so both items below can be appended in the intended order, and
+         * so the external URI, the `_blank` target and the badge that come with it cannot
+         * survive.
          */
         $administration->removeChild(self::ROLES_ITEM);
 

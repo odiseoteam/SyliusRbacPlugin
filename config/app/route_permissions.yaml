@@ -1,0 +1,90 @@
+# The admin routes Sylius does not cover on its own.
+#
+# Admin routes in a stock install already declare `permission: true`, and the
+# resource controller turns that into a `{package}.{subject}.{operation}` code by itself. The
+# entries below are the remainder, split into two kinds:
+#
+#   * routes that enforce nothing today and are given a permission here;
+#   * routes that declare `permission: true` but whose controller cannot be mapped to a resource
+#     action, so nothing would ever be checked.
+#
+# Every one of them was found by walking the router, not by reading Sylius' documentation.
+# Applications and plugins extend this list with their own routes.
+odiseo_sylius_rbac:
+    route_permissions:
+
+        # --- Enforce nothing at all today ------------------------------------------------
+
+        # Signs the administrator in as another user. The sharpest hole of the set: it hands
+        # over someone else's session and no permission stands in the way.
+        sylius_admin_impersonate_user:
+            permission: sylius.impersonation.execute
+            group: administration
+            dangerous: true
+
+        # Generic endpoint that returns rows for any resource passed as `{alias}`. Effectively a
+        # read API over the whole catalogue of entities, which is why it is flagged.
+        sylius_admin_entity_autocomplete:
+            permission: sylius.entity_autocomplete.view
+            group: administration
+            dangerous: true
+
+        sylius_admin_dashboard:
+            permission: sylius.dashboard.view
+            group: dashboard
+
+        # A CRUD screen that simply lost its `permission: true` while its siblings kept theirs.
+        sylius_admin_taxon_index:
+            permission: sylius.taxon.index
+            group: catalog
+
+        sylius_admin_admin_user_remove_avatar:
+            permission: sylius.admin_user.update
+            group: administration
+
+        # Sending a customer an email is not the same capability as editing the order, so it
+        # gets its own operation instead of borrowing `update`. Support staff can be allowed to
+        # resend a confirmation without being allowed to change what was ordered.
+        sylius_admin_order_resend_confirmation_email:
+            permission: sylius.order.resend_confirmation_email
+            group: sales
+
+        sylius_admin_shipment_resend_confirmation_email:
+            permission: sylius.shipment.resend_confirmation_email
+            group: sales
+
+        # Dispatches to whichever Live Component the request names, so one permission for the
+        # whole endpoint is coarser than it should be. Left deliberately blunt here rather than
+        # left open; per-component enforcement belongs with the HTTP surface.
+        sylius_admin_live_component:
+            permission: sylius.live_component.execute
+            group: administration
+
+        # --- Declare `permission: true`, but nothing ever checks it ----------------------
+
+        # An invokable controller, so the resource controller's check never runs.
+        sylius_admin_catalog_promotion_delete:
+            permission: sylius.catalog_promotion.delete
+            group: marketing
+
+        # `generateAction` never calls `isGrantedOr403()`, so bulk-generating coupons is
+        # unguarded even with a working engine plugged in. Its own operation rather than
+        # `create`: generating a batch is not the same as adding one coupon by hand.
+        sylius_admin_promotion_coupon_generate:
+            permission: sylius.promotion_coupon.generate
+            group: marketing
+
+        sylius_admin_customer_orders_statistics:
+            permission: sylius.customer.show
+            group: customers
+
+    # Deliberately open. Listed rather than omitted so a coverage check can tell a
+    # considered decision apart from an oversight.
+    public_routes:
+        - sylius_admin_login
+        - sylius_admin_login_check
+        - sylius_admin_logout
+        - sylius_admin_request_password_reset
+        - sylius_admin_render_reset_password_page
+        - sylius_admin_password_reset
+        - sylius_admin_render_password_reset

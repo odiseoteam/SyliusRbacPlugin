@@ -2,9 +2,9 @@ sylius_grid:
     grids:
         sylius_admin_admin_user:
             fields:
-                administration_role:
+                administration_roles:
                     type: twig
-                    label: odiseo_rbac.ui.administration_role
-                    sortable: true
+                    label: odiseo_rbac.ui.administration_roles
+                    # Not sortable: an administrator holds several roles
                     options:
-                        template: "@OdiseoSyliusRbacPlugin/admin/administration_role/grid/field/administration_role.html.twig"
+                        template: "@OdiseoSyliusRbacPlugin/admin/administration_role/grid/field/administration_roles.html.twig"

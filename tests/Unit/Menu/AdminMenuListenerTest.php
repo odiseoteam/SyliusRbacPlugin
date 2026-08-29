@@ -130,7 +130,7 @@ final class AdminMenuListenerTest extends TestCase
         $menu
             ->addChild('sylius.ui.administration')
             ->addChild('roles')
-            ->setUri('https://sylius.com/plus/?utm_campaign=rbac-placeholder')
+            ->setUri('https://sylius.com/plus/?utm_source=product&utm_medium=placeholder&utm_campaign=rbac-placeholder')
             ->setLinkAttribute('target', '_blank')
             ->setLabel('sylius.ui.roles')
             ->setExtra('plus_logo', true)

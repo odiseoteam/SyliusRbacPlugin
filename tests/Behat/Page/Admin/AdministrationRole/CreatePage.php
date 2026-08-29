@@ -8,16 +8,10 @@ use Sylius\Behat\Page\Admin\Crud\CreatePage as BaseCreatePage;
 
 final class CreatePage extends BaseCreatePage implements CreatePageInterface
 {
-    public function fillName(string $name): void
-    {
-        $this->getDocument()->fillField('Name', $name);
-    }
+    use AdministrationRoleFormTrait;
 
-    /** @return array<string, string> */
-    protected function getDefinedElements(): array
+    public function fillCode(string $code): void
     {
-        return array_merge(parent::getDefinedElements(), [
-            'name' => '#odiseo_rbac_administration_role_name',
-        ]);
+        $this->getElement('code')->setValue($code);
     }
 }

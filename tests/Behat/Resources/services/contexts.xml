@@ -9,6 +9,7 @@
             <argument type="service" id="sylius.behat.shared_storage" />
             <argument type="service" id="odiseo_rbac.factory.administration_role" />
             <argument type="service" id="odiseo_rbac.repository.administration_role" />
+            <argument type="service" id="sylius.translation_locale_provider" />
             <tag name="fob.context_service" />
         </service>
 

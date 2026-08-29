@@ -86,6 +86,13 @@ jobs:
                 run: vendor/bin/console lint:container
 
             -
+                # Fails when an admin route is reachable with no permission check. Running it
+                # across the Sylius version matrix is what catches a route added by a new Sylius
+                # release before it ships unguarded.
+                name: Check every admin route is covered by a permission
+                run: vendor/bin/console odiseo:rbac:debug --strict
+
+            -
                 name: Run PHPStan
                 run: vendor/bin/phpstan analyse -c phpstan.neon -l max src/
 

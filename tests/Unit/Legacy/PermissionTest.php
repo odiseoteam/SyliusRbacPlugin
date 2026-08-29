@@ -9,7 +9,7 @@ use Odiseo\SyliusRbacPlugin\Legacy\Permission;
 use PHPUnit\Framework\TestCase;
 
 /**
- * The old format has to stay readable: it is what the data migration command (PR 6) will find
+ * The old format has to stay readable: it is what `odiseo:rbac:migrate-permissions` finds
  * in the databases of everyone coming from 1.x / 2.x.
  */
 final class PermissionTest extends TestCase
@@ -51,7 +51,7 @@ final class PermissionTest extends TestCase
      * `in_array(..., strict: true)`, that is, by object identity. Two logically equal
      * permissions coming from separate deserializations compare as `false`.
      *
-     * The data migration command (PR 6) must NOT rely on `equals()`: it has to compare
+     * The data migration must NOT rely on `equals()`: it has to compare
      * `type()` and the OperationTypes cast to string.
      */
     public function testEqualsComparesOperationTypesByIdentityAndCannotBeTrustedAcrossInstances(): void

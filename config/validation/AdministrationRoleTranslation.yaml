@@ -1,0 +1,12 @@
+Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleTranslation:
+    properties:
+        name:
+            - NotBlank:
+                message: 'odiseo_rbac.administration_role.name.not_blank'
+                groups: ['odiseo']
+            - Length:
+                min: 2
+                max: 250
+                minMessage: 'odiseo_rbac.administration_role.name.min_length'
+                maxMessage: 'odiseo_rbac.administration_role.name.max_length'
+                groups: ['odiseo']

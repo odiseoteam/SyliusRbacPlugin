@@ -10,15 +10,14 @@ Rewriting that parsing from scratch would be more expensive and riskier than kee
 ## Rules
 
 - The only code allowed to import `Odiseo\SyliusRbacPlugin\Legacy\` is the data migration
-  command. The rule is enforced with `deptrac` in CI (ROADMAP PR 20), and it currently holds
+  command. The rule is enforced with `deptrac` in CI, and it currently holds
   with no exceptions: no production file imports this namespace.
 - The migration command reads the old JSON through **DBAL**, not through
   `Entity\AdministrationRole`. The entity keeps the column mapped — see the docblock on its
-  `$permissions` property — but does not expose it, so PR 5 can reshape the entity without
+  `$permissions` property — but does not expose it, so the entity can be reshaped without
   breaking the migration.
 - Nothing here gets fixed, refactored or extended. If it is broken, it is fixed in the new
   engine. `Permission::equals()` has a known bug, documented in its test; it stays as is.
 
 Removed in its entirety in 4.0, together with the migration command.
 
-See ROADMAP §5.1.

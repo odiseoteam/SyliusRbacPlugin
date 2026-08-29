@@ -6,13 +6,13 @@ namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Transform;
 
 use Behat\Behat\Context\Context;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Odiseo\SyliusRbacPlugin\Repository\AdministrationRoleRepositoryInterface;
 use Webmozart\Assert\Assert;
 
 final class AdministrationRoleContext implements Context
 {
     public function __construct(
-        private RepositoryInterface $administrationRoleRepository,
+        private AdministrationRoleRepositoryInterface $administrationRoleRepository,
     ) {
     }
 
@@ -22,8 +22,7 @@ final class AdministrationRoleContext implements Context
      */
     public function getAdministrationRoleByName(string $name): AdministrationRoleInterface
     {
-        /** @var AdministrationRoleInterface|null $administrationRole */
-        $administrationRole = $this->administrationRoleRepository->findOneBy(['name' => $name]);
+        $administrationRole = $this->administrationRoleRepository->findOneByName($name);
 
         Assert::notNull($administrationRole, sprintf('Administration role with name "%s" does not exist', $name));
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin;
 
+use Odiseo\SyliusRbacPlugin\DependencyInjection\Compiler\CheckAdminUserIsRoleAwarePass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class OdiseoSyliusRbacPlugin extends Bundle
@@ -14,5 +16,12 @@ final class OdiseoSyliusRbacPlugin extends Bundle
     public function getPath(): string
     {
         return \dirname(__DIR__);
+    }
+
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new CheckAdminUserIsRoleAwarePass());
     }
 }

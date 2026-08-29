@@ -1,0 +1,18 @@
+services:
+    odiseo_rbac.security.effective_permissions_provider:
+        class: Odiseo\SyliusRbacPlugin\Security\EffectivePermissionsProvider
+
+    Odiseo\SyliusRbacPlugin\Security\EffectivePermissionsProviderInterface: '@odiseo_rbac.security.effective_permissions_provider'
+
+    odiseo_rbac.security.scope_resolver.unrestricted:
+        class: Odiseo\SyliusRbacPlugin\Security\Scope\UnrestrictedScopeResolver
+
+    Odiseo\SyliusRbacPlugin\Security\Scope\ScopeResolverInterface: '@odiseo_rbac.security.scope_resolver.unrestricted'
+
+    odiseo_rbac.security.voter.permission:
+        class: Odiseo\SyliusRbacPlugin\Security\Voter\PermissionVoter
+        arguments:
+            - '@odiseo_rbac.security.effective_permissions_provider'
+            - '@Odiseo\SyliusRbacPlugin\Security\Scope\ScopeResolverInterface'
+        tags:
+            - { name: security.voter }

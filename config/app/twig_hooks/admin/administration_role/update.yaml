@@ -5,21 +5,27 @@ sylius_twig_hooks:
                 template: '@SyliusAdmin/shared/crud/common/content/form.html.twig'
                 configuration:
                     method: 'PUT'
+                    render_rest: false
                 priority: 0
 
         'odiseo_rbac.admin.administration_role.update.content.form':
+            general:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/general.html.twig'
+                priority: 100
+            translations:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/translations.html.twig'
+                priority: 0
+            # Inherited from 'sylius_admin.common': it renders a General card holding every field
+            # that no other hookable claimed, which would render the translations twice.
             sections:
-                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/sections.html.twig'
+                enabled: false
+
+        'odiseo_rbac.admin.administration_role.update.content.form.general':
+            code:
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/general/code.html.twig'
                 priority: 0
 
-        'odiseo_rbac.admin.administration_role.update.content.form.sections':
-            general:
-                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/sections/general.html.twig'
-                priority: 100
-
-        'odiseo_rbac.admin.administration_role.update.content.form.sections.general':
-            default:
-                enabled: false
+        'odiseo_rbac.admin.administration_role.update.content.form.translations':
             name:
-                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/sections/general/name.html.twig'
-                priority: 100
+                template: '@OdiseoSyliusRbacPlugin/admin/administration_role/form/translations/name.html.twig'
+                priority: 0

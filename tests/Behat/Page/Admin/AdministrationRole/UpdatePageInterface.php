@@ -8,7 +8,8 @@ use Sylius\Behat\Page\Admin\Crud\UpdatePageInterface as BaseUpdatePageInterface;
 
 interface UpdatePageInterface extends BaseUpdatePageInterface
 {
-    /** @throws \Behat\Mink\Exception\ElementNotFoundException */
+    public function isCodeDisabled(): bool;
+
     public function fillName(string $name): void;
 
     public function getName(): string;

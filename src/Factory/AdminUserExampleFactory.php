@@ -47,12 +47,15 @@ class AdminUserExampleFactory extends BaseAdminUserExampleFactory
 
         $options = $this->optionsResolver->resolve($options);
 
-        if (!isset($options['administration_role'])) {
+        if (!isset($options['administration_roles']) || !$user instanceof AdministrationRoleAwareInterface) {
             return $user;
         }
 
-        if ($user instanceof AdministrationRoleAwareInterface) {
-            $user->setAdministrationRole($options['administration_role']);
+        /** @var iterable<AdministrationRoleInterface> $administrationRoles */
+        $administrationRoles = $options['administration_roles'];
+
+        foreach ($administrationRoles as $administrationRole) {
+            $user->addAdministrationRole($administrationRole);
         }
 
         return $user;
@@ -62,10 +65,14 @@ class AdminUserExampleFactory extends BaseAdminUserExampleFactory
     {
         parent::configureOptions($resolver);
 
+        /**
+         * Looked up by `code`, not by name: the name is translated now, so it is neither unique
+         * nor stable enough for a fixture to point at.
+         */
         $resolver
-            ->setDefined('administration_role')
-            ->setAllowedTypes('administration_role', ['string', AdministrationRoleInterface::class, 'null'])
-            ->setNormalizer('administration_role', LazyOption::findOneBy($this->administrationRoleRepository, 'name'))
+            ->setDefined('administration_roles')
+            ->setAllowedTypes('administration_roles', ['array'])
+            ->setNormalizer('administration_roles', LazyOption::findBy($this->administrationRoleRepository, 'code'))
         ;
     }
 }

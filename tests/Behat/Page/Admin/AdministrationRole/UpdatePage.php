@@ -9,27 +9,18 @@ use Webmozart\Assert\Assert;
 
 final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 {
-    public function fillName(string $name): void
+    use AdministrationRoleFormTrait;
+
+    public function isCodeDisabled(): bool
     {
-        $this->getDocument()->fillField('Name', $name);
+        return $this->getElement('code')->hasAttribute('disabled');
     }
 
     public function getName(): string
     {
-        $field = $this->getDocument()->findField('Name');
-        Assert::notNull($field, 'The name field could not be found on the page.');
-
-        $value = $field->getValue();
+        $value = $this->getElement('name')->getValue();
         Assert::string($value);
 
         return $value;
-    }
-
-    /** @return array<string, string> */
-    protected function getDefinedElements(): array
-    {
-        return array_merge(parent::getDefinedElements(), [
-            'name' => '#odiseo_rbac_administration_role_name',
-        ]);
     }
 }

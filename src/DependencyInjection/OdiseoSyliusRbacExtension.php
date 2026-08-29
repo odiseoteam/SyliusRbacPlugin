@@ -11,16 +11,54 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
     use PrependDoctrineMigrationsTrait;
 
+    private const ROUTE_PERMISSIONS_FILE = __DIR__ . '/../../config/app/route_permissions.yaml';
+
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+
+        $container->setParameter('odiseo_rbac.route_permissions', $config['route_permissions']);
+        $container->setParameter('odiseo_rbac.public_routes', $config['public_routes']);
+        $container->setParameter('odiseo_rbac.declared_permissions', self::asDeclarations($config['route_permissions']));
+        $container->setParameter('odiseo_rbac.legacy_section_routes', [
+            ...$config['sylius_sections'],
+            ...$config['custom_sections'],
+        ]);
+        $container->setParameter('odiseo_rbac.handled_routes', [
+            ...array_keys($config['route_permissions']),
+            ...$config['public_routes'],
+        ]);
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
 
         $loader->load('services.yaml');
+    }
+
+    /**
+     * @param array<string, array{permission: string, label: string|null, group: string|null, dangerous: bool}> $routePermissions
+     *
+     * @return array<string, array{identifier: string, label: string|null, group: string|null, dangerous: bool}>
+     */
+    private static function asDeclarations(array $routePermissions): array
+    {
+        $declarations = [];
+
+        foreach ($routePermissions as $route => $permission) {
+            $declarations[$route] = [
+                'identifier' => $permission['permission'],
+                'label' => $permission['label'],
+                'group' => $permission['group'],
+                'dangerous' => $permission['dangerous'],
+            ];
+        }
+
+        return $declarations;
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container): ConfigurationInterface
@@ -31,6 +69,25 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
     public function prepend(ContainerBuilder $container): void
     {
         $this->prependDoctrineMigrations($container);
+
+        /**
+         * Loaded here rather than left to the application's imports on purpose. Everything else
+         * the plugin ships degrades gracefully if `config/config.yaml` is not imported — a grid
+         * goes missing and someone notices. These declarations are the only thing standing
+         * between an administrator and the impersonation endpoint, so they cannot be optional.
+         *
+         * Prepending also means the application still overrides any single entry by key.
+         */
+        $defaults = Yaml::parseFile(self::ROUTE_PERMISSIONS_FILE);
+
+        if (!is_array($defaults) || !is_array($defaults['odiseo_sylius_rbac'] ?? null)) {
+            throw new \LogicException(sprintf(
+                'Expected "%s" to declare an "odiseo_sylius_rbac" section.',
+                self::ROUTE_PERMISSIONS_FILE,
+            ));
+        }
+
+        $container->prependExtensionConfig('odiseo_sylius_rbac', $defaults['odiseo_sylius_rbac']);
     }
 
     protected function getMigrationsNamespace(): string

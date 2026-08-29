@@ -22,5 +22,6 @@ services:
         arguments:
             - '@odiseo_rbac.factory.administration_role'
             - '@doctrine.orm.entity_manager'
+            - '@sylius.repository.locale'
         tags:
             - { name: sylius_fixtures.fixture }

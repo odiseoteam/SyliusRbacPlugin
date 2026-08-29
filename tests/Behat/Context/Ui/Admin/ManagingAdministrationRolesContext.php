@@ -66,9 +66,18 @@ final class ManagingAdministrationRolesContext implements Context
     }
 
     /**
-     * @When I do not specify its name
+     * @When I specify its code as :code
      */
-    public function iDoNotSpecifyItsName(): void
+    public function iSpecifyItsCodeAs(string $code): void
+    {
+        $this->createPage->fillCode($code);
+    }
+
+    /**
+     * @When I do not specify its name
+     * @When I do not specify its code
+     */
+    public function iDoNotSpecifyIt(): void
     {
         // deliberately left blank
     }
@@ -132,6 +141,14 @@ final class ManagingAdministrationRolesContext implements Context
     }
 
     /**
+     * @Then I should not be able to edit its code
+     */
+    public function iShouldNotBeAbleToEditItsCode(): void
+    {
+        Assert::true($this->updatePage->isCodeDisabled());
+    }
+
+    /**
      * @Then its name should be :name
      */
     public function itsNameShouldBe(string $name): void
@@ -151,12 +168,12 @@ final class ManagingAdministrationRolesContext implements Context
     }
 
     /**
-     * @Then I should be notified that this name is already taken
+     * @Then I should be notified that this code is already taken
      */
-    public function iShouldBeNotifiedThatThisNameIsAlreadyTaken(): void
+    public function iShouldBeNotifiedThatThisCodeIsAlreadyTaken(): void
     {
         Assert::contains(
-            $this->resolveCurrentPage()->getValidationMessage('name'),
+            $this->resolveCurrentPage()->getValidationMessage('code'),
             'already taken',
         );
     }

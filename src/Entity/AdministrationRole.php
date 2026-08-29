@@ -4,45 +4,134 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Entity;
 
+use Odiseo\SyliusRbacPlugin\Permission\PermissionPattern;
 use Sylius\Component\Resource\Model\TimestampableTrait;
+use Sylius\Component\Resource\Model\TranslatableTrait;
+use Sylius\Component\Resource\Model\TranslationInterface;
 
 class AdministrationRole implements AdministrationRoleInterface
 {
+    use TranslatableTrait {
+        __construct as private initializeTranslationsCollection;
+    }
     use TimestampableTrait;
 
     protected ?int $id = null;
 
-    protected ?string $name = null;
+    /**
+     * Stable identity, separate from the display name.
+     *
+     * The name is translated and an administrator can rename a role at will, so it cannot be
+     * what fixtures or configuration point at. Every other named resource in Sylius — channels,
+     * payment methods, shipping methods — draws the same line.
+     */
+    protected ?string $code = null;
 
     /**
-     * Pre-v3 engine permissions, serialized to JSON.
+     * Permission patterns, as written: `sylius.product.*`, `*.*.index`.
      *
-     * **Do not drop this property or its mapping in `config/doctrine/AdministrationRole.orm.xml`.**
-     * It holds down the `permissions` column, where the data of users coming from 1.x / 2.0
-     * still lives. Without the mapping, the next `doctrine:schema:update` proposes a DROP and
-     * takes that data with it before it can be migrated.
+     * Deliberately not expanded into the operations that exist today. Expanding at save time
+     * would freeze the role, so the next Sylius release that adds an operation to products
+     * would leave every existing role without it.
      *
-     * Accessors are omitted on purpose: nothing in the new engine reads it, and the data
-     * migration command (PR 6) reads the JSON through DBAL rather than through this entity, so
-     * it does not depend on whatever shape the entity takes after PR 5. Interpreting this
-     * format is the sole responsibility of `Odiseo\SyliusRbacPlugin\Legacy`.
+     * @var list<string>
+     */
+    protected array $permissions = [];
+
+    /**
+     * Permissions in the pre-v3 format, untouched.
+     *
+     * **Do not drop this property or its mapping.** It is the only copy of what users coming
+     * from 1.x / 2.0 had configured, and `odiseo:rbac:migrate-permissions` reads it
+     * through DBAL to produce the patterns above. Without the mapping, the next
+     * `doctrine:schema:update` proposes a DROP and takes it with it.
+     *
+     * No accessors on purpose: interpreting this format is the sole responsibility of
+     * `Odiseo\SyliusRbacPlugin\Legacy`, and nothing in the new engine may read it.
      *
      * @var array<array-key, string>
      */
-    protected array $permissions = [];
+    protected array $legacyPermissions = [];
+
+    public function __construct()
+    {
+        $this->initializeTranslationsCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): void
+    {
+        $this->code = $code;
+    }
+
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->getAdministrationRoleTranslation()->getName();
     }
 
     public function setName(?string $name): void
     {
-        $this->name = $name;
+        $this->getAdministrationRoleTranslation()->setName($name);
+    }
+
+    public function getPermissionPatterns(): array
+    {
+        return array_values(array_map(
+            static fn (string $pattern): PermissionPattern => PermissionPattern::fromString($pattern),
+            $this->permissions,
+        ));
+    }
+
+    public function addPermissionPattern(PermissionPattern $pattern): void
+    {
+        if ($this->hasPermissionPattern($pattern)) {
+            return;
+        }
+
+        $this->permissions[] = $pattern->toString();
+    }
+
+    public function removePermissionPattern(PermissionPattern $pattern): void
+    {
+        $this->permissions = array_values(
+            array_filter($this->permissions, static fn (string $stored): bool => $stored !== $pattern->toString()),
+        );
+    }
+
+    public function hasPermissionPattern(PermissionPattern $pattern): bool
+    {
+        return in_array($pattern->toString(), $this->permissions, true);
+    }
+
+    public function clearPermissionPatterns(): void
+    {
+        $this->permissions = [];
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
+
+    protected function createTranslation(): TranslationInterface
+    {
+        return new AdministrationRoleTranslation();
+    }
+
+    private function getAdministrationRoleTranslation(): AdministrationRoleTranslationInterface
+    {
+        /** @var AdministrationRoleTranslationInterface $translation */
+        $translation = $this->getTranslation();
+
+        return $translation;
     }
 }

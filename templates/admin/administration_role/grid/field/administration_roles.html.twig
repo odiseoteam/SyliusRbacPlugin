@@ -1,0 +1,5 @@
+{% for administrationRole in data %}
+    <span class="badge bg-secondary-lt">{{ administrationRole.name }}</span>
+{% else %}
+    <span class="text-secondary">{{ 'odiseo_rbac.ui.no_roles_assigned'|trans }}</span>
+{% endfor %}

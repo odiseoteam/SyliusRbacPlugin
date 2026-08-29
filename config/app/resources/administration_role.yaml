@@ -6,6 +6,14 @@ sylius_resource:
                 model: Odiseo\SyliusRbacPlugin\Entity\AdministrationRole
                 interface: Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface
                 form: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleType
-                repository: Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository
+                repository: Odiseo\SyliusRbacPlugin\Repository\AdministrationRoleRepository
                 controller: Sylius\Bundle\ResourceBundle\Controller\ResourceController
-                factory: Sylius\Component\Resource\Factory\Factory
+                factory: Sylius\Component\Resource\Factory\TranslatableFactory
+            translation:
+                classes:
+                    model: Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleTranslation
+                    interface: Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleTranslationInterface
+                    form: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleTranslationType
+                    repository: Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository
+                    controller: Sylius\Bundle\ResourceBundle\Controller\ResourceController
+                    factory: Sylius\Component\Resource\Factory\Factory

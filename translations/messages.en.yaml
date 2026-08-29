@@ -2,4 +2,4 @@ odiseo_rbac:
     ui:
         administration_role: 'Administration role'
         administration_roles: 'Administration roles'
-        rbac_role: 'RBAC role'
+        no_roles_assigned: 'No roles assigned'

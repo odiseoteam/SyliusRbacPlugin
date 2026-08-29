@@ -5,11 +5,20 @@ sylius_grid:
                 name: doctrine/orm
                 options:
                     class: "%odiseo_rbac.model.administration_role.class%"
+                    repository:
+                        method: createListQueryBuilder
+                        arguments:
+                            - "expr:service('sylius.context.locale').getLocaleCode()"
             fields:
+                code:
+                    type: string
+                    label: sylius.ui.code
+                    sortable: ~
                 name:
                     type: string
                     label: sylius.ui.name
-                    sortable: ~
+                    sortable: translation.name
+                    path: translation.name
                 createdAt:
                     type: datetime
                     label: sylius.ui.creation_date
@@ -21,7 +30,7 @@ sylius_grid:
                     type: string
                     label: sylius.ui.search
                     options:
-                        fields: [name]
+                        fields: [code, translation.name]
                     form_options:
                         type: !php/const Sylius\Component\Grid\Filter\StringFilter::TYPE_CONTAINS
             actions:

@@ -8,6 +8,7 @@ use Sylius\Behat\Page\Admin\Crud\CreatePageInterface as BaseCreatePageInterface;
 
 interface CreatePageInterface extends BaseCreatePageInterface
 {
-    /** @throws \Behat\Mink\Exception\ElementNotFoundException */
+    public function fillCode(string $code): void;
+
     public function fillName(string $name): void;
 }

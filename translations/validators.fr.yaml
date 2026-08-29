@@ -1,7 +1,12 @@
 odiseo_rbac:
     administration_role:
+        code:
+            not_blank: "Le code du rôle d'administration ne peut pas être vide"
+            unique: 'Ce code est déjà utilisé'
+            regex: "Le code du rôle d'administration ne peut contenir que des lettres, des chiffres, des tirets bas et des tirets"
+            min_length: "Le code du rôle d'administration doit contenir au moins {{ limit }} caractères"
+            max_length: "Le code du rôle d'administration ne peut pas dépasser {{ limit }} caractères"
         name:
             not_blank: "Le nom du rôle d'administration ne peut pas être vide"
-            unique: 'Ce nom est déjà utilisé'
             min_length: "Le nom du rôle d'administration doit contenir au moins {{ limit }} caractères"
             max_length: "Le nom du rôle d'administration ne peut pas dépasser {{ limit }} caractères"

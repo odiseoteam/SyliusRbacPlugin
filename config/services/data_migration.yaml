@@ -1,0 +1,29 @@
+services:
+    odiseo_rbac.data_migration.section_translator:
+        class: Odiseo\SyliusRbacPlugin\DataMigration\LegacySectionPermissionTranslator
+        arguments:
+            - '@router'
+            - '@odiseo_rbac.permission.route_resolver'
+            - '%odiseo_rbac.legacy_section_routes%'
+
+    odiseo_rbac.data_migration.role_factory:
+        class: Odiseo\SyliusRbacPlugin\DataMigration\LegacyRoleFactory
+
+    odiseo_rbac.data_migration.role_repository:
+        class: Odiseo\SyliusRbacPlugin\DataMigration\LegacyRoleRepository
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '@odiseo_rbac.data_migration.role_factory'
+
+    odiseo_rbac.data_migration.migrator:
+        class: Odiseo\SyliusRbacPlugin\DataMigration\LegacyPermissionMigrator
+        arguments:
+            - '@odiseo_rbac.data_migration.role_repository'
+            - '@odiseo_rbac.data_migration.section_translator'
+
+    odiseo_rbac.command.migrate_permissions:
+        class: Odiseo\SyliusRbacPlugin\DataMigration\MigrateLegacyPermissionsCommand
+        arguments:
+            - '@odiseo_rbac.data_migration.migrator'
+        tags:
+            - { name: console.command }

@@ -9,7 +9,7 @@ namespace Odiseo\SyliusRbacPlugin\Legacy;
  *
  * Kept solely so the data migration command can read what is currently stored in user
  * databases. Do not use from new code: the data migration is the only layer allowed to
- * import `Legacy\` (see ROADMAP §5.1).
+ * import `Legacy\`, and `deptrac.yaml` enforces it.
  *
  * @internal
  *

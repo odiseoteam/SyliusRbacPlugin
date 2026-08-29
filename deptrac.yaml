@@ -2,10 +2,10 @@
 #
 # `src/Legacy/` only exists so the data migration command can read what users coming from
 # 1.x / 2.x have stored. Everything else in the plugin must be able to ignore it, and in 4.0
-# both the namespace and its single consumer get deleted together. Enforcing that here means
-# "is any of the 2019 engine still wired in?" is answered by CI instead of by code review.
+# both the namespace and its single consumer get deleted together. Enforcing it here means CI
+# answers whether any of the old engine is still wired in, instead of code review.
 #
-# See ROADMAP §5.1 and src/Legacy/README.md.
+# See src/Legacy/README.md.
 deptrac:
   paths:
     - ./src
@@ -16,8 +16,7 @@ deptrac:
         - type: directory
           value: src/Legacy/.*
 
-    # The only layer allowed to read the old format. Does not exist yet: it is created by
-    # ROADMAP PR 6, and this rule is what points that command at the right directory.
+    # The only layer allowed to read the old format.
     - name: DataMigration
       collectors:
         - type: directory
