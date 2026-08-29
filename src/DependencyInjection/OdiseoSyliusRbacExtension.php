@@ -26,6 +26,8 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $container->setParameter('odiseo_rbac.route_permissions', $config['route_permissions']);
         $container->setParameter('odiseo_rbac.public_routes', $config['public_routes']);
         $container->setParameter('odiseo_rbac.declared_permissions', self::asDeclarations($config['route_permissions']));
+        $container->setParameter('odiseo_rbac.deny_unprotected_admin_routes', $config['deny_unprotected_admin_routes']);
+        $container->setParameter('odiseo_rbac.route_identifiers', self::asIdentifiers($config['route_permissions']));
         $container->setParameter('odiseo_rbac.legacy_section_routes', [
             ...$config['sylius_sections'],
             ...$config['custom_sections'],
@@ -59,6 +61,19 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         }
 
         return $declarations;
+    }
+
+    /**
+     * @param array<string, array{permission: string, label: string|null, group: string|null, dangerous: bool}> $routePermissions
+     *
+     * @return array<string, string>
+     */
+    private static function asIdentifiers(array $routePermissions): array
+    {
+        return array_map(
+            static fn (array $permission): string => $permission['permission'],
+            $routePermissions,
+        );
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container): ConfigurationInterface

@@ -6,6 +6,7 @@ namespace Odiseo\SyliusRbacPlugin\Fixture;
 
 use Doctrine\Persistence\ObjectManager;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Permission\PermissionPattern;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
 use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
@@ -35,6 +36,13 @@ class AdministrationRoleFixture extends AbstractFixture implements FixtureInterf
 
         $administrationRole->setCode($code);
 
+        /** @var list<string> $patterns */
+        $patterns = $options['permissions'];
+
+        foreach ($patterns as $pattern) {
+            $administrationRole->addPermissionPattern(PermissionPattern::fromString($pattern));
+        }
+
         /**
          * The name is translated, and a translatable entity has no current locale until it is
          * told: writing the name without this fails with "No locale has been set". The same
@@ -58,6 +66,9 @@ class AdministrationRoleFixture extends AbstractFixture implements FixtureInterf
 
         $node->scalarNode('code')->isRequired()->cannotBeEmpty();
         $node->scalarNode('name')->isRequired()->cannotBeEmpty();
+        $permissions = $node->arrayNode('permissions');
+        $permissions->defaultValue([]);
+        $permissions->scalarPrototype();
     }
 
     public function getName(): string

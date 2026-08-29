@@ -1,0 +1,14 @@
+default:
+    suites:
+        ui_enforcing_administrator_permissions:
+            contexts:
+                - sylius.behat.context.hook.doctrine_orm
+
+                - sylius.behat.context.transform.shared_storage
+
+                - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.admin_security
+
+                - odiseo_rbac.behat.context.ui.administrator_permissions
+            filters:
+                tags: "@enforcing_administrator_permissions&&@ui"

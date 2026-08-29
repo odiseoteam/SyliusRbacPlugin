@@ -3,3 +3,12 @@ services:
         class: Odiseo\SyliusRbacPlugin\Menu\AdminMenuListener
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+    odiseo_rbac.menu.permission_listener:
+        class: Odiseo\SyliusRbacPlugin\Menu\MenuPermissionListener
+        arguments:
+            - '@security.authorization_checker'
+            - '@odiseo_rbac.permission.route_map'
+        tags:
+            # Runs last, so it also filters whatever other listeners have added.
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: filterAdminMenu, priority: -1000 }

@@ -39,3 +39,13 @@ services:
             - '@odiseo_rbac.permission.discoverer'
         tags:
             - { name: console.command }
+
+    odiseo_rbac.permission.route_map:
+        class: Odiseo\SyliusRbacPlugin\Permission\RoutePermissionMap
+        arguments:
+            - '@router'
+            - '@odiseo_rbac.permission.route_resolver'
+            - '%odiseo_rbac.route_identifiers%'
+            - '%odiseo_rbac.public_routes%'
+
+    Odiseo\SyliusRbacPlugin\Permission\RoutePermissionMapInterface: '@odiseo_rbac.permission.route_map'

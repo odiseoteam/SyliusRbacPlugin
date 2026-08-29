@@ -6,3 +6,6 @@ sylius_fixtures:
                     options:
                         code: 'administrator'
                         name: 'Administrator'
+                        # Every permission, including ones plugins add later. Stored as the
+                        # pattern rather than its expansion so it never falls behind.
+                        permissions: ['*.*.*']

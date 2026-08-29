@@ -1,0 +1,14 @@
+services:
+    odiseo_rbac.grid.action_permission_filter:
+        class: Odiseo\SyliusRbacPlugin\Grid\GridActionPermissionFilter
+        arguments:
+            - '@security.authorization_checker'
+            - '@odiseo_rbac.permission.route_map'
+            - '@sylius.resource_registry'
+
+    odiseo_rbac.grid.definition_converter:
+        class: Odiseo\SyliusRbacPlugin\Grid\PermissionAwareDefinitionConverter
+        decorates: sylius.grid.array_to_definition_converter
+        arguments:
+            - '@.inner'
+            - '@odiseo_rbac.grid.action_permission_filter'

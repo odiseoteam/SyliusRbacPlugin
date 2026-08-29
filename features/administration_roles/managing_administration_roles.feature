@@ -7,6 +7,7 @@ Feature: Managing administration roles
     Background:
         Given the store operates on a single channel in "United States"
         And I am logged in as an administrator
+        And my administrator account has full permissions
 
     @ui
     Scenario: Adding a new administration role
@@ -41,7 +42,7 @@ Feature: Managing administration roles
         And I name it "Another name entirely"
         And I add it
         Then I should be notified that this code is already taken
-        And there should be 1 administration roles in the system
+        And there should be no administration role named "Another name entirely"
 
     @ui
     Scenario: Renaming an administration role

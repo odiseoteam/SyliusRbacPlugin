@@ -1,2 +1,3 @@
 imports:
     - suites/ui/managing_administration_roles.yaml
+    - suites/ui/enforcing_administrator_permissions.yaml

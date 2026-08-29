@@ -78,9 +78,18 @@ odiseo_sylius_rbac:
             permission: sylius.customer.show
             group: customers
 
+        # Whole-shop revenue, order counts and customer growth, served by a plain controller
+        # rather than an API Platform operation, so nothing derives a permission for it. Its own
+        # subject: no resource covers it, and reading the shop's numbers is a capability a shop
+        # may well want to grant on its own.
+        sylius_api_admin_statistics:
+            permission: sylius.statistics.view
+            group: dashboard
+
     # Deliberately open. Listed rather than omitted so a coverage check can tell a
     # considered decision apart from an oversight.
     public_routes:
+        - sylius_api_admin_authentication_token
         - sylius_admin_login
         - sylius_admin_login_check
         - sylius_admin_logout
