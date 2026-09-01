@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Odiseo\SyliusRbacPlugin\Unit\Security\Http;
 
+use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
 use Odiseo\SyliusRbacPlugin\Security\Http\AdminRouteAuthorizationListener;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,6 +88,61 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         $this->listen('some_plugin_admin_screen', '/admin/whatever', checker: $checker, main: false);
     }
 
+    /**
+     * The route is shared by every autocomplete field, so its permission cannot be a single
+     * declaration — it goes through the resolver instead.
+     */
+    public function testEntityAutocompleteIsCheckedAgainstWhatTheResolverResolves(): void
+    {
+        $resolver = $this->createMock(EntityAutocompletePermissionResolverInterface::class);
+        $resolver->method('resolve')->with('sylius_admin_taxon')->willReturn('sylius.taxon.index');
+
+        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker->expects(self::once())->method('isGranted')->with('sylius.taxon.index')->willReturn(true);
+
+        $this->listen(
+            EntityAutocompletePermissionResolverInterface::ROUTE,
+            '/admin/autocomplete/sylius_admin_taxon',
+            checker: $checker,
+            resolver: $resolver,
+            attributes: ['alias' => 'sylius_admin_taxon'],
+        );
+    }
+
+    public function testEntityAutocompleteIsDeniedWhenTheResolvedPermissionIsNotGranted(): void
+    {
+        $this->expectException(AccessDeniedException::class);
+        $this->expectExceptionMessageMatches('/sylius\.taxon\.index/');
+
+        $resolver = $this->createMock(EntityAutocompletePermissionResolverInterface::class);
+        $resolver->method('resolve')->willReturn('sylius.taxon.index');
+
+        $this->listen(
+            EntityAutocompletePermissionResolverInterface::ROUTE,
+            '/admin/autocomplete/sylius_admin_taxon',
+            granted: false,
+            resolver: $resolver,
+            attributes: ['alias' => 'sylius_admin_taxon'],
+        );
+    }
+
+    /** Nothing to fall back to: an alias the resolver cannot place is denied, not let through. */
+    public function testEntityAutocompleteIsDeniedWhenNothingCanBeResolved(): void
+    {
+        $this->expectException(AccessDeniedException::class);
+        $this->expectExceptionMessageMatches('/No permission could be resolved/');
+
+        $resolver = $this->createMock(EntityAutocompletePermissionResolverInterface::class);
+        $resolver->method('resolve')->willReturn(null);
+
+        $this->listen(
+            EntityAutocompletePermissionResolverInterface::ROUTE,
+            '/admin/autocomplete/some_third_party_alias',
+            resolver: $resolver,
+            attributes: ['alias' => 'some_third_party_alias'],
+        );
+    }
+
     private function listen(
         string $route,
         string $path,
@@ -95,10 +151,17 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         array $sylius = [],
         bool $denyUnprotected = true,
         bool $main = true,
+        ?EntityAutocompletePermissionResolverInterface $resolver = null,
+        array $attributes = [],
     ): void {
         if (null === $checker) {
             $checker = $this->createMock(AuthorizationCheckerInterface::class);
             $checker->method('isGranted')->willReturn($granted);
+        }
+
+        if (null === $resolver) {
+            $resolver = $this->createMock(EntityAutocompletePermissionResolverInterface::class);
+            $resolver->method('resolve')->willReturn(null);
         }
 
         $request = Request::create($path);
@@ -108,6 +171,10 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
             $request->attributes->set('_sylius', $sylius);
         }
 
+        foreach ($attributes as $name => $value) {
+            $request->attributes->set($name, $value);
+        }
+
         $event = new ControllerEvent(
             $this->createMock(HttpKernelInterface::class),
             static fn (): null => null,
@@ -115,7 +182,7 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
             $main ? HttpKernelInterface::MAIN_REQUEST : HttpKernelInterface::SUB_REQUEST,
         );
 
-        (new AdminRouteAuthorizationListener($checker, self::DECLARED, self::PUBLIC_ROUTES, $denyUnprotected))
+        (new AdminRouteAuthorizationListener($checker, self::DECLARED, self::PUBLIC_ROUTES, $resolver, $denyUnprotected))
             ->onKernelController($event);
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Security\Http;
 
+use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -21,6 +23,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  *   else ever looks at those declarations;
  * - anything else is unprotected. It is denied when `deny_unprotected_admin_routes` is on,
  *   which is the default, and `excluded_routes` is the list of deliberate exceptions.
+ *
+ * `sylius_admin_entity_autocomplete` is a fourth kind of its own: one route shared by every
+ * autocomplete field, so no single declared permission means the right thing for all of it. Its
+ * permission is resolved per request instead, by `EntityAutocompletePermissionResolver`.
  */
 final readonly class AdminRouteAuthorizationListener implements EventSubscriberInterface
 {
@@ -32,6 +38,7 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
         private AuthorizationCheckerInterface $authorizationChecker,
         private array $routePermissions,
         private array $excludedRoutes,
+        private EntityAutocompletePermissionResolverInterface $entityAutocompleteResolver,
         private bool $denyUnprotectedRoutes = true,
         private string $adminPathName = 'admin',
     ) {
@@ -59,6 +66,12 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
             return;
         }
 
+        if (EntityAutocompletePermissionResolverInterface::ROUTE === $route) {
+            $this->enforceEntityAutocomplete($request);
+
+            return;
+        }
+
         $declared = $this->routePermissions[$route] ?? null;
 
         if (null !== $declared) {
@@ -80,6 +93,27 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
                 '"odiseo_sylius_rbac.route_permissions", list it under "excluded_routes" if it is ' .
                 'meant to be open, or turn off "deny_unprotected_admin_routes".',
                 $route,
+            ));
+        }
+    }
+
+    private function enforceEntityAutocomplete(Request $request): void
+    {
+        $alias = $request->attributes->get('alias');
+        $permission = is_string($alias) ? $this->entityAutocompleteResolver->resolve($alias, $request) : null;
+
+        if (null === $permission) {
+            throw new AccessDeniedException(sprintf(
+                'No permission could be resolved for entity-autocomplete alias "%s".',
+                is_string($alias) ? $alias : '(unknown)',
+            ));
+        }
+
+        if (!$this->authorizationChecker->isGranted($permission)) {
+            throw new AccessDeniedException(sprintf(
+                'Permission "%s" is required for entity-autocomplete alias "%s".',
+                $permission,
+                is_string($alias) ? $alias : '(unknown)',
             ));
         }
     }

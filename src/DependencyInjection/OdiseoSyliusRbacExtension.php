@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\DependencyInjection;
 
+use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -25,6 +26,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
 
         $container->setParameter('odiseo_rbac.route_permissions', $config['route_permissions']);
         $container->setParameter('odiseo_rbac.excluded_routes', $config['excluded_routes']);
+        $container->setParameter('odiseo_rbac.entity_autocomplete_permissions', $config['entity_autocomplete_permissions']);
         $container->setParameter('odiseo_rbac.declared_permissions', self::asDeclarations($config['route_permissions']));
         $container->setParameter('odiseo_rbac.deny_unprotected_admin_routes', $config['deny_unprotected_admin_routes']);
         $container->setParameter('odiseo_rbac.subject_parents', $config['subject_parents']);
@@ -36,6 +38,9 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $container->setParameter('odiseo_rbac.handled_routes', [
             ...array_keys($config['route_permissions']),
             ...$config['excluded_routes'],
+            // Resolved per request rather than declared, so the discoverer would otherwise
+            // report it as uncovered. See EntityAutocompletePermissionResolver.
+            EntityAutocompletePermissionResolverInterface::ROUTE,
         ]);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));

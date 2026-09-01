@@ -18,11 +18,6 @@ odiseo_sylius_rbac:
             permission: sylius.impersonation.execute
             group: administration
 
-        # Generic endpoint that returns rows for any resource passed as `{alias}`.
-        sylius_admin_entity_autocomplete:
-            permission: sylius.entity_autocomplete.view
-            group: administration
-
         sylius_admin_dashboard:
             permission: sylius.dashboard.view
             group: dashboard

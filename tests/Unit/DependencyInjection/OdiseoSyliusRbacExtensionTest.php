@@ -83,7 +83,7 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
         ]]);
 
         self::assertSame(
-            ['some_admin_route', 'some_excluded_route'],
+            ['some_admin_route', 'some_excluded_route', 'sylius_admin_entity_autocomplete'],
             $container->getParameter('odiseo_rbac.handled_routes'),
         );
     }

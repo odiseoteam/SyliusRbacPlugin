@@ -89,6 +89,22 @@ final class Configuration implements ConfigurationInterface
         'sylius.shop_user' => 'sylius.customer',
     ];
 
+    /**
+     * `sylius_admin_entity_autocomplete` is one route shared by every autocomplete field, so no
+     * single permission covers all of it. These aliases each query one fixed entity, so they get
+     * the permission its own index screen already checks. The grid filter aliases are not
+     * listed: they are reused across every grid, so their target travels with the request
+     * instead — see `EntityAutocompletePermissionResolver`.
+     *
+     * @var array<string, string>
+     */
+    private const AUTOCOMPLETE_ALIAS_PERMISSIONS = [
+        'sylius_admin_taxon' => 'sylius.taxon.index',
+        'sylius_admin_product' => 'sylius.product.index',
+        'sylius_admin_product_variant' => 'sylius.product_variant.index',
+        'sylius_admin_product_attribute' => 'sylius.product_attribute.index',
+    ];
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('odiseo_sylius_rbac');
@@ -139,6 +155,12 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('excluded_routes')
                     ->info('Admin routes that deliberately require no permission, such as login and password reset. Listing them is what lets a coverage check tell "decided to leave open" apart from "forgot".')
                     ->scalarPrototype()->end()
+                ->end()
+                ->arrayNode('entity_autocomplete_permissions')
+                    ->info('Entity-autocomplete aliases fixed to one entity, mapped to the permission its own index screen already checks. See EntityAutocompletePermissionResolver.')
+                    ->useAttributeAsKey('alias')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(self::AUTOCOMPLETE_ALIAS_PERMISSIONS)
                 ->end()
             ->end()
         ;

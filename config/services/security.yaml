@@ -31,6 +31,7 @@ services:
             - '@security.authorization_checker'
             - '%odiseo_rbac.route_identifiers%'
             - '%odiseo_rbac.excluded_routes%'
+            - '@odiseo_rbac.permission.entity_autocomplete_resolver'
             - '%odiseo_rbac.deny_unprotected_admin_routes%'
             - '%sylius_admin.path_name%'
         tags:

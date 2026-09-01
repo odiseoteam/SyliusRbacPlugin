@@ -40,6 +40,14 @@ services:
         tags:
             - { name: console.command }
 
+    odiseo_rbac.permission.entity_autocomplete_resolver:
+        class: Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolver
+        arguments:
+            - '@sylius.resource_registry'
+            - '%odiseo_rbac.entity_autocomplete_permissions%'
+
+    Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface: '@odiseo_rbac.permission.entity_autocomplete_resolver'
+
     odiseo_rbac.permission.route_map:
         class: Odiseo\SyliusRbacPlugin\Permission\RoutePermissionMap
         arguments:
