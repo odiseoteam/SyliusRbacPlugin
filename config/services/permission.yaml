@@ -15,12 +15,19 @@ services:
         arguments:
             - '%odiseo_rbac.declared_permissions%'
 
+    odiseo_rbac.permission.discoverer.live_component:
+        class: Odiseo\SyliusRbacPlugin\Permission\Discovery\LiveComponentPermissionDiscoverer
+        arguments:
+            - '%odiseo_rbac.live_components%'
+            - '%odiseo_rbac.mapped_live_components%'
+
     odiseo_rbac.permission.discoverer:
         class: Odiseo\SyliusRbacPlugin\Permission\Discovery\ChainPermissionDiscoverer
         arguments:
             -
                 - '@odiseo_rbac.permission.discoverer.resource_route'
                 - '@odiseo_rbac.permission.discoverer.declared'
+                - '@odiseo_rbac.permission.discoverer.live_component'
 
     odiseo_rbac.permission.registry_factory:
         class: Odiseo\SyliusRbacPlugin\Permission\PermissionRegistryFactory
@@ -47,6 +54,13 @@ services:
             - '%odiseo_rbac.entity_autocomplete_permissions%'
 
     Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface: '@odiseo_rbac.permission.entity_autocomplete_resolver'
+
+    odiseo_rbac.permission.live_component_resolver:
+        class: Odiseo\SyliusRbacPlugin\Permission\LiveComponentPermissionResolver
+        arguments:
+            - '%odiseo_rbac.live_component_permissions%'
+
+    Odiseo\SyliusRbacPlugin\Permission\LiveComponentPermissionResolverInterface: '@odiseo_rbac.permission.live_component_resolver'
 
     odiseo_rbac.permission.route_map:
         class: Odiseo\SyliusRbacPlugin\Permission\RoutePermissionMap

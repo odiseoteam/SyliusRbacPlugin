@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Odiseo\SyliusRbacPlugin\Unit\Security\Http;
 
 use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
+use Odiseo\SyliusRbacPlugin\Permission\LiveComponentPermissionResolverInterface;
 use Odiseo\SyliusRbacPlugin\Security\Http\AdminRouteAuthorizationListener;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -143,6 +144,61 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         );
     }
 
+    /**
+     * The route is shared by every live component, so its permission cannot be a single
+     * declaration — it goes through the resolver instead.
+     */
+    public function testLiveComponentIsCheckedAgainstWhatTheResolverResolves(): void
+    {
+        $resolver = $this->createMock(LiveComponentPermissionResolverInterface::class);
+        $resolver->method('resolve')->with('sylius_admin:taxon:form', 'get')->willReturn('sylius.taxon.update');
+
+        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker->expects(self::once())->method('isGranted')->with('sylius.taxon.update')->willReturn(true);
+
+        $this->listen(
+            LiveComponentPermissionResolverInterface::ROUTE,
+            '/admin/en_US/_components/sylius_admin:taxon:form',
+            checker: $checker,
+            liveComponentResolver: $resolver,
+            attributes: ['_live_component' => 'sylius_admin:taxon:form', '_live_action' => 'get'],
+        );
+    }
+
+    public function testLiveComponentIsDeniedWhenTheResolvedPermissionIsNotGranted(): void
+    {
+        $this->expectException(AccessDeniedException::class);
+        $this->expectExceptionMessageMatches('/sylius\.taxon\.update/');
+
+        $resolver = $this->createMock(LiveComponentPermissionResolverInterface::class);
+        $resolver->method('resolve')->willReturn('sylius.taxon.update');
+
+        $this->listen(
+            LiveComponentPermissionResolverInterface::ROUTE,
+            '/admin/en_US/_components/sylius_admin:taxon:tree/moveUp',
+            granted: false,
+            liveComponentResolver: $resolver,
+            attributes: ['_live_component' => 'sylius_admin:taxon:tree', '_live_action' => 'moveUp'],
+        );
+    }
+
+    /** Nothing to fall back to: a component the resolver cannot place is denied, not let through. */
+    public function testLiveComponentIsDeniedWhenNothingCanBeResolved(): void
+    {
+        $this->expectException(AccessDeniedException::class);
+        $this->expectExceptionMessageMatches('/No permission could be resolved/');
+
+        $resolver = $this->createMock(LiveComponentPermissionResolverInterface::class);
+        $resolver->method('resolve')->willReturn(null);
+
+        $this->listen(
+            LiveComponentPermissionResolverInterface::ROUTE,
+            '/admin/en_US/_components/acme_plugin:widget:form',
+            liveComponentResolver: $resolver,
+            attributes: ['_live_component' => 'acme_plugin:widget:form', '_live_action' => 'get'],
+        );
+    }
+
     private function listen(
         string $route,
         string $path,
@@ -152,6 +208,7 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         bool $denyUnprotected = true,
         bool $main = true,
         ?EntityAutocompletePermissionResolverInterface $resolver = null,
+        ?LiveComponentPermissionResolverInterface $liveComponentResolver = null,
         array $attributes = [],
     ): void {
         if (null === $checker) {
@@ -162,6 +219,11 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         if (null === $resolver) {
             $resolver = $this->createMock(EntityAutocompletePermissionResolverInterface::class);
             $resolver->method('resolve')->willReturn(null);
+        }
+
+        if (null === $liveComponentResolver) {
+            $liveComponentResolver = $this->createMock(LiveComponentPermissionResolverInterface::class);
+            $liveComponentResolver->method('resolve')->willReturn(null);
         }
 
         $request = Request::create($path);
@@ -182,7 +244,13 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
             $main ? HttpKernelInterface::MAIN_REQUEST : HttpKernelInterface::SUB_REQUEST,
         );
 
-        (new AdminRouteAuthorizationListener($checker, self::DECLARED, self::PUBLIC_ROUTES, $resolver, $denyUnprotected))
-            ->onKernelController($event);
+        (new AdminRouteAuthorizationListener(
+            $checker,
+            self::DECLARED,
+            self::PUBLIC_ROUTES,
+            $resolver,
+            $liveComponentResolver,
+            $denyUnprotected,
+        ))->onKernelController($event);
     }
 }

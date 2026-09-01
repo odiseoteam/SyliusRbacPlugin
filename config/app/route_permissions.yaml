@@ -13,10 +13,11 @@ odiseo_sylius_rbac:
     route_permissions:
         # --- Routes with no `permission: true` declared ---------------
         
-        # Signs the administrator in as another user.
+        # Signs the administrator in as another user. Filed under Customer in the tree --
+        # see SUBJECT_PARENTS -- since that's the screen the button sits on; the group here
+        # would be overridden anyway.
         sylius_admin_impersonate_user:
             permission: sylius.impersonation.execute
-            group: administration
 
         sylius_admin_dashboard:
             permission: sylius.dashboard.view
@@ -39,13 +40,6 @@ odiseo_sylius_rbac:
         sylius_admin_shipment_resend_confirmation_email:
             permission: sylius.shipment.resend_confirmation_email
             group: sales
-
-        # Dispatches to whichever Live Component the request names, so one permission for the
-        # whole endpoint is coarser than it should be. Left deliberately blunt here rather than
-        # left open; per-component enforcement belongs with the HTTP surface.
-        sylius_admin_live_component:
-            permission: sylius.live_component.execute
-            group: administration
 
         # --- Declare `permission: true`, but nothing ever checks it ----------------------
 

@@ -77,16 +77,31 @@ final class Configuration implements ConfigurationInterface
 
     /**
      * Subjects reached only from inside another subject's screen, where the identifier does not
-     * say so on its own.
+     * say so on its own, or says so wrong.
      *
-     * Most sub-resources are derived instead: `sylius.product_taxon` extends `sylius.product`,
-     * so the tree nests it without being told. `sylius.shop_user` is the exception — the
-     * customer's login account, edited from the customer screen, sharing no prefix with it.
+     * Most sub-resources are derived instead: `sylius.promotion_coupon` extends
+     * `sylius.promotion`, so the tree nests it without being told. The rest share a prefix with
+     * the wrong subject, because the identifier is built from the controller's service name, not
+     * from where the screen is actually reached:
+     *
+     * - `sylius.shop_user` is the customer's login account, edited from the customer screen,
+     *   sharing no prefix with it.
+     * - `sylius.product_taxon` ("Manage product positions") is reached from editing a taxon, not
+     *   a product, despite the `product_` prefix.
+     * - `sylius.channel_pricing_log_entry` ("Price history") is reached from editing a product
+     *   variant's price in one channel, not from managing channels, despite the `channel_`
+     *   prefix.
+     * - `sylius.impersonation` is a header button on the customer screen, right next to the one
+     *   that deletes the shop user account — same screen as `sylius.shop_user`, sharing no
+     *   prefix with either.
      *
      * @var array<string, string>
      */
     private const SUBJECT_PARENTS = [
         'sylius.shop_user' => 'sylius.customer',
+        'sylius.product_taxon' => 'sylius.taxon',
+        'sylius.channel_pricing_log_entry' => 'sylius.product_variant',
+        'sylius.impersonation' => 'sylius.customer',
     ];
 
     /**
@@ -103,6 +118,56 @@ final class Configuration implements ConfigurationInterface
         'sylius_admin_product' => 'sylius.product.index',
         'sylius_admin_product_variant' => 'sylius.product_variant.index',
         'sylius_admin_product_attribute' => 'sylius.product_attribute.index',
+    ];
+
+    /**
+     * `sylius_admin_live_component` is one route shared by every live component in the admin, so
+     * no single permission covers all of it. Each is mapped here to the permission its own screen
+     * already checks. `sylius_admin:taxon:tree` is not listed: `LiveComponentPermissionResolver`
+     * gives it its own rule, because its default action only renders the tree but `moveUp` and
+     * `moveDown` reorder it for real.
+     *
+     * @var array<string, string>
+     */
+    private const LIVE_COMPONENT_PERMISSIONS = [
+        'sylius_admin:customer:order_statistics' => 'sylius.customer.show',
+        'sylius_admin:dashboard:channel_selector' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:new_orders' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:statistics' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:pending_action:count_orders_to_process' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:pending_action:count_pending_payments' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:pending_action:count_product_reviews_to_approve' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:pending_action:count_product_variants_out_of_stock' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:pending_action:count_shipments_to_ship' => 'sylius.dashboard.view',
+        'sylius_admin:admin_user:form' => 'sylius.admin_user.update',
+        'sylius_admin:catalog_promotion:form' => 'sylius.catalog_promotion.update',
+        'sylius_admin:channel:form' => 'sylius.channel.update',
+        'sylius_admin:country:form' => 'sylius.country.update',
+        'sylius_admin:currency:form' => 'sylius.currency.update',
+        'sylius_admin:customer:form' => 'sylius.customer.update',
+        'sylius_admin:customer_group:form' => 'sylius.customer_group.update',
+        'sylius_admin:exchange_rate:form' => 'sylius.exchange_rate.update',
+        'sylius_admin:locale:form' => 'sylius.locale.update',
+        'sylius_admin:order:form' => 'sylius.order.update',
+        'sylius_admin:product:form' => 'sylius.product.update',
+        'sylius_admin:product:generate_product_variants_form' => 'sylius.product.update',
+        'sylius_admin:product:product_attribute_autocomplete' => 'sylius.product.update',
+        'sylius_admin:product_association_type:form' => 'sylius.product_association_type.update',
+        'sylius_admin:product_attribute:form' => 'sylius.product_attribute.update',
+        'sylius_admin:product_option:form' => 'sylius.product_option.update',
+        'sylius_admin:product_review:form' => 'sylius.product_review.update',
+        'sylius_admin:product_variant:form' => 'sylius.product_variant.update',
+        'sylius_admin:promotion:form' => 'sylius.promotion.update',
+        'sylius_admin:promotion_coupon:form' => 'sylius.promotion_coupon.update',
+        'sylius_admin:promotion_coupon:generator_instruction_form' => 'sylius.promotion_coupon.generate',
+        'sylius_admin:shipment:ship_form' => 'sylius.shipment.ship',
+        'sylius_admin:shipping_category:form' => 'sylius.shipping_category.update',
+        'sylius_admin:shipping_method:form' => 'sylius.shipping_method.update',
+        'sylius_admin:tax_category:form' => 'sylius.tax_category.update',
+        'sylius_admin:tax_rate:form' => 'sylius.tax_rate.update',
+        'sylius_admin:taxon:delete' => 'sylius.taxon.delete',
+        'sylius_admin:taxon:form' => 'sylius.taxon.update',
+        'sylius_admin:zone:form' => 'sylius.zone.update',
     ];
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -143,7 +208,7 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue(self::LEGACY_CUSTOM_SECTIONS)
                 ->end()
                 ->arrayNode('subject_parents')
-                    ->info('Subjects that belong under another subject in the permission tree, for the cases the identifier cannot express. A subject whose identifier extends its parent -- sylius.product_taxon under sylius.product -- is nested without being listed here.')
+                    ->info('Subjects that belong under another subject in the permission tree, for the cases the identifier cannot express or gets wrong. A subject whose identifier correctly extends its parent -- sylius.promotion_coupon under sylius.promotion -- is nested without being listed here.')
                     ->useAttributeAsKey('subject')
                     ->scalarPrototype()->end()
                     ->defaultValue(self::SUBJECT_PARENTS)
@@ -161,6 +226,12 @@ final class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('alias')
                     ->scalarPrototype()->end()
                     ->defaultValue(self::AUTOCOMPLETE_ALIAS_PERMISSIONS)
+                ->end()
+                ->arrayNode('live_component_permissions')
+                    ->info('Live components mapped to the permission their own screen already checks. See LiveComponentPermissionResolver.')
+                    ->useAttributeAsKey('component')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(self::LIVE_COMPONENT_PERMISSIONS)
                 ->end()
             ->end()
         ;

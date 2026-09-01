@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\DependencyInjection;
 
 use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
+use Odiseo\SyliusRbacPlugin\Permission\LiveComponentPermissionResolverInterface;
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -27,6 +28,11 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $container->setParameter('odiseo_rbac.route_permissions', $config['route_permissions']);
         $container->setParameter('odiseo_rbac.excluded_routes', $config['excluded_routes']);
         $container->setParameter('odiseo_rbac.entity_autocomplete_permissions', $config['entity_autocomplete_permissions']);
+        $container->setParameter('odiseo_rbac.live_component_permissions', $config['live_component_permissions']);
+        $container->setParameter('odiseo_rbac.mapped_live_components', [
+            ...array_keys($config['live_component_permissions']),
+            LiveComponentPermissionResolverInterface::TAXON_TREE_COMPONENT,
+        ]);
         $container->setParameter('odiseo_rbac.declared_permissions', self::asDeclarations($config['route_permissions']));
         $container->setParameter('odiseo_rbac.deny_unprotected_admin_routes', $config['deny_unprotected_admin_routes']);
         $container->setParameter('odiseo_rbac.subject_parents', $config['subject_parents']);
@@ -39,8 +45,10 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
             ...array_keys($config['route_permissions']),
             ...$config['excluded_routes'],
             // Resolved per request rather than declared, so the discoverer would otherwise
-            // report it as uncovered. See EntityAutocompletePermissionResolver.
+            // report them as uncovered. See EntityAutocompletePermissionResolver and
+            // LiveComponentPermissionResolver.
             EntityAutocompletePermissionResolverInterface::ROUTE,
+            LiveComponentPermissionResolverInterface::ROUTE,
         ]);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));

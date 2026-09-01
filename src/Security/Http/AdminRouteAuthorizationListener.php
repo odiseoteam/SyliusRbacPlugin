@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Security\Http;
 
 use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
+use Odiseo\SyliusRbacPlugin\Permission\LiveComponentPermissionResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -24,9 +25,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * - anything else is unprotected. It is denied when `deny_unprotected_admin_routes` is on,
  *   which is the default, and `excluded_routes` is the list of deliberate exceptions.
  *
- * `sylius_admin_entity_autocomplete` is a fourth kind of its own: one route shared by every
- * autocomplete field, so no single declared permission means the right thing for all of it. Its
- * permission is resolved per request instead, by `EntityAutocompletePermissionResolver`.
+ * `sylius_admin_entity_autocomplete` and `sylius_admin_live_component` are a fourth kind of their
+ * own: each is one route shared by many different fields or components, so no single declared
+ * permission means the right thing for all of it. Their permission is resolved per request
+ * instead, by `EntityAutocompletePermissionResolver` and `LiveComponentPermissionResolver`.
  */
 final readonly class AdminRouteAuthorizationListener implements EventSubscriberInterface
 {
@@ -39,6 +41,7 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
         private array $routePermissions,
         private array $excludedRoutes,
         private EntityAutocompletePermissionResolverInterface $entityAutocompleteResolver,
+        private LiveComponentPermissionResolverInterface $liveComponentResolver,
         private bool $denyUnprotectedRoutes = true,
         private string $adminPathName = 'admin',
     ) {
@@ -68,6 +71,12 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
 
         if (EntityAutocompletePermissionResolverInterface::ROUTE === $route) {
             $this->enforceEntityAutocomplete($request);
+
+            return;
+        }
+
+        if (LiveComponentPermissionResolverInterface::ROUTE === $route) {
+            $this->enforceLiveComponent($request);
 
             return;
         }
@@ -114,6 +123,31 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
                 'Permission "%s" is required for entity-autocomplete alias "%s".',
                 $permission,
                 is_string($alias) ? $alias : '(unknown)',
+            ));
+        }
+    }
+
+    private function enforceLiveComponent(Request $request): void
+    {
+        $component = $request->attributes->get('_live_component');
+        $action = $request->attributes->get('_live_action', 'get');
+
+        $permission = is_string($component) && is_string($action)
+            ? $this->liveComponentResolver->resolve($component, $action)
+            : null;
+
+        if (null === $permission) {
+            throw new AccessDeniedException(sprintf(
+                'No permission could be resolved for live component "%s".',
+                is_string($component) ? $component : '(unknown)',
+            ));
+        }
+
+        if (!$this->authorizationChecker->isGranted($permission)) {
+            throw new AccessDeniedException(sprintf(
+                'Permission "%s" is required for live component "%s".',
+                $permission,
+                is_string($component) ? $component : '(unknown)',
             ));
         }
     }
