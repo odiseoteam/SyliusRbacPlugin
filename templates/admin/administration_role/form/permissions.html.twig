@@ -1,0 +1,119 @@
+{% set form = hookable_metadata.context.form %}
+
+<div class="card mb-3 rbac-permission-tree" data-controller="rbac-permissions"
+     data-rbac-permissions-identifiers-value="{{ odiseo_rbac_permission_identifiers()|json_encode|e('html_attr') }}"
+     data-rbac-permissions-read-operations-value="{{ odiseo_rbac_read_operations()|json_encode|e('html_attr') }}">
+    <div class="card-header">
+        <h2 class="card-title mb-0">{{ 'odiseo_rbac.ui.permissions'|trans }}</h2>
+    </div>
+
+    <div class="card-body border-bottom py-2 d-flex flex-wrap gap-3 align-items-center">
+        <div class="input-group input-group-flat" style="width: 22rem">
+            <input type="search" class="form-control" data-action="input->rbac-permissions#filter"
+                   placeholder="{{ 'odiseo_rbac.ui.filter_permissions'|trans }}" autocomplete="off">
+        </div>
+
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <span class="text-secondary">{{ 'odiseo_rbac.ui.grant'|trans }}:</span>
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn rbac-blanket" data-blanket="all"
+                        data-rbac-permissions-target="global" data-action="click->rbac-permissions#global"
+                        title="{{ 'odiseo_rbac.ui.grant_everything_hint'|trans }}">{{ 'odiseo_rbac.ui.everything'|trans }}</button>
+                <button type="button" class="btn rbac-blanket" data-blanket="read"
+                        data-rbac-permissions-target="global" data-action="click->rbac-permissions#global"
+                        title="{{ 'odiseo_rbac.ui.read_everywhere_hint'|trans }}">{{ 'odiseo_rbac.ui.read_only'|trans }}</button>
+                <button type="button" class="btn rbac-blanket" data-blanket="none"
+                        data-rbac-permissions-target="global" data-action="click->rbac-permissions#global">{{ 'odiseo_rbac.ui.nothing'|trans }}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        {% for group in odiseo_rbac_permission_tree() %}
+            <div class="rbac-group mb-2" data-group="{{ group.name }}" data-rbac-permissions-target="group">
+                <div class="rbac-group-head d-flex align-items-center gap-2 ps-2">
+                    <input type="checkbox" class="form-check-input m-0"
+                           data-rbac-permissions-target="groupCheck" data-action="change->rbac-permissions#group"
+                           title="{{ 'odiseo_rbac.ui.everything_in_this_section'|trans }}"
+                           aria-label="{{ ('odiseo_rbac.ui.group.' ~ group.name)|trans }}">
+
+                    <button type="button" class="btn border-0 d-flex align-items-center justify-content-start gap-2 flex-grow-1 text-start"
+                            data-action="click->rbac-permissions#collapse">
+                        {{ ux_icon('tabler:chevron-down', {'class': 'icon rbac-chevron'}) }}
+                        <strong>{{ ('odiseo_rbac.ui.group.' ~ group.name)|trans }}</strong>
+                        <span class="text-secondary small" data-rbac-permissions-target="groupCount">0 / {{ group.permissionCount }}</span>
+                    </button>
+                </div>
+
+                <div class="table-responsive rbac-group-body">
+                    <table class="table table-sm table-vcenter table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>{{ 'odiseo_rbac.ui.subject'|trans }}</th>
+                                {% for column in group.columns %}
+                                    <th class="text-center">
+                                        {{ ('odiseo_rbac.ui.operation.' ~ column)|trans }}
+                                        <button type="button" class="btn btn-sm p-0 border-0 d-block mx-auto text-secondary"
+                                                data-operation="{{ column }}"
+                                                data-action="click->rbac-permissions#column">{{ 'odiseo_rbac.ui.all'|trans }}</button>
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subject in group.subjects %}
+                                <tr data-subject="{{ subject.key }}">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2 flex-wrap{{ subject.parent ? ' rbac-nested' : '' }}">
+                                            <input type="checkbox" class="form-check-input m-0"
+                                                   data-rbac-permissions-target="row" data-action="change->rbac-permissions#row"
+                                                   title="{{ 'odiseo_rbac.ui.everything_on_this'|trans }}">
+                                            <span>
+                                                <strong>{{ subject.label|trans }}</strong>
+                                                <code class="text-secondary small ms-1 d-none" data-rbac-permissions-target="identifier">{{ subject.key }}</code>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    {% for column in group.columns %}
+                                        <td class="text-center">
+                                            {% if subject.has(column) %}
+                                                <input type="checkbox" class="form-check-input m-0"
+                                                       data-permission="{{ subject.identifier(column) }}"
+                                                       data-rbac-permissions-target="cell" data-action="change->rbac-permissions#cell"
+                                                       title="{{ subject.identifier(column) }}"
+                                                       aria-label="{{ column }} {{ subject.key }}">
+                                            {% else %}
+                                                <span class="text-secondary" aria-hidden="true">·</span>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="card-footer">
+        <div class="d-flex flex-wrap align-items-center gap-3 text-secondary small">
+            <span><strong data-rbac-permissions-target="ruleCount">0</strong> {{ 'odiseo_rbac.ui.rules'|trans }}</span>
+            <span><strong data-rbac-permissions-target="permissionCount">0</strong> {{ 'odiseo_rbac.ui.permissions_granted'|trans }}</span>
+
+            <label class="form-check form-switch mb-0 ms-auto">
+                <input class="form-check-input" type="checkbox" data-action="change->rbac-permissions#identifiers">
+                <span class="form-check-label small text-secondary">{{ 'odiseo_rbac.ui.show_identifiers'|trans }}</span>
+            </label>
+        </div>
+
+        <div class="mt-3 d-none" data-rbac-permissions-target="storedPanel">
+            <div class="text-secondary small mb-2">{{ 'odiseo_rbac.ui.what_gets_stored'|trans }}</div>
+            <ul class="rbac-rules list-unstyled mb-0 small d-flex flex-wrap gap-1" data-rbac-permissions-target="stored"></ul>
+        </div>
+    </div>
+
+    {{ form_widget(form.permissions, {'attr': {'data-rbac-permissions-target': 'field'}}) }}
+</div>

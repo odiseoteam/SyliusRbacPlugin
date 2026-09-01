@@ -37,7 +37,6 @@ final class DebugPermissionsCommand extends Command
     {
         $this
             ->addOption('subject', null, InputOption::VALUE_REQUIRED, 'Only show permissions whose "{package}.{subject}" starts with this')
-            ->addOption('dangerous', null, InputOption::VALUE_NONE, 'Only show permissions flagged as dangerous to grant')
             ->addOption('strict', null, InputOption::VALUE_NONE, 'Exit with a failure if any admin route is left unchecked, so this can be run in CI')
         ;
     }
@@ -51,22 +50,17 @@ final class DebugPermissionsCommand extends Command
 
         /** @var string|null $subjectFilter */
         $subjectFilter = $input->getOption('subject');
-        $dangerousOnly = true === $input->getOption('dangerous');
         $strict = true === $input->getOption('strict');
 
         $rows = [];
 
         foreach ($registry->all() as $identifier => $definition) {
-            if ($dangerousOnly && !$definition->dangerous) {
-                continue;
-            }
-
             if (null !== $subjectFilter && !str_starts_with($identifier, $subjectFilter)) {
                 continue;
             }
 
             $rows[] = [
-                $definition->dangerous ? sprintf('<fg=red>%s</>', $identifier) : $identifier,
+                $identifier,
                 $definition->group ?? '<fg=gray>—</>',
                 $definition->label ?? '<fg=gray>—</>',
             ];
@@ -105,7 +99,7 @@ final class DebugPermissionsCommand extends Command
     private function reportUnprotectedRoutes(SymfonyStyle $io, array $unprotectedRoutes): void
     {
         if ([] === $unprotectedRoutes) {
-            $io->success('Every admin route is either covered by a permission or declared public.');
+            $io->success('Every admin route is either covered by a permission or declared excluded.');
 
             return;
         }
@@ -120,7 +114,7 @@ final class DebugPermissionsCommand extends Command
             ),
         );
         $io->warning(sprintf(
-            '%d admin route(s) are reachable without any permission check. Give each one an entry under "odiseo_sylius_rbac.route_permissions", or list it under "public_routes" if leaving it open is the decision.',
+            '%d admin route(s) are reachable without any permission check. Give each one an entry under "odiseo_sylius_rbac.route_permissions", or list it under "excluded_routes" if leaving it open is the decision.',
             count($unprotectedRoutes),
         ));
     }

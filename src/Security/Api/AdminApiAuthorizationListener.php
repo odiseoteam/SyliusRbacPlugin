@@ -26,13 +26,13 @@ final readonly class AdminApiAuthorizationListener implements EventSubscriberInt
     /**
      * @param array<string, string> $routePermissions route name => permission identifier, for
      *        the endpoints that are plain controllers rather than API Platform operations
-     * @param list<string> $publicRoutes
+     * @param list<string> $excludedRoutes
      */
     public function __construct(
         private AuthorizationCheckerInterface $authorizationChecker,
         private ApiOperationPermissionResolverInterface $resolver,
         private array $routePermissions = [],
-        private array $publicRoutes = [],
+        private array $excludedRoutes = [],
         private string $apiRoutePrefix = '/api/v2',
         private string $adminPathName = 'admin',
         private bool $denyUnresolvedOperations = true,
@@ -58,7 +58,7 @@ final readonly class AdminApiAuthorizationListener implements EventSubscriberInt
 
         $route = $request->attributes->get('_route');
 
-        if (is_string($route) && in_array($route, $this->publicRoutes, true)) {
+        if (is_string($route) && in_array($route, $this->excludedRoutes, true)) {
             return;
         }
 

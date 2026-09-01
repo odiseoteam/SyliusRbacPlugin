@@ -15,6 +15,17 @@ trait AdministrationRoleFormTrait
         $this->getElement('name')->setValue($name);
     }
 
+    /**
+     * The permission tree is an editor for this one field. Writing it directly is what the tree
+     * does on every click, and it is the only way to exercise the form without a browser.
+     *
+     * @param list<string> $patterns
+     */
+    public function grantPermissions(array $patterns): void
+    {
+        $this->getElement('permissions')->setValue(implode("\n", $patterns));
+    }
+
     /** @return array<string, string> */
     protected function getDefinedElements(): array
     {
@@ -26,6 +37,7 @@ trait AdministrationRoleFormTrait
              * application's locales change.
              */
             'name' => '[id^="odiseo_rbac_administration_role_translations_"][id$="_name"]',
+            'permissions' => '#odiseo_rbac_administration_role_permissions',
         ]);
     }
 }

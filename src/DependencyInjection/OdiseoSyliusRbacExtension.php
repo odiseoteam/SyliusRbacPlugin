@@ -24,9 +24,10 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('odiseo_rbac.route_permissions', $config['route_permissions']);
-        $container->setParameter('odiseo_rbac.public_routes', $config['public_routes']);
+        $container->setParameter('odiseo_rbac.excluded_routes', $config['excluded_routes']);
         $container->setParameter('odiseo_rbac.declared_permissions', self::asDeclarations($config['route_permissions']));
         $container->setParameter('odiseo_rbac.deny_unprotected_admin_routes', $config['deny_unprotected_admin_routes']);
+        $container->setParameter('odiseo_rbac.subject_parents', $config['subject_parents']);
         $container->setParameter('odiseo_rbac.route_identifiers', self::asIdentifiers($config['route_permissions']));
         $container->setParameter('odiseo_rbac.legacy_section_routes', [
             ...$config['sylius_sections'],
@@ -34,7 +35,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         ]);
         $container->setParameter('odiseo_rbac.handled_routes', [
             ...array_keys($config['route_permissions']),
-            ...$config['public_routes'],
+            ...$config['excluded_routes'],
         ]);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
@@ -43,9 +44,9 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
     }
 
     /**
-     * @param array<string, array{permission: string, label: string|null, group: string|null, dangerous: bool}> $routePermissions
+     * @param array<string, array{permission: string, label: string|null, group: string|null}> $routePermissions
      *
-     * @return array<string, array{identifier: string, label: string|null, group: string|null, dangerous: bool}>
+     * @return array<string, array{identifier: string, label: string|null, group: string|null}>
      */
     private static function asDeclarations(array $routePermissions): array
     {
@@ -56,7 +57,6 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
                 'identifier' => $permission['permission'],
                 'label' => $permission['label'],
                 'group' => $permission['group'],
-                'dangerous' => $permission['dangerous'],
             ];
         }
 
@@ -64,7 +64,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
     }
 
     /**
-     * @param array<string, array{permission: string, label: string|null, group: string|null, dangerous: bool}> $routePermissions
+     * @param array<string, array{permission: string, label: string|null, group: string|null}> $routePermissions
      *
      * @return array<string, string>
      */

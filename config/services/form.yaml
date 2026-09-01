@@ -26,3 +26,8 @@ services:
             - '%odiseo_rbac.model.administration_role.class%'
         tags:
             - { name: form.type , alias: odiseo_rbac_administration_role_choice }
+
+    odiseo_rbac.form.type.permission_patterns:
+        class: Odiseo\SyliusRbacPlugin\Form\Type\PermissionPatternsType
+        tags:
+            - { name: form.type }

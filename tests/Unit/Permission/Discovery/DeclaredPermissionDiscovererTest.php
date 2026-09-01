@@ -16,7 +16,6 @@ final class DeclaredPermissionDiscovererTest extends TestCase
                 'identifier' => 'sylius.impersonation.execute',
                 'label' => 'sylius.ui.impersonate',
                 'group' => 'administration',
-                'dangerous' => true,
             ],
         ]))->discover();
 
@@ -26,7 +25,6 @@ final class DeclaredPermissionDiscovererTest extends TestCase
         self::assertSame('sylius.impersonation.execute', $definition->identifier->toString());
         self::assertSame('sylius.ui.impersonate', $definition->label);
         self::assertSame('administration', $definition->group);
-        self::assertTrue($definition->dangerous);
     }
 
     public function testMetadataIsOptional(): void
@@ -37,7 +35,6 @@ final class DeclaredPermissionDiscovererTest extends TestCase
 
         self::assertNull($result->definitions[0]->label);
         self::assertNull($result->definitions[0]->group);
-        self::assertFalse($result->definitions[0]->dangerous);
     }
 
     /**

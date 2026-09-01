@@ -20,16 +20,40 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * A parent that ends up with no children and no destination of its own is removed too —
  * otherwise the administrator is left with headings that expand into nothing.
  */
-final readonly class MenuPermissionListener
+final class MenuPermissionListener
 {
+    /**
+     * Lets the permission tree build the menu unfiltered.
+     *
+     * The tree derives its groups from the admin menu, and the menu the current administrator
+     * sees is by definition only the part they may reach — deriving groups from it would hide
+     * whole sections from whoever is editing a role.
+     */
+    private bool $suspended = false;
+
+    public function suspended(callable $build): mixed
+    {
+        $this->suspended = true;
+
+        try {
+            return $build();
+        } finally {
+            $this->suspended = false;
+        }
+    }
+
     public function __construct(
-        private AuthorizationCheckerInterface $authorizationChecker,
-        private RoutePermissionMapInterface $routePermissions,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly RoutePermissionMapInterface $routePermissions,
     ) {
     }
 
     public function filterAdminMenu(MenuBuilderEvent $event): void
     {
+        if ($this->suspended) {
+            return;
+        }
+
         $this->filter($event->getMenu());
     }
 

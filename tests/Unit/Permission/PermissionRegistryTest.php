@@ -70,19 +70,6 @@ final class PermissionRegistryTest extends TestCase
         self::assertSame('catalog', $definition->group);
     }
 
-    public function testMergingNeverUnflagsSomethingDangerous(): void
-    {
-        $registry = new PermissionRegistry([
-            new PermissionDefinition(PermissionIdentifier::fromString('sylius.impersonation.execute'), dangerous: true),
-            new PermissionDefinition(PermissionIdentifier::fromString('sylius.impersonation.execute'), group: 'administration'),
-        ]);
-
-        $definition = $registry->get(PermissionIdentifier::fromString('sylius.impersonation.execute'));
-
-        self::assertTrue($definition->dangerous);
-        self::assertSame('administration', $definition->group);
-    }
-
     public function testItExpandsAPatternIntoWhatItActuallyCovers(): void
     {
         $registry = new PermissionRegistry([

@@ -41,7 +41,6 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
 
         self::assertArrayHasKey('sylius_admin_impersonate_user', $routePermissions);
         self::assertSame('sylius.impersonation.execute', $routePermissions['sylius_admin_impersonate_user']['permission']);
-        self::assertTrue($routePermissions['sylius_admin_impersonate_user']['dangerous']);
     }
 
     public function testTheRoutesLeftDeliberatelyOpenAreShippedToo(): void
@@ -51,23 +50,23 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
 
         $extension->prepend($container);
 
-        $publicRoutes = $container->getExtensionConfig('odiseo_sylius_rbac')[0]['public_routes'] ?? [];
+        $excludedRoutes = $container->getExtensionConfig('odiseo_sylius_rbac')[0]['excluded_routes'] ?? [];
 
-        self::assertContains('sylius_admin_login', $publicRoutes);
-        self::assertContains('sylius_admin_logout', $publicRoutes);
+        self::assertContains('sylius_admin_login', $excludedRoutes);
+        self::assertContains('sylius_admin_logout', $excludedRoutes);
     }
 
     public function testDeclarationsBecomeTheParametersTheDiscoverersRead(): void
     {
         $container = $this->load([[
             'route_permissions' => [
-                'some_admin_route' => ['permission' => 'sylius.thing.view', 'group' => 'administration', 'dangerous' => true],
+                'some_admin_route' => ['permission' => 'sylius.thing.view', 'group' => 'administration'],
             ],
-            'public_routes' => ['some_public_route'],
+            'excluded_routes' => ['some_excluded_route'],
         ]]);
 
         self::assertSame(
-            ['some_admin_route' => ['identifier' => 'sylius.thing.view', 'label' => null, 'group' => 'administration', 'dangerous' => true]],
+            ['some_admin_route' => ['identifier' => 'sylius.thing.view', 'label' => null, 'group' => 'administration']],
             $container->getParameter('odiseo_rbac.declared_permissions'),
         );
     }
@@ -76,15 +75,15 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
      * Both lists feed the same parameter because a route is "handled" either way: the discoverer
      * has to stay quiet about it, or it ends up telling people to declare what they declared.
      */
-    public function testBothDeclaredAndPublicRoutesCountAsHandled(): void
+    public function testBothDeclaredAndExcludedRoutesCountAsHandled(): void
     {
         $container = $this->load([[
             'route_permissions' => ['some_admin_route' => ['permission' => 'sylius.thing.view']],
-            'public_routes' => ['some_public_route'],
+            'excluded_routes' => ['some_excluded_route'],
         ]]);
 
         self::assertSame(
-            ['some_admin_route', 'some_public_route'],
+            ['some_admin_route', 'some_excluded_route'],
             $container->getParameter('odiseo_rbac.handled_routes'),
         );
     }

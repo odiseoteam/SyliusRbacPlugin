@@ -20,6 +20,12 @@ interface AdministrationRoleInterface extends
 
     public function setName(?string $name): void;
 
+    /** @return list<string> */
+    public function getPermissions(): array;
+
+    /** @param list<string> $permissions */
+    public function setPermissions(array $permissions): void;
+
     /** @return list<PermissionPattern> */
     public function getPermissionPatterns(): array;
 

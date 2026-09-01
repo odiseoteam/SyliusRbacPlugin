@@ -16,6 +16,9 @@ final class AdministrationRoleType extends AbstractResourceType
         parent::buildForm($builder, $options);
 
         $builder
+            ->add('permissions', PermissionPatternsType::class, [
+                'label' => false,
+            ])
             ->add('translations', ResourceTranslationsType::class, [
                 'entry_type' => AdministrationRoleTranslationType::class,
                 'label' => false,

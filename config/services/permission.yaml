@@ -46,6 +46,25 @@ services:
             - '@router'
             - '@odiseo_rbac.permission.route_resolver'
             - '%odiseo_rbac.route_identifiers%'
-            - '%odiseo_rbac.public_routes%'
+            - '%odiseo_rbac.excluded_routes%'
 
     Odiseo\SyliusRbacPlugin\Permission\RoutePermissionMapInterface: '@odiseo_rbac.permission.route_map'
+
+    odiseo_rbac.permission.tree:
+        class: Odiseo\SyliusRbacPlugin\Permission\PermissionTree
+        arguments:
+            - '@odiseo_rbac.permission.registry'
+            - '@router'
+            - '@odiseo_rbac.permission.route_resolver'
+            - '@odiseo_rbac.menu.unfiltered_provider'
+            - '@sylius.resource_registry'
+            - '%odiseo_rbac.subject_parents%'
+
+    Odiseo\SyliusRbacPlugin\Permission\PermissionTreeInterface: '@odiseo_rbac.permission.tree'
+
+    odiseo_rbac.twig.permission_tree:
+        class: Odiseo\SyliusRbacPlugin\Twig\PermissionTreeExtension
+        arguments:
+            - '@odiseo_rbac.permission.tree'
+        tags:
+            - { name: twig.extension }

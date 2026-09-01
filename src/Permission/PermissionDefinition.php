@@ -9,7 +9,6 @@ namespace Odiseo\SyliusRbacPlugin\Permission;
  *
  * Identity is the identifier and nothing else. `label` and `group` are presentation, and are
  * kept out of the identifier so the tree can be reorganised without invalidating stored roles.
- * `dangerous` marks capabilities that warrant a warning when granted, such as impersonation.
  */
 final readonly class PermissionDefinition
 {
@@ -17,7 +16,6 @@ final readonly class PermissionDefinition
         public PermissionIdentifier $identifier,
         public ?string $label = null,
         public ?string $group = null,
-        public bool $dangerous = false,
     ) {
     }
 
@@ -39,8 +37,6 @@ final readonly class PermissionDefinition
             $this->identifier,
             $other->label ?? $this->label,
             $other->group ?? $this->group,
-            // Once something has been flagged dangerous, a later description cannot un-flag it.
-            $this->dangerous || $other->dangerous,
         );
     }
 }

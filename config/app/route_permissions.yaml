@@ -8,32 +8,26 @@
 #   * routes that declare `permission: true` but whose controller cannot be mapped to a resource
 #     action, so nothing would ever be checked.
 #
-# Every one of them was found by walking the router, not by reading Sylius' documentation.
 # Applications and plugins extend this list with their own routes.
 odiseo_sylius_rbac:
     route_permissions:
-
-        # --- Enforce nothing at all today ------------------------------------------------
-
-        # Signs the administrator in as another user. The sharpest hole of the set: it hands
-        # over someone else's session and no permission stands in the way.
+        # --- Routes with no `permission: true` declared ---------------
+        
+        # Signs the administrator in as another user.
         sylius_admin_impersonate_user:
             permission: sylius.impersonation.execute
             group: administration
-            dangerous: true
 
-        # Generic endpoint that returns rows for any resource passed as `{alias}`. Effectively a
-        # read API over the whole catalogue of entities, which is why it is flagged.
+        # Generic endpoint that returns rows for any resource passed as `{alias}`.
         sylius_admin_entity_autocomplete:
             permission: sylius.entity_autocomplete.view
             group: administration
-            dangerous: true
 
         sylius_admin_dashboard:
             permission: sylius.dashboard.view
             group: dashboard
 
-        # A CRUD screen that simply lost its `permission: true` while its siblings kept theirs.
+        # Just a redirect to the create screen; Sylius excludes taxon's `index` on purpose.
         sylius_admin_taxon_index:
             permission: sylius.taxon.index
             group: catalog
@@ -42,9 +36,7 @@ odiseo_sylius_rbac:
             permission: sylius.admin_user.update
             group: administration
 
-        # Sending a customer an email is not the same capability as editing the order, so it
-        # gets its own operation instead of borrowing `update`. Support staff can be allowed to
-        # resend a confirmation without being allowed to change what was ordered.
+        # Own operation, not `update`: resending a confirmation isn't editing the order.
         sylius_admin_order_resend_confirmation_email:
             permission: sylius.order.resend_confirmation_email
             group: sales
@@ -67,9 +59,7 @@ odiseo_sylius_rbac:
             permission: sylius.catalog_promotion.delete
             group: marketing
 
-        # `generateAction` never calls `isGrantedOr403()`, so bulk-generating coupons is
-        # unguarded even with a working engine plugged in. Its own operation rather than
-        # `create`: generating a batch is not the same as adding one coupon by hand.
+        # `generateAction` never checks permission, and a batch isn't the same as one coupon by hand.
         sylius_admin_promotion_coupon_generate:
             permission: sylius.promotion_coupon.generate
             group: marketing
@@ -78,17 +68,14 @@ odiseo_sylius_rbac:
             permission: sylius.customer.show
             group: customers
 
-        # Whole-shop revenue, order counts and customer growth, served by a plain controller
-        # rather than an API Platform operation, so nothing derives a permission for it. Its own
-        # subject: no resource covers it, and reading the shop's numbers is a capability a shop
-        # may well want to grant on its own.
+        # Plain controller, nothing derives a permission, and no resource owns whole-shop numbers.
         sylius_api_admin_statistics:
             permission: sylius.statistics.view
             group: dashboard
 
-    # Deliberately open. Listed rather than omitted so a coverage check can tell a
-    # considered decision apart from an oversight.
-    public_routes:
+    # Deliberately excluded from the permission check. Listed rather than omitted so a coverage
+    # check can tell a considered decision apart from an oversight.
+    excluded_routes:
         - sylius_api_admin_authentication_token
         - sylius_admin_login
         - sylius_admin_login_check

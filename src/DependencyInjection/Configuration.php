@@ -75,6 +75,20 @@ final class Configuration implements ConfigurationInterface
         ],
     ];
 
+    /**
+     * Subjects reached only from inside another subject's screen, where the identifier does not
+     * say so on its own.
+     *
+     * Most sub-resources are derived instead: `sylius.product_taxon` extends `sylius.product`,
+     * so the tree nests it without being told. `sylius.shop_user` is the exception — the
+     * customer's login account, edited from the customer screen, sharing no prefix with it.
+     *
+     * @var array<string, string>
+     */
+    private const SUBJECT_PARENTS = [
+        'sylius.shop_user' => 'sylius.customer',
+    ];
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('odiseo_sylius_rbac');
@@ -97,7 +111,6 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('label')->defaultNull()->end()
                             ->scalarNode('group')->defaultNull()->end()
-                            ->booleanNode('dangerous')->defaultFalse()->end()
                         ->end()
                     ->end()
                 ->end()
@@ -113,11 +126,17 @@ final class Configuration implements ConfigurationInterface
                     ->arrayPrototype()->scalarPrototype()->end()->end()
                     ->defaultValue(self::LEGACY_CUSTOM_SECTIONS)
                 ->end()
+                ->arrayNode('subject_parents')
+                    ->info('Subjects that belong under another subject in the permission tree, for the cases the identifier cannot express. A subject whose identifier extends its parent -- sylius.product_taxon under sylius.product -- is nested without being listed here.')
+                    ->useAttributeAsKey('subject')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(self::SUBJECT_PARENTS)
+                ->end()
                 ->booleanNode('deny_unprotected_admin_routes')
                     ->info('Deny any admin route that no permission covers. On by default: a route nobody protected is the failure this plugin exists to prevent. Turn it off to let uncovered routes through while migrating an application that has many of them.')
                     ->defaultTrue()
                 ->end()
-                ->arrayNode('public_routes')
+                ->arrayNode('excluded_routes')
                     ->info('Admin routes that deliberately require no permission, such as login and password reset. Listing them is what lets a coverage check tell "decided to leave open" apart from "forgot".')
                     ->scalarPrototype()->end()
                 ->end()

@@ -13,7 +13,7 @@ services:
             - '@security.authorization_checker'
             - '@odiseo_rbac.security.api.permission_resolver'
             - '%odiseo_rbac.route_identifiers%'
-            - '%odiseo_rbac.public_routes%'
+            - '%odiseo_rbac.excluded_routes%'
             - '%sylius.security.api_route%'
             - '%sylius_admin.path_name%'
             - '%odiseo_rbac.deny_unprotected_admin_routes%'

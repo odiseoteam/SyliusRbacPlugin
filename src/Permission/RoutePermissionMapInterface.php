@@ -15,5 +15,5 @@ interface RoutePermissionMapInterface
      */
     public function permissionForPath(string $path): ?string;
 
-    public function isPublic(string $routeName): bool;
+    public function isExcluded(string $routeName): bool;
 }

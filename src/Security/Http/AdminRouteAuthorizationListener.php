@@ -20,18 +20,18 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * - a route named in `odiseo_sylius_rbac.route_permissions` is checked here, because nothing
  *   else ever looks at those declarations;
  * - anything else is unprotected. It is denied when `deny_unprotected_admin_routes` is on,
- *   which is the default, and `public_routes` is the list of deliberate exceptions.
+ *   which is the default, and `excluded_routes` is the list of deliberate exceptions.
  */
 final readonly class AdminRouteAuthorizationListener implements EventSubscriberInterface
 {
     /**
      * @param array<string, string> $routePermissions route name => permission identifier
-     * @param list<string> $publicRoutes routes that deliberately require no permission
+     * @param list<string> $excludedRoutes routes that deliberately require no permission
      */
     public function __construct(
         private AuthorizationCheckerInterface $authorizationChecker,
         private array $routePermissions,
-        private array $publicRoutes,
+        private array $excludedRoutes,
         private bool $denyUnprotectedRoutes = true,
         private string $adminPathName = 'admin',
     ) {
@@ -55,7 +55,7 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
             return;
         }
 
-        if (in_array($route, $this->publicRoutes, true)) {
+        if (in_array($route, $this->excludedRoutes, true)) {
             return;
         }
 
@@ -77,7 +77,7 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
         if ($this->denyUnprotectedRoutes) {
             throw new AccessDeniedException(sprintf(
                 'Route "%s" is under the admin but no permission covers it. Declare one under ' .
-                '"odiseo_sylius_rbac.route_permissions", list it under "public_routes" if it is ' .
+                '"odiseo_sylius_rbac.route_permissions", list it under "excluded_routes" if it is ' .
                 'meant to be open, or turn off "deny_unprotected_admin_routes".',
                 $route,
             ));

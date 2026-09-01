@@ -83,6 +83,30 @@ class AdministrationRole implements AdministrationRoleInterface
         $this->getAdministrationRoleTranslation()->setName($name);
     }
 
+    /**
+     * The patterns as stored, for the form to bind to.
+     *
+     * `getPermissionPatterns()` stays the API for code that reasons about permissions; this pair
+     * exists because a form binds to a property, and the editor's value is the list of rules.
+     * Both go through `PermissionPattern`, so nothing malformed reaches the column either way.
+     *
+     * @return list<string>
+     */
+    public function getPermissions(): array
+    {
+        return array_values($this->permissions);
+    }
+
+    /** @param list<string> $permissions */
+    public function setPermissions(array $permissions): void
+    {
+        $this->clearPermissionPatterns();
+
+        foreach ($permissions as $pattern) {
+            $this->addPermissionPattern(PermissionPattern::fromString($pattern));
+        }
+    }
+
     public function getPermissionPatterns(): array
     {
         return array_values(array_map(

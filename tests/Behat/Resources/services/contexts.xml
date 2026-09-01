@@ -35,6 +35,7 @@
             <argument type="service" id="odiseo_rbac.behat.page.admin.administration_role.index" />
             <argument type="service" id="odiseo_rbac.behat.page.admin.administration_role.create" />
             <argument type="service" id="odiseo_rbac.behat.page.admin.administration_role.update" />
+            <argument type="service" id="odiseo_rbac.manager.administration_role" />
             <tag name="fob.context_service" />
         </service>
     </services>

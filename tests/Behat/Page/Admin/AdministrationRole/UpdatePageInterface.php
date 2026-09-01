@@ -12,5 +12,8 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
 
     public function fillName(string $name): void;
 
+    /** @param list<string> $patterns */
+    public function grantPermissions(array $patterns): void;
+
     public function getName(): string;
 }

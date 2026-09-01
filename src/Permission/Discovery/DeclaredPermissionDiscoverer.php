@@ -22,7 +22,7 @@ use Odiseo\SyliusRbacPlugin\Permission\PermissionIdentifier;
 final readonly class DeclaredPermissionDiscoverer implements PermissionDiscovererInterface
 {
     /**
-     * @param array<string, array{identifier: string, label?: string|null, group?: string|null, dangerous?: bool}> $declarations
+     * @param array<string, array{identifier: string, label?: string|null, group?: string|null}> $declarations
      *        keyed by whatever declared it — a route name, or a `Class::method` — so the report
      *        can say where a bad declaration came from
      */
@@ -41,7 +41,6 @@ final readonly class DeclaredPermissionDiscoverer implements PermissionDiscovere
                     PermissionIdentifier::fromString($declaration['identifier']),
                     $declaration['label'] ?? null,
                     $declaration['group'] ?? null,
-                    $declaration['dangerous'] ?? false,
                 );
             } catch (InvalidPermissionSyntaxException $exception) {
                 $unprotectedRoutes[(string) $source] = $exception->getMessage();

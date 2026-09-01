@@ -11,7 +11,7 @@ use Odiseo\SyliusRbacPlugin\Permission\PermissionDefinition;
  *
  * An unprotected route is reported, never thrown: one odd third-party controller must not stop
  * the application from booting. The fix for any of them is an entry in
- * `odiseo_sylius_rbac.route_permissions`, or in `public_routes` if leaving it open is intended.
+ * `odiseo_sylius_rbac.route_permissions`, or in `excluded_routes` if leaving it open is intended.
  */
 final readonly class DiscoveredPermissions
 {

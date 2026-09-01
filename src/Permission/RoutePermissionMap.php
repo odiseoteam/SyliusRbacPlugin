@@ -22,13 +22,13 @@ final class RoutePermissionMap implements RoutePermissionMapInterface
 
     /**
      * @param array<string, string> $declaredPermissions route name => permission identifier
-     * @param list<string> $publicRoutes
+     * @param list<string> $excludedRoutes
      */
     public function __construct(
         private readonly RouterInterface $router,
         private readonly RoutePermissionResolver $resolver,
         private readonly array $declaredPermissions = [],
-        private readonly array $publicRoutes = [],
+        private readonly array $excludedRoutes = [],
     ) {
     }
 
@@ -54,9 +54,9 @@ final class RoutePermissionMap implements RoutePermissionMapInterface
         return is_string($route) ? $this->permissionFor($route) : null;
     }
 
-    public function isPublic(string $routeName): bool
+    public function isExcluded(string $routeName): bool
     {
-        return in_array($routeName, $this->publicRoutes, true);
+        return in_array($routeName, $this->excludedRoutes, true);
     }
 
     /** @return array<string, string> */

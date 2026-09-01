@@ -54,6 +54,34 @@ Feature: Managing administration roles
         And there should be an administration role named "Product manager"
 
     @ui
+    Scenario: Granting permissions to an administration role
+        Given there is already an administration role "Catalog manager" in the system
+        When I want to edit the "Catalog manager" administration role
+        And I grant it the "sylius.product.*, sylius.taxon.index" permissions
+        And I save my changes
+        Then I should be notified that it has been successfully edited
+        And this administration role should grant "sylius.product.*, sylius.taxon.index"
+
+    @ui
+    Scenario: Taking every permission away from an administration role
+        Given there is already an administration role "Catalog manager" in the system
+        When I want to edit the "Catalog manager" administration role
+        And I grant it no permissions
+        And I save my changes
+        Then I should be notified that it has been successfully edited
+        And this administration role should grant ""
+
+    # The field is written by the tree, so anything malformed reaching it is a tampered request.
+    # A pattern nothing can match would grant nothing while looking like it grants something.
+    @ui
+    Scenario: A malformed permission pattern is dropped rather than stored
+        Given there is already an administration role "Catalog manager" in the system
+        When I want to edit the "Catalog manager" administration role
+        And I grant it the "sylius.product.*, not a pattern, sylius.order" permissions
+        And I save my changes
+        Then this administration role should grant "sylius.product.*"
+
+    @ui
     Scenario: Trying to change the code of an existing administration role
         Given there is already an administration role "Catalog manager" in the system
         When I want to edit the "Catalog manager" administration role

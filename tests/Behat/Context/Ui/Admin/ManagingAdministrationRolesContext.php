@@ -6,6 +6,7 @@ namespace Tests\Odiseo\SyliusRbacPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Doctrine\Persistence\ObjectManager;
 use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Sylius\Behat\Service\Resolver\CurrentPageResolverInterface;
@@ -21,6 +22,7 @@ final class ManagingAdministrationRolesContext implements Context
         private IndexPageInterface $indexPage,
         private CreatePageInterface $createPage,
         private UpdatePageInterface $updatePage,
+        private ObjectManager $administrationRoleManager,
     ) {
     }
 
@@ -108,6 +110,39 @@ final class ManagingAdministrationRolesContext implements Context
 
         $this->indexPage->open();
         $this->indexPage->deleteAdministrationRole($name);
+    }
+
+    /**
+     * @When I grant it the :patterns permissions
+     * @When I grant it the :patterns permission
+     */
+    public function iGrantItThePermissions(string $patterns): void
+    {
+        $this->resolveCurrentPage()->grantPermissions(array_map('trim', explode(',', $patterns)));
+    }
+
+    /**
+     * @When I grant it no permissions
+     */
+    public function iGrantItNoPermissions(): void
+    {
+        $this->resolveCurrentPage()->grantPermissions([]);
+    }
+
+    /**
+     * @Then /^(this administration role) should grant "([^"]*)"$/
+     */
+    public function thisAdministrationRoleShouldGrant(
+        AdministrationRoleInterface $administrationRole,
+        string $patterns,
+    ): void {
+        // The form was submitted in a request of its own; the copy held here predates it.
+        $this->administrationRoleManager->refresh($administrationRole);
+
+        Assert::same(
+            $administrationRole->getPermissions(),
+            '' === $patterns ? [] : array_map('trim', explode(',', $patterns)),
+        );
     }
 
     /**

@@ -11,4 +11,7 @@ interface CreatePageInterface extends BaseCreatePageInterface
     public function fillCode(string $code): void;
 
     public function fillName(string $name): void;
+
+    /** @param list<string> $patterns */
+    public function grantPermissions(array $patterns): void;
 }

@@ -30,7 +30,7 @@ services:
         arguments:
             - '@security.authorization_checker'
             - '%odiseo_rbac.route_identifiers%'
-            - '%odiseo_rbac.public_routes%'
+            - '%odiseo_rbac.excluded_routes%'
             - '%odiseo_rbac.deny_unprotected_admin_routes%'
             - '%sylius_admin.path_name%'
         tags:

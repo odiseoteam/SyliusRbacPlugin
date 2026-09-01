@@ -30,17 +30,6 @@ final class DebugPermissionsCommandTest extends TestCase
         self::assertSame(Command::SUCCESS, $tester->getStatusCode());
     }
 
-    public function testItCanShowOnlyWhatIsDangerousToGrant(): void
-    {
-        $tester = $this->runCommand([
-            new PermissionDefinition(PermissionIdentifier::fromString('sylius.impersonation.execute'), dangerous: true),
-            new PermissionDefinition(PermissionIdentifier::fromString('sylius.product.index')),
-        ], ['--dangerous' => true]);
-
-        self::assertStringContainsString('sylius.impersonation.execute', $tester->getDisplay());
-        self::assertStringNotContainsString('sylius.product.index', $tester->getDisplay());
-    }
-
     public function testItCanNarrowToOneSubject(): void
     {
         $tester = $this->runCommand([
