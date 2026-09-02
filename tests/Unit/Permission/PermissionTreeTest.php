@@ -187,6 +187,41 @@ final class PermissionTreeTest extends TestCase
         self::assertSame(['catalog', 'not_on_the_menu'], $this->groupNames($tree));
     }
 
+    /** Groups are read where the menu puts them, not alphabetically. */
+    public function testItOrdersGroupsAsTheyAppearInTheMenuRatherThanAlphabetically(): void
+    {
+        $tree = $this->tree(['sylius.order.index', 'sylius.product.index'], [
+            'sales' => ['Orders' => '/admin/orders/'],
+            'catalog' => ['Products' => '/admin/products/'],
+        ]);
+
+        self::assertSame(['sales', 'catalog'], $this->groupNames($tree));
+    }
+
+    /** A section whose own route needs no permission has no subject to derive a position from. */
+    public function testItOrdersASectionByItsOwnPositionEvenWhenNoSubjectIsOnIt(): void
+    {
+        $tree = $this->tree(
+            ['sylius.dashboard.view' => 'dashboard', 'sylius.product.index'],
+            ['dashboard' => [], 'catalog' => ['Products' => '/admin/products/']],
+        );
+
+        self::assertSame(['dashboard', 'catalog'], $this->groupNames($tree));
+    }
+
+    /** Same idea one level down: the rows inside a group follow their entry's own menu order. */
+    public function testItOrdersSubjectsWithinAGroupAsTheyAppearInTheMenu(): void
+    {
+        $tree = $this->tree(['sylius.order.index', 'sylius.customer.index'], [
+            'sales' => [
+                'Orders' => '/admin/orders/',
+                'Customers' => '/admin/customers/',
+            ],
+        ]);
+
+        self::assertSame(['Orders', 'Customers'], $this->labels($tree, 'sales'));
+    }
+
     /**
      * A section name may arrive as the menu's translation key or as a declaration's own word.
      * Reducing both to one token is what keeps them from becoming two sections that read alike.

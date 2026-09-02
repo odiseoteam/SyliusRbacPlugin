@@ -99,13 +99,13 @@
     </div>
 
     <div class="card-footer">
-        <div class="d-flex flex-wrap align-items-center gap-3 text-secondary small">
-            <span><strong data-rbac-permissions-target="ruleCount">0</strong> {{ 'odiseo_rbac.ui.rules'|trans }}</span>
-            <span><strong data-rbac-permissions-target="permissionCount">0</strong> {{ 'odiseo_rbac.ui.permissions_granted'|trans }}</span>
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <span class="text-secondary small"><strong data-rbac-permissions-target="ruleCount">0</strong> {{ 'odiseo_rbac.ui.rules'|trans }}</span>
+            <span class="text-secondary small"><strong data-rbac-permissions-target="permissionCount">0</strong> {{ 'odiseo_rbac.ui.permissions_granted'|trans }}</span>
 
             <label class="form-check form-switch mb-0 ms-auto">
                 <input class="form-check-input" type="checkbox" data-action="change->rbac-permissions#identifiers">
-                <span class="form-check-label small text-secondary">{{ 'odiseo_rbac.ui.show_identifiers'|trans }}</span>
+                <span class="form-check-label text-secondary">{{ 'odiseo_rbac.ui.show_identifiers'|trans }}</span>
             </label>
         </div>
 

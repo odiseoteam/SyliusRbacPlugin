@@ -25,3 +25,12 @@ services:
             - '@sylius.repository.locale'
         tags:
             - { name: sylius_fixtures.fixture }
+
+    odiseo_rbac.fixture.admin_user_administration_role:
+        class: Odiseo\SyliusRbacPlugin\Fixture\AdminUserAdministrationRoleFixture
+        arguments:
+            - '@sylius.repository.admin_user'
+            - '@odiseo_rbac.repository.administration_role'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: sylius_fixtures.fixture }

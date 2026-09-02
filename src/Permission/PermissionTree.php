@@ -64,7 +64,7 @@ final class PermissionTree implements PermissionTreeInterface
     /** @return array<string, PermissionGroup> */
     private function build(): array
     {
-        [$fromMenu, $menuLabels] = $this->fromMenu();
+        [$fromMenu, $menuLabels, $menuOrder, $sectionOrder] = $this->fromMenu();
         $definitions = $this->registry->all();
 
         $subjectKeys = [];
@@ -115,13 +115,17 @@ final class PermissionTree implements PermissionTreeInterface
             $subjectKey = self::subjectKeyOf($definition);
             $groupName = self::canonical($groupOfSubject[$subjectKey] ?? self::UNGROUPED);
 
-            $groups[$groupName] ??= new PermissionGroup($groupName);
+            $groups[$groupName] ??= new PermissionGroup($groupName, $menuOrder);
             $groups[$groupName]->add($definition, $labels[$subjectKey], $parents[$subjectKey] ?? null);
         }
 
+        /**
+         * Groups follow the order their section is read in on the admin menu. One the menu never
+         * mentions sorts after the ones it does, alphabetically among itself; the leftovers last.
+         */
         uasort($groups, static fn (PermissionGroup $a, PermissionGroup $b): int => [
-            $a->name === self::UNGROUPED, $a->name,
-        ] <=> [$b->name === self::UNGROUPED, $b->name]);
+            $a->name === self::UNGROUPED, $sectionOrder[$a->name] ?? \PHP_INT_MAX, $a->name,
+        ] <=> [$b->name === self::UNGROUPED, $sectionOrder[$b->name] ?? \PHP_INT_MAX, $b->name]);
 
         return $groups;
     }
@@ -229,24 +233,33 @@ final class PermissionTree implements PermissionTreeInterface
     }
 
     /**
-     * @return array{array<string, string>, array<string, string>} menu section, and the label of
-     *         the entry itself — the word the administrator already reads in the navigation
+     * @return array{array<string, string>, array<string, string>, array<string, int>, array<string, int>}
+     *         menu section, the label of the entry itself — the word the administrator already
+     *         reads in the navigation — the position of the entry, and the position of its section
      */
     private function fromMenu(): array
     {
         $menu = $this->menuProvider->menu();
 
         if (null === $menu) {
-            return [[], []];
+            return [[], [], [], []];
         }
 
         $groups = [];
         $labels = [];
+        $order = [];
+        $sectionOrder = [];
 
         foreach ($menu->getChildren() as $section) {
             $sectionLabel = $section->getLabel() ?: $section->getName();
 
-            $this->walk($section, function (string $uri, string $itemLabel) use (&$groups, &$labels, $sectionLabel): void {
+            /**
+             * Taken from the section rather than from one of its subjects: a section whose own
+             * route needs no permission — Dashboard — has no subject to derive a position from.
+             */
+            $sectionOrder[self::canonical($sectionLabel)] ??= count($sectionOrder);
+
+            $this->walk($section, function (string $uri, string $itemLabel) use (&$groups, &$labels, &$order, $sectionLabel): void {
                 $subject = $this->subjectOf($uri);
 
                 if (null === $subject) {
@@ -255,10 +268,11 @@ final class PermissionTree implements PermissionTreeInterface
 
                 $groups[$subject] ??= $sectionLabel;
                 $labels[$subject] ??= $itemLabel;
+                $order[$subject] ??= count($order);
             });
         }
 
-        return [$groups, $labels];
+        return [$groups, $labels, $order, $sectionOrder];
     }
 
     /**

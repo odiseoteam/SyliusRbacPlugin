@@ -9,3 +9,12 @@ sylius_fixtures:
                         # Every permission, including ones plugins add later. Stored as the
                         # pattern rather than its expansion so it never falls behind.
                         permissions: ['*.*.*']
+
+                admin_user_administration_role:
+                    name: 'admin_user_administration_role'
+                    # Runs after admin_user and administration_role, both at the default
+                    # priority (0): a negative priority always dequeues later.
+                    priority: -1
+                    options:
+                        role: 'administrator'
+                        usernames: ['sylius', 'api']

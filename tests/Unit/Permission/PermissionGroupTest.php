@@ -65,6 +65,20 @@ final class PermissionGroupTest extends TestCase
         ));
     }
 
+    /** Rows follow the admin menu, not the alphabet — a subject the menu never links to falls back to it. */
+    public function testItOrdersSubjectsByTheirMenuPositionRatherThanAlphabetically(): void
+    {
+        $group = new PermissionGroup('sales', ['sylius.order' => 1, 'sylius.customer' => 0]);
+        $group->add($this->definition('sylius.order.index'), 'Orders');
+        $group->add($this->definition('sylius.customer.index'), 'Customers');
+        $group->add($this->definition('sylius.payment.index'), 'Payments');
+
+        self::assertSame(['Customers', 'Orders', 'Payments'], array_map(
+            static fn ($subject): string => $subject->label,
+            $group->subjects(),
+        ));
+    }
+
     /** A parent filed in another group cannot be followed, so the row stays where it is. */
     public function testItKeepsASubjectWhoseParentIsNotInThisGroupInAlphabeticalOrder(): void
     {

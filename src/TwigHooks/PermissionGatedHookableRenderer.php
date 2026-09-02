@@ -22,6 +22,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * changes the component, props or template behind it -- see the dashboard widgets in
  * `config/app/twig_hooks/admin/dashboard.yaml`.
  *
+ * A list grants on *any* of its permissions, for the container of several gated hookables -- an
+ * "Actions" dropdown, a button group -- which has no permission of its own and would otherwise
+ * open onto nothing once every item inside it is denied.
+ *
  * Denying renders nothing rather than throwing: a missing widget is a gap in the layout, not a
  * broken page.
  */
@@ -38,15 +42,14 @@ final readonly class PermissionGatedHookableRenderer implements SupportableHooka
 
     public function supports(AbstractHookable $hookable): bool
     {
-        return is_string($hookable->configuration[self::CONFIGURATION_KEY] ?? null);
+        return [] !== $this->permissionsOf($hookable);
     }
 
     public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
-        /** @var string $permission */
-        $permission = $hookable->configuration[self::CONFIGURATION_KEY];
+        $permissions = $this->permissionsOf($hookable);
 
-        if (!$this->authorizationChecker->isGranted($permission)) {
+        if (!$this->isAnyGranted($permissions)) {
             return '';
         }
 
@@ -59,7 +62,35 @@ final readonly class PermissionGatedHookableRenderer implements SupportableHooka
         throw new \LogicException(sprintf(
             'No renderer supports the "%s" hookable once "%s" is granted.',
             $hookable::class,
-            $permission,
+            implode('" or "', $permissions),
         ));
+    }
+
+    /** @return list<string> */
+    private function permissionsOf(AbstractHookable $hookable): array
+    {
+        $declared = $hookable->configuration[self::CONFIGURATION_KEY] ?? null;
+
+        if (is_string($declared)) {
+            return [$declared];
+        }
+
+        if (!is_array($declared)) {
+            return [];
+        }
+
+        return array_values(array_filter($declared, 'is_string'));
+    }
+
+    /** @param list<string> $permissions */
+    private function isAnyGranted(array $permissions): bool
+    {
+        foreach ($permissions as $permission) {
+            if ($this->authorizationChecker->isGranted($permission)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

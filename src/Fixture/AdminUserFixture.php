@@ -13,7 +13,7 @@ class AdminUserFixture extends BaseAdminUserFixture
     {
         $node = $resourceNode->children();
 
-        $node->scalarNode('administration_role')->cannotBeEmpty();
+        $node->arrayNode('administration_roles')->scalarPrototype()->cannotBeEmpty();
 
         parent::configureResourceNode($resourceNode);
     }

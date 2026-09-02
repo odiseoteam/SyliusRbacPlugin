@@ -1,11 +1,26 @@
+# Takes over the `roles` section of the administrator form.
+#
+# The key and the slot are Sylius' own: declaring `roles` at the same priority in the same hook
+# replaces the section Sylius registers there. Renaming the key brings that one back alongside
+# this one, so keep both as they are.
 sylius_twig_hooks:
     hooks:
-        'sylius_admin.admin_user.create.content.form.sections.account':
-            administration_role:
-                template: '@OdiseoSyliusRbacPlugin/admin/user/_administration_role.html.twig'
-                priority: 50
+        'sylius_admin.admin_user.create.content.form.sections#left':
+            roles:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/roles.html.twig'
+                priority: -100
 
-        'sylius_admin.admin_user.update.content.form.sections.account':
-            administration_role:
-                template: '@OdiseoSyliusRbacPlugin/admin/user/_administration_role.html.twig'
-                priority: 50
+        'sylius_admin.admin_user.update.content.form.sections#left':
+            roles:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/roles.html.twig'
+                priority: -100
+
+        'sylius_admin.admin_user.create.content.form.sections.roles':
+            administration_roles:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/roles/administration_roles.html.twig'
+                priority: 0
+
+        'sylius_admin.admin_user.update.content.form.sections.roles':
+            administration_roles:
+                template: '@OdiseoSyliusRbacPlugin/admin/user/roles/administration_roles.html.twig'
+                priority: 0

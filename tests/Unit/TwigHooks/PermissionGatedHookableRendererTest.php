@@ -72,7 +72,46 @@ final class PermissionGatedHookableRendererTest extends TestCase
         $renderer->render($this->hookable('sylius.statistics.view'), $this->createMock(HookableMetadata::class));
     }
 
-    private function hookable(?string $permission = null): HookableTemplate
+    /** A container has no permission of its own, and must not open onto nothing. */
+    public function testItGrantsAContainerWhenAnyOfItsPermissionsIsGranted(): void
+    {
+        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker->method('isGranted')->willReturnMap([
+            ['sylius.customer.update', null, false],
+            ['sylius.shop_user.delete', null, true],
+        ]);
+
+        $hookable = $this->hookable(['sylius.customer.update', 'sylius.shop_user.delete']);
+
+        $delegate = $this->createMock(SupportableHookableRendererInterface::class);
+        $delegate->method('supports')->willReturn(true);
+        $delegate->method('render')->willReturn('<div>actions</div>');
+
+        self::assertSame('<div>actions</div>', (new PermissionGatedHookableRenderer($checker, [$delegate]))
+            ->render($hookable, $this->createMock(HookableMetadata::class)));
+    }
+
+    public function testItDeniesAContainerWhenEveryOneOfItsPermissionsIsDenied(): void
+    {
+        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker->method('isGranted')->willReturn(false);
+
+        $hookable = $this->hookable(['sylius.customer.update', 'sylius.shop_user.delete']);
+
+        self::assertSame('', (new PermissionGatedHookableRenderer($checker, []))
+            ->render($hookable, $this->createMock(HookableMetadata::class)));
+    }
+
+    /** An empty list is no declaration at all, not a hookable nothing can ever grant. */
+    public function testItDoesNotSupportAHookWhosePermissionListIsEmpty(): void
+    {
+        $renderer = new PermissionGatedHookableRenderer($this->createMock(AuthorizationCheckerInterface::class), []);
+
+        self::assertFalse($renderer->supports($this->hookable([])));
+    }
+
+    /** @param string|list<string>|null $permission */
+    private function hookable(string|array|null $permission = null): HookableTemplate
     {
         return new HookableTemplate(
             'sylius_admin.dashboard.index.content',

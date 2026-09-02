@@ -12,8 +12,11 @@ final class PermissionGroup
     /** @var array<string, PermissionSubject> */
     private array $subjects = [];
 
-    public function __construct(public readonly string $name)
-    {
+    /** @param array<string, int> $menuOrder subject key => position in the admin menu */
+    public function __construct(
+        public readonly string $name,
+        private readonly array $menuOrder = [],
+    ) {
     }
 
     public function add(PermissionDefinition $definition, string $label, ?string $parent = null): void
@@ -32,15 +35,17 @@ final class PermissionGroup
     }
 
     /**
-     * The rows in reading order: every subject with a screen of its own, alphabetically, each
-     * followed by whatever is reached from inside it.
+     * The rows in reading order: every subject with a screen of its own, in the order its entry
+     * appears in the admin menu — falling back to alphabetical for one the menu never links to —
+     * each followed by whatever is reached from inside it.
      *
      * @return list<PermissionSubject>
      */
     public function subjects(): array
     {
         $subjects = $this->subjects;
-        ksort($subjects);
+        uksort($subjects, fn (string $a, string $b): int => [$this->menuOrder[$a] ?? \PHP_INT_MAX, $a]
+            <=> [$this->menuOrder[$b] ?? \PHP_INT_MAX, $b]);
 
         $children = [];
 
