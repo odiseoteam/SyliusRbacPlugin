@@ -199,6 +199,25 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         );
     }
 
+    /** The live-component counterpart to a public route: never asked, resolver included. */
+    public function testAnExcludedLiveComponentIsNeverChecked(): void
+    {
+        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker->expects(self::never())->method('isGranted');
+
+        $resolver = $this->createMock(LiveComponentPermissionResolverInterface::class);
+        $resolver->expects(self::never())->method('resolve');
+
+        $this->listen(
+            LiveComponentPermissionResolverInterface::ROUTE,
+            '/admin/en_US/_components/sylius_admin:dashboard:channel_selector',
+            checker: $checker,
+            liveComponentResolver: $resolver,
+            excludedLiveComponents: ['sylius_admin:dashboard:channel_selector'],
+            attributes: ['_live_component' => 'sylius_admin:dashboard:channel_selector', '_live_action' => 'get'],
+        );
+    }
+
     private function listen(
         string $route,
         string $path,
@@ -209,6 +228,7 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
         bool $main = true,
         ?EntityAutocompletePermissionResolverInterface $resolver = null,
         ?LiveComponentPermissionResolverInterface $liveComponentResolver = null,
+        array $excludedLiveComponents = [],
         array $attributes = [],
     ): void {
         if (null === $checker) {
@@ -250,6 +270,7 @@ final class AdminRouteAuthorizationListenerTest extends TestCase
             self::PUBLIC_ROUTES,
             $resolver,
             $liveComponentResolver,
+            $excludedLiveComponents,
             $denyUnprotected,
         ))->onKernelController($event);
     }

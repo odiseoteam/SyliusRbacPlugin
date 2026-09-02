@@ -127,18 +127,26 @@ final class Configuration implements ConfigurationInterface
      * gives it its own rule, because its default action only renders the tree but `moveUp` and
      * `moveDown` reorder it for real.
      *
+     * The dashboard widgets are mapped to the resource each one is actually a summary of --
+     * `count_shipments_to_ship` to `sylius.shipment.index`, not a blanket `sylius.dashboard.view`
+     * -- so a role missing one resource's permission simply does not see that widget, rather than
+     * a single dashboard permission gating everything or nothing. See
+     * `config/app/twig_hooks/admin/dashboard.yaml`, where the same permissions gate the initial
+     * render through `PermissionGatedHookableRenderer`; this map only covers the follow-up
+     * live-action requests. `sylius_admin:dashboard:channel_selector` is not listed: it changes
+     * no data of its own, so it is in `live_component_excluded` instead.
+     *
      * @var array<string, string>
      */
     private const LIVE_COMPONENT_PERMISSIONS = [
         'sylius_admin:customer:order_statistics' => 'sylius.customer.show',
-        'sylius_admin:dashboard:channel_selector' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:new_orders' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:statistics' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:pending_action:count_orders_to_process' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:pending_action:count_pending_payments' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:pending_action:count_product_reviews_to_approve' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:pending_action:count_product_variants_out_of_stock' => 'sylius.dashboard.view',
-        'sylius_admin:dashboard:pending_action:count_shipments_to_ship' => 'sylius.dashboard.view',
+        'sylius_admin:dashboard:new_orders' => 'sylius.order.index',
+        'sylius_admin:dashboard:statistics' => 'sylius.statistics.view',
+        'sylius_admin:dashboard:pending_action:count_orders_to_process' => 'sylius.order.index',
+        'sylius_admin:dashboard:pending_action:count_pending_payments' => 'sylius.payment.index',
+        'sylius_admin:dashboard:pending_action:count_product_reviews_to_approve' => 'sylius.product_review.index',
+        'sylius_admin:dashboard:pending_action:count_product_variants_out_of_stock' => 'sylius.product_variant.index',
+        'sylius_admin:dashboard:pending_action:count_shipments_to_ship' => 'sylius.shipment.index',
         'sylius_admin:admin_user:form' => 'sylius.admin_user.update',
         'sylius_admin:catalog_promotion:form' => 'sylius.catalog_promotion.update',
         'sylius_admin:channel:form' => 'sylius.channel.update',
@@ -168,6 +176,20 @@ final class Configuration implements ConfigurationInterface
         'sylius_admin:taxon:delete' => 'sylius.taxon.delete',
         'sylius_admin:taxon:form' => 'sylius.taxon.update',
         'sylius_admin:zone:form' => 'sylius.zone.update',
+    ];
+
+    /**
+     * Live components that deliberately require no permission -- the counterpart to
+     * `excluded_routes`, for the fourth kind of route (see `AdminRouteAuthorizationListener`).
+     *
+     * `channel_selector` only changes which channel the *other* dashboard widgets are filtered
+     * by; it exposes nothing and mutates nothing on its own, so nothing needs to be granted to
+     * use it once the dashboard itself is reachable.
+     *
+     * @var list<string>
+     */
+    private const LIVE_COMPONENT_EXCLUDED = [
+        'sylius_admin:dashboard:channel_selector',
     ];
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -232,6 +254,11 @@ final class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('component')
                     ->scalarPrototype()->end()
                     ->defaultValue(self::LIVE_COMPONENT_PERMISSIONS)
+                ->end()
+                ->arrayNode('live_component_excluded')
+                    ->info('Live components that deliberately require no permission, the live-component counterpart to "excluded_routes".')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(self::LIVE_COMPONENT_EXCLUDED)
                 ->end()
             ->end()
         ;

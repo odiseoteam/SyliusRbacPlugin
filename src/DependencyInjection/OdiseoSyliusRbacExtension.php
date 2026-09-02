@@ -29,8 +29,10 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $container->setParameter('odiseo_rbac.excluded_routes', $config['excluded_routes']);
         $container->setParameter('odiseo_rbac.entity_autocomplete_permissions', $config['entity_autocomplete_permissions']);
         $container->setParameter('odiseo_rbac.live_component_permissions', $config['live_component_permissions']);
+        $container->setParameter('odiseo_rbac.live_component_excluded', $config['live_component_excluded']);
         $container->setParameter('odiseo_rbac.mapped_live_components', [
             ...array_keys($config['live_component_permissions']),
+            ...$config['live_component_excluded'],
             LiveComponentPermissionResolverInterface::TAXON_TREE_COMPONENT,
         ]);
         $container->setParameter('odiseo_rbac.declared_permissions', self::asDeclarations($config['route_permissions']));

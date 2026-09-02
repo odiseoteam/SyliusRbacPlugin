@@ -19,10 +19,6 @@ odiseo_sylius_rbac:
         sylius_admin_impersonate_user:
             permission: sylius.impersonation.execute
 
-        sylius_admin_dashboard:
-            permission: sylius.dashboard.view
-            group: dashboard
-
         # Just a redirect to the create screen; Sylius excludes taxon's `index` on purpose.
         sylius_admin_taxon_index:
             permission: sylius.taxon.index
@@ -73,3 +69,7 @@ odiseo_sylius_rbac:
         - sylius_admin_render_reset_password_page
         - sylius_admin_password_reset
         - sylius_admin_render_password_reset
+        # Open so a role missing one widget's permission lands somewhere after logging in
+        # instead of a 403; the widgets on it are gated individually -- see
+        # LIVE_COMPONENT_PERMISSIONS and config/app/twig_hooks/admin/dashboard.yaml.
+        - sylius_admin_dashboard

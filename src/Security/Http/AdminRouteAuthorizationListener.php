@@ -29,12 +29,15 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * own: each is one route shared by many different fields or components, so no single declared
  * permission means the right thing for all of it. Their permission is resolved per request
  * instead, by `EntityAutocompletePermissionResolver` and `LiveComponentPermissionResolver`.
+ * `excludedLiveComponents` is that fourth kind's own `excludedRoutes`: a component with nothing
+ * of its own to protect, such as a UI-only toggle.
  */
 final readonly class AdminRouteAuthorizationListener implements EventSubscriberInterface
 {
     /**
      * @param array<string, string> $routePermissions route name => permission identifier
      * @param list<string> $excludedRoutes routes that deliberately require no permission
+     * @param list<string> $excludedLiveComponents live components that deliberately require no permission
      */
     public function __construct(
         private AuthorizationCheckerInterface $authorizationChecker,
@@ -42,6 +45,7 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
         private array $excludedRoutes,
         private EntityAutocompletePermissionResolverInterface $entityAutocompleteResolver,
         private LiveComponentPermissionResolverInterface $liveComponentResolver,
+        private array $excludedLiveComponents = [],
         private bool $denyUnprotectedRoutes = true,
         private string $adminPathName = 'admin',
     ) {
@@ -130,6 +134,11 @@ final readonly class AdminRouteAuthorizationListener implements EventSubscriberI
     private function enforceLiveComponent(Request $request): void
     {
         $component = $request->attributes->get('_live_component');
+
+        if (is_string($component) && in_array($component, $this->excludedLiveComponents, true)) {
+            return;
+        }
+
         $action = $request->attributes->get('_live_action', 'get');
 
         $permission = is_string($component) && is_string($action)
