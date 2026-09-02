@@ -23,6 +23,7 @@ services:
             - '@odiseo_rbac.factory.administration_role'
             - '@doctrine.orm.entity_manager'
             - '@sylius.repository.locale'
+            - '@odiseo_rbac.repository.administration_role'
         tags:
             - { name: sylius_fixtures.fixture }
 

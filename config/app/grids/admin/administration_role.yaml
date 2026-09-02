@@ -11,20 +11,32 @@ sylius_grid:
                             - "expr:service('sylius.context.locale').getLocaleCode()"
             fields:
                 code:
-                    type: string
+                    type: twig
                     label: sylius.ui.code
                     sortable: ~
+                    options:
+                        template: "@SyliusAdmin/shared/grid/field/code.html.twig"
                 name:
                     type: string
                     label: sylius.ui.name
                     sortable: translation.name
                     path: translation.name
                 createdAt:
-                    type: datetime
+                    type: twig
                     label: sylius.ui.creation_date
                     sortable: ~
                     options:
-                        format: d-m-Y H:i
+                        template: "@SyliusAdmin/shared/grid/field/date.html.twig"
+                        vars:
+                            th_class: "w-1 text-center"
+                updatedAt:
+                    type: twig
+                    label: sylius.ui.updating_date
+                    sortable: ~
+                    options:
+                        template: "@SyliusAdmin/shared/grid/field/date.html.twig"
+                        vars:
+                            th_class: "w-1 text-center"
             filters:
                 search:
                     type: string

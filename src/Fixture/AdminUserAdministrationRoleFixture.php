@@ -47,7 +47,16 @@ class AdminUserAdministrationRoleFixture extends AbstractFixture implements Fixt
 
         foreach ($usernames as $username) {
             $adminUser = $this->adminUserRepository->findOneBy(['username' => $username]);
-            Assert::isInstanceOf($adminUser, AdministrationRoleAwareInterface::class);
+
+            /**
+             * A username nothing created is skipped rather than fatal. This ships to every
+             * installation, and the administrators it names are the ones Sylius' own demo
+             * fixtures happen to create: an application that replaces them would otherwise get a
+             * failing `sylius:fixtures:load` out of a convenience it never asked for.
+             */
+            if (!$adminUser instanceof AdministrationRoleAwareInterface) {
+                continue;
+            }
 
             $adminUser->addAdministrationRole($administrationRole);
         }

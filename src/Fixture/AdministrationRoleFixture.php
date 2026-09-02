@@ -16,28 +16,40 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class AdministrationRoleFixture extends AbstractFixture implements FixtureInterface
 {
-    /** @param RepositoryInterface<LocaleInterface> $localeRepository */
+    /**
+     * @param RepositoryInterface<LocaleInterface> $localeRepository
+     * @param RepositoryInterface<AdministrationRoleInterface> $administrationRoleRepository
+     */
     public function __construct(
         protected FactoryInterface $administrationRoleFactory,
         protected ObjectManager $administrationRoleManager,
         protected RepositoryInterface $localeRepository,
+        protected RepositoryInterface $administrationRoleRepository,
     ) {
     }
 
     public function load(array $options): void
     {
-        /** @var AdministrationRoleInterface $administrationRole */
-        $administrationRole = $this->administrationRoleFactory->createNew();
-
         /** @var string $code */
         $code = $options['code'];
         /** @var string $name */
         $name = $options['name'];
 
-        $administrationRole->setCode($code);
+        /** Reused when the code is already taken, so a repeated load does not hit the unique constraint. */
+        $administrationRole = $this->administrationRoleRepository->findOneBy(['code' => $code]);
+
+        if (!$administrationRole instanceof AdministrationRoleInterface) {
+            /** @var AdministrationRoleInterface $administrationRole */
+            $administrationRole = $this->administrationRoleFactory->createNew();
+            $administrationRole->setCode($code);
+        }
 
         /** @var list<string> $patterns */
         $patterns = $options['permissions'];
+
+        foreach ($administrationRole->getPermissionPatterns() as $existing) {
+            $administrationRole->removePermissionPattern($existing);
+        }
 
         foreach ($patterns as $pattern) {
             $administrationRole->addPermissionPattern(PermissionPattern::fromString($pattern));

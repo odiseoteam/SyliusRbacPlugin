@@ -1,20 +1,63 @@
+# The roles a shop starts with. Patterns are stored as written, never expanded, so each one keeps
+# covering operations and resources added after it was seeded.
+#
+# Re-runnable: a code that already exists is reused instead of inserted a second time.
 sylius_fixtures:
     suites:
         default:
             fixtures:
-                administration_role:
+                administration_role_super_admin:
+                    name: 'administration_role'
                     options:
-                        code: 'administrator'
-                        name: 'Administrator'
-                        # Every permission, including ones plugins add later. Stored as the
-                        # pattern rather than its expansion so it never falls behind.
+                        code: 'super_admin'
+                        name: 'Super Admin'
                         permissions: ['*.*.*']
 
+                administration_role_catalog:
+                    name: 'administration_role'
+                    options:
+                        code: 'catalog'
+                        name: 'Catalog'
+                        permissions:
+                            - 'sylius.product.*'
+                            - 'sylius.product_variant.*'
+                            - 'sylius.product_attribute.*'
+                            - 'sylius.product_option.*'
+                            - 'sylius.product_association_type.*'
+                            - 'sylius.product_taxon.*'
+                            - 'sylius.taxon.*'
+                            - 'sylius.channel_pricing_log_entry.*'
+
+                administration_role_sales:
+                    name: 'administration_role'
+                    options:
+                        code: 'sales'
+                        name: 'Sales'
+                        permissions:
+                            - 'sylius.order.*'
+                            - 'sylius.payment.*'
+                            - 'sylius.payment_request.*'
+                            - 'sylius.shipment.*'
+                            - 'sylius.customer.*'
+                            - 'sylius.customer_group.*'
+
+                administration_role_read_only:
+                    name: 'administration_role'
+                    options:
+                        code: 'read_only'
+                        name: 'Read only'
+                        # The two operations that show something without changing it. Anything
+                        # added later is covered too, which is the point of not expanding them.
+                        permissions: ['*.*.index', '*.*.show']
+
+                # Convenience for the demo data: the administrators Sylius' own fixtures create
+                # start as super admins instead of seeing an empty admin. A username nothing
+                # created is skipped, so replacing those fixtures does not break the load.
                 admin_user_administration_role:
                     name: 'admin_user_administration_role'
-                    # Runs after admin_user and administration_role, both at the default
-                    # priority (0): a negative priority always dequeues later.
+                    # Runs after admin_user and the roles above, all at the default priority (0):
+                    # a negative priority always dequeues later.
                     priority: -1
                     options:
-                        role: 'administrator'
+                        role: 'super_admin'
                         usernames: ['sylius', 'api']
