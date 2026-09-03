@@ -105,6 +105,10 @@ jobs:
                 run: vendor/bin/deptrac analyse --config-file=deptrac.yaml --no-progress
 
             -
+                name: Check for unused Composer dependencies
+                run: vendor/bin/composer-unused
+
+            -
                 name: Run Non-unit PHPUnit tests
                 run: vendor/bin/phpunit --colors=always --testsuite=non-unit
 

@@ -2,6 +2,10 @@
 # through PermissionGatedHookableRenderer. Only `configuration` is added here -- component, props
 # and template stay whatever Sylius declares them as, so an upgrade never has to be reconciled
 # with this file. `channel_selector` is left alone on purpose: see LIVE_COMPONENT_EXCLUDED.
+#
+# The "pending actions" widget (orders to process, shipments to ship...) does not exist before
+# Sylius 2.1, so gating it lives in config/app/twig_hooks_sylius_2_1/admin/dashboard.yaml,
+# loaded only where that widget does.
 sylius_twig_hooks:
     hooks:
         'sylius_admin.dashboard.index.content':
@@ -13,20 +17,3 @@ sylius_twig_hooks:
             new_orders:
                 configuration:
                     permission: sylius.order.index
-
-        'sylius_admin.dashboard.index.content.latest_statistics.pending_actions.body':
-            orders_to_process:
-                configuration:
-                    permission: sylius.order.index
-            shipments_to_ship:
-                configuration:
-                    permission: sylius.shipment.index
-            pending_payments:
-                configuration:
-                    permission: sylius.payment.index
-            product_reviews_to_approve:
-                configuration:
-                    permission: sylius.product_review.index
-            product_variants_out_of_stock:
-                configuration:
-                    permission: sylius.product_variant.index

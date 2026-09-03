@@ -11,8 +11,13 @@
 sylius_twig_hooks:
     hooks:
         # --- Order: transitions and everything the Actions dropdown offers -------------------
+        #
+        # Gated at this flat hook because it's the one every supported Sylius version declares:
+        # on 2.0 these three are the buttons themselves; on 2.1+ Sylius disables them here and
+        # renders the real ones one hook down, in the Actions dropdown -- see
+        # config/app/twig_hooks_sylius_2_1/admin/order.yaml, loaded only where that hook exists.
 
-        'sylius_admin.order.show.content.header.title_block.actions.list':
+        'sylius_admin.order.show.content.header.title_block.actions':
             cancel:
                 configuration:
                     permission: sylius.order.cancel
