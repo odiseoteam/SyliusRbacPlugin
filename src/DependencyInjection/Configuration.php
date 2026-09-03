@@ -102,6 +102,45 @@ final class Configuration implements ConfigurationInterface
         'sylius.product_taxon' => 'sylius.taxon',
         'sylius.channel_pricing_log_entry' => 'sylius.product_variant',
         'sylius.impersonation' => 'sylius.customer',
+        // No single owner -- shared by a customer's address book and an order's addresses.
+        'sylius.address' => 'sylius.customer',
+    ];
+
+    /**
+     * API-only resources with no admin screen of their own
+     *
+     * @var array<string, string>
+     */
+    private const FOLDED_API_SUBJECTS = [
+        'sylius.product_image' => 'sylius.product',
+        'sylius.product_translation' => 'sylius.product',
+        'sylius.product_association' => 'sylius.product',
+        'sylius.taxon_image' => 'sylius.taxon',
+        'sylius.taxon_translation' => 'sylius.taxon',
+        'sylius.product_variant_translation' => 'sylius.product_variant',
+        'sylius.channel_pricing' => 'sylius.product_variant',
+        'sylius.product_attribute_value' => 'sylius.product_attribute',
+        'sylius.product_attribute_translation' => 'sylius.product_attribute',
+        'sylius.product_option_value' => 'sylius.product_option',
+        'sylius.product_option_value_translation' => 'sylius.product_option',
+        'sylius.product_option_translation' => 'sylius.product_option',
+        'sylius.product_association_type_translation' => 'sylius.product_association_type',
+        'sylius.province' => 'sylius.country',
+        'sylius.promotion_rule' => 'sylius.promotion',
+        'sylius.promotion_action' => 'sylius.promotion',
+        'sylius.promotion_translation' => 'sylius.promotion',
+        'sylius.catalog_promotion_action' => 'sylius.catalog_promotion',
+        'sylius.catalog_promotion_scope' => 'sylius.catalog_promotion',
+        'sylius.catalog_promotion_translation' => 'sylius.catalog_promotion',
+        'sylius.shipping_method_rule' => 'sylius.shipping_method',
+        'sylius.shipping_method_translation' => 'sylius.shipping_method',
+        'sylius.payment_method_translation' => 'sylius.payment_method',
+        'sylius.gateway_config' => 'sylius.payment_method',
+        'sylius.avatar_image' => 'sylius.admin_user',
+        'sylius.order_item' => 'sylius.order',
+        'sylius.order_item_unit' => 'sylius.order',
+        'sylius.adjustment' => 'sylius.order',
+        'sylius.address_log_entry' => 'sylius.order',
     ];
 
     /**
@@ -179,6 +218,30 @@ final class Configuration implements ConfigurationInterface
     ];
 
     /**
+     * Hookables under an "actions" hook that deliberately carry no permission: form controls
+     * (`update`, `cancel`...), navigation (`list`, `show`, `view_in_store`), and the catalog
+     * promotion's discount rows, which aren't action buttons despite the hook name. Listed so a
+     * new one from Sylius fails the build instead of going unnoticed.
+     *
+     * @var array<string, list<string>>
+     */
+    private const UNGATED_ACTION_HOOKABLES = [
+        'sylius_admin.common.create.content.header.title_block.actions' => ['cancel', 'create'],
+        'sylius_admin.common.update.content.header.title_block.actions' => ['cancel', 'update', 'show'],
+        'sylius_admin.product.update.content.header.title_block.actions' => ['cancel', 'update', 'view_in_store'],
+        'sylius_admin.product.show.content.header.title_block.actions' => ['view_in_store'],
+        'sylius_admin.product_variant.update.content.header.title_block.actions' => ['cancel', 'update', 'view_in_store'],
+        'sylius_admin.product.generate_variants.content.header.title_block.actions' => ['cancel', 'generate'],
+        'sylius_admin.promotion_coupon.generate.content.header.title_block.actions' => ['cancel', 'generate'],
+        'sylius_admin.order.show.content.header.title_block.actions' => ['back', 'list'],
+        'sylius_admin.order.history.content.header.title_block.actions' => ['back'],
+        'sylius_admin.order.index.content.header.title_block.actions' => ['cancel'],
+        'sylius_admin.catalog_promotion.show.content.sections.actions' => ['action'],
+        'sylius_admin.catalog_promotion.show.content.sections.actions.action#percentage_discount' => ['type', 'amount'],
+        'sylius_admin.catalog_promotion.show.content.sections.actions.action#fixed_discount' => ['type', 'channels_amount'],
+    ];
+
+    /**
      * Live components that deliberately require no permission -- the counterpart to
      * `excluded_routes`, for the fourth kind of route (see `AdminRouteAuthorizationListener`).
      *
@@ -235,6 +298,12 @@ final class Configuration implements ConfigurationInterface
                     ->scalarPrototype()->end()
                     ->defaultValue(self::SUBJECT_PARENTS)
                 ->end()
+                ->arrayNode('folded_api_subjects')
+                    ->info('Resources with no admin screen of their own -- images, translations, provinces -- whose operations resolve to the parent\'s "update" or "show" instead of a permission of their own.')
+                    ->useAttributeAsKey('subject')
+                    ->scalarPrototype()->end()
+                    ->defaultValue(self::FOLDED_API_SUBJECTS)
+                ->end()
                 ->booleanNode('deny_unprotected_admin_routes')
                     ->info('Deny any admin route that no permission covers. On by default: a route nobody protected is the failure this plugin exists to prevent. Turn it off to let uncovered routes through while migrating an application that has many of them.')
                     ->defaultTrue()
@@ -254,6 +323,12 @@ final class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('component')
                     ->scalarPrototype()->end()
                     ->defaultValue(self::LIVE_COMPONENT_PERMISSIONS)
+                ->end()
+                ->arrayNode('ungated_action_hookables')
+                    ->info('Hookables under an "actions" hook that deliberately carry no permission. Listing them is what lets a coverage check tell a decision apart from an oversight.')
+                    ->useAttributeAsKey('hook')
+                    ->arrayPrototype()->scalarPrototype()->end()->end()
+                    ->defaultValue(self::UNGATED_ACTION_HOOKABLES)
                 ->end()
                 ->arrayNode('live_component_excluded')
                     ->info('Live components that deliberately require no permission, the live-component counterpart to "excluded_routes".')

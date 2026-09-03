@@ -79,6 +79,17 @@ final readonly class PermissionIdentifier implements \Stringable
         return $this->toString();
     }
 
+    /**
+     * Whether a string can stand as one segment of an identifier, asked without having to build
+     * one and catch the failure. Used where a segment is derived from something outside the
+     * plugin's control -- a URI, a workflow transition -- and a bad one means "not an
+     * identifier" rather than "an error".
+     */
+    public static function isValidSegment(string $segment): bool
+    {
+        return PermissionPattern::WILDCARD !== $segment && 1 === preg_match(self::SEGMENT_FORMAT, $segment);
+    }
+
     private static function assertValidSegment(string $segment, string $value): void
     {
         if (PermissionPattern::WILDCARD === $segment) {

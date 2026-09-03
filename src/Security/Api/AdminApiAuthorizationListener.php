@@ -62,6 +62,18 @@ final readonly class AdminApiAuthorizationListener implements EventSubscriberInt
             return;
         }
 
+        /**
+         * A declaration wins over whatever the operation derives, exactly as it does for HTML
+         * routes: it exists for the handful of endpoints whose permission cannot be read off
+         * their own shape. `DELETE /customers/{id}/user` deletes the shop user account, not the
+         * customer, and the admin screen gates that button with `sylius.shop_user.delete`.
+         */
+        if (is_string($route) && isset($this->routePermissions[$route])) {
+            $this->denyUnlessGranted($this->routePermissions[$route], $route);
+
+            return;
+        }
+
         $resourceClass = $request->attributes->get('_api_resource_class');
         $operationName = $request->attributes->get('_api_operation_name');
 
@@ -113,10 +125,15 @@ final readonly class AdminApiAuthorizationListener implements EventSubscriberInt
             return;
         }
 
-        if (!$this->authorizationChecker->isGranted($declared)) {
+        $this->denyUnlessGranted($declared, $route);
+    }
+
+    private function denyUnlessGranted(string $permission, mixed $route): void
+    {
+        if (!$this->authorizationChecker->isGranted($permission)) {
             throw new AccessDeniedException(sprintf(
                 'Permission "%s" is required for route "%s".',
-                $declared,
+                $permission,
                 is_string($route) ? $route : '(unnamed)',
             ));
         }

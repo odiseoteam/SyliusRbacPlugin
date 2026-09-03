@@ -108,6 +108,13 @@ sylius_twig_hooks:
                 configuration:
                     permission: sylius.channel_pricing_log_entry.index
 
+        # --- Catalog promotion -----------------------------------------------------------------
+
+        'sylius_admin.catalog_promotion.show.content.header.title_block.actions':
+            edit:
+                configuration:
+                    permission: sylius.catalog_promotion.update
+
         # --- Promotion -----------------------------------------------------------------------
 
         'sylius_admin.promotion.update.content.header.title_block.actions':

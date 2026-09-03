@@ -113,6 +113,24 @@ final class AdminApiAuthorizationListenerTest extends TestCase
         );
     }
 
+    /**
+     * A declaration wins over what the operation itself derives, the same order the HTML side
+     * uses. `DELETE /customers/{id}/user` derives "delete a customer" but deletes the shop user
+     * account, which is what the admin screen gates it with.
+     */
+    public function testADeclarationWinsOverWhatTheOperationDerives(): void
+    {
+        $this->expectException(AccessDeniedException::class);
+        $this->expectExceptionMessageMatches('/sylius\.shop_user\.delete/');
+
+        $this->listen(
+            '/api/v2/admin/customers/1/user',
+            'sylius.customer.delete',
+            route: 'sylius_api_admin_customer_delete',
+            granted: false,
+        );
+    }
+
     private function listen(
         string $path,
         ?string $permission,
@@ -148,7 +166,10 @@ final class AdminApiAuthorizationListenerTest extends TestCase
         (new AdminApiAuthorizationListener(
             $checker,
             $resolver,
-            ['sylius_api_admin_statistics' => 'sylius.statistics.view'],
+            [
+                'sylius_api_admin_statistics' => 'sylius.statistics.view',
+                'sylius_api_admin_customer_delete' => 'sylius.shop_user.delete',
+            ],
             ['sylius_api_admin_authentication_token'],
             '/api/v2',
             'admin',

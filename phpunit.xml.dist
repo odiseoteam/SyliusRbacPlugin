@@ -12,7 +12,10 @@
         <server name="EXPECTED_RESPONSE_DIR" value="../Responses/Expected"/>
 
         <env name="APP_SECRET" value="''" />
-        <env name="APP_ENV" value="test"/>
+        <!-- A <server>, not an <env>: the test-application bootstrap reads $_SERVER first and
+             would otherwise overwrite it with the "dev" its own .env declares, booting the
+             kernel-based tests against the dev container. -->
+        <server name="APP_ENV" value="test"/>
     </php>
 
     <testsuites>

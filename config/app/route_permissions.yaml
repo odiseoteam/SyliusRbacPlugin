@@ -58,10 +58,32 @@ odiseo_sylius_rbac:
             permission: sylius.statistics.view
             group: dashboard
 
+        # --- API operations whose own shape names the wrong thing ------------------------
+
+        # DELETE /admin/customers/{id}/user removes the shop user account, not the customer.
+        # The admin screen gates the same button with `sylius.shop_user.delete`.
+        sylius_api_admin_customer_delete:
+            permission: sylius.shop_user.delete
+
+        # The API counterpart of `sylius_admin_customer_orders_statistics`, and granted by the
+        # same permission: one administrator should not be able to read per-customer figures on
+        # one surface and not the other.
+        sylius_api_admin_customer_get_statistics:
+            permission: sylius.customer.show
+
+        # Adding an image is declared on the parent resource, so the last segment of
+        # `/admin/products/{code}/images` is a noun and not the name of an action -- the reading
+        # ApiOperationPermissionResolver would otherwise give it. The admin adds images from the
+        # product form, so it is the same permission as editing the product.
+        sylius_api_admin_product_product_image_post:
+            permission: sylius.product.update
+
+        sylius_api_admin_taxon_taxon_image_post:
+            permission: sylius.taxon.update
+
     # Deliberately excluded from the permission check. Listed rather than omitted so a coverage
     # check can tell a considered decision apart from an oversight.
     excluded_routes:
-        - sylius_api_admin_authentication_token
         - sylius_admin_login
         - sylius_admin_login_check
         - sylius_admin_logout
@@ -69,6 +91,13 @@ odiseo_sylius_rbac:
         - sylius_admin_render_reset_password_page
         - sylius_admin_password_reset
         - sylius_admin_render_password_reset
+        # The API's own password reset. Marked PUBLIC_ACCESS by Sylius' access control, so
+        # whoever calls it has no administrator to check a permission against.
+        - sylius_api_admin_reset_password_post
+        - sylius_api_admin_reset_password_patch
+        # Issues the credentials every other API call needs. Asking it for a permission is a
+        # closed loop.
+        - sylius_api_admin_authentication_token
         # Open so a role missing one widget's permission lands somewhere after logging in
         # instead of a 403; the widgets on it are gated individually -- see
         # LIVE_COMPONENT_PERMISSIONS and config/app/twig_hooks/admin/dashboard.yaml.

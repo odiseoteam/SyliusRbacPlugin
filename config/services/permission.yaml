@@ -15,6 +15,15 @@ services:
         arguments:
             - '%odiseo_rbac.declared_permissions%'
 
+    odiseo_rbac.permission.discoverer.api_operation:
+        class: Odiseo\SyliusRbacPlugin\Permission\Discovery\ApiOperationPermissionDiscoverer
+        arguments:
+            - '@router'
+            - '@odiseo_rbac.security.api.permission_resolver'
+            - '%odiseo_rbac.handled_routes%'
+            - '%sylius.security.api_route%'
+            - '%sylius_admin.path_name%'
+
     odiseo_rbac.permission.discoverer.live_component:
         class: Odiseo\SyliusRbacPlugin\Permission\Discovery\LiveComponentPermissionDiscoverer
         arguments:
@@ -26,6 +35,7 @@ services:
         arguments:
             -
                 - '@odiseo_rbac.permission.discoverer.resource_route'
+                - '@odiseo_rbac.permission.discoverer.api_operation'
                 - '@odiseo_rbac.permission.discoverer.declared'
                 - '@odiseo_rbac.permission.discoverer.live_component'
 

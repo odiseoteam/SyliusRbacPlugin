@@ -4,6 +4,7 @@ services:
         arguments:
             - '@api_platform.metadata.resource.metadata_collection_factory'
             - '@sylius.resource_registry'
+            - '%odiseo_rbac.folded_api_subjects%'
 
     Odiseo\SyliusRbacPlugin\Security\Api\ApiOperationPermissionResolverInterface: '@odiseo_rbac.security.api.permission_resolver'
 
