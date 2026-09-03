@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\DependencyInjection;
 
+use Odiseo\SyliusRbacPlugin\Compatibility\SyliusVersion;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -233,13 +234,36 @@ final class Configuration implements ConfigurationInterface
         'sylius_admin.product_variant.update.content.header.title_block.actions' => ['cancel', 'update', 'view_in_store'],
         'sylius_admin.product.generate_variants.content.header.title_block.actions' => ['cancel', 'generate'],
         'sylius_admin.promotion_coupon.generate.content.header.title_block.actions' => ['cancel', 'generate'],
-        'sylius_admin.order.show.content.header.title_block.actions' => ['back', 'list'],
         'sylius_admin.order.history.content.header.title_block.actions' => ['back'],
-        'sylius_admin.order.index.content.header.title_block.actions' => ['cancel'],
         'sylius_admin.catalog_promotion.show.content.sections.actions' => ['action'],
         'sylius_admin.catalog_promotion.show.content.sections.actions.action#percentage_discount' => ['type', 'amount'],
         'sylius_admin.catalog_promotion.show.content.sections.actions.action#fixed_discount' => ['type', 'channels_amount'],
     ];
+
+    /**
+     * Ungated hookables that only exist from Sylius 2.1 on: `order/index.yaml` -- the order
+     * grid's own cancel button -- does not ship before 2.1, and before then the order screen's
+     * `.actions` hook has no `back`/`list` (no Actions dropdown yet, see
+     * `config/app/twig_hooks_sylius_2_1/admin/order.yaml`). A `private const` can't express
+     * that, since it has to be a compile-time literal; `ungatedActionHookables()` is where the
+     * two merge.
+     *
+     * @var array<string, list<string>>
+     */
+    private const UNGATED_ACTION_HOOKABLES_SYLIUS_2_1 = [
+        'sylius_admin.order.index.content.header.title_block.actions' => ['cancel'],
+        'sylius_admin.order.show.content.header.title_block.actions' => ['back', 'list'],
+    ];
+
+    /** @return array<string, list<string>> */
+    private static function ungatedActionHookables(): array
+    {
+        if (!SyliusVersion::isAtLeast('2.1.0')) {
+            return self::UNGATED_ACTION_HOOKABLES;
+        }
+
+        return [...self::UNGATED_ACTION_HOOKABLES, ...self::UNGATED_ACTION_HOOKABLES_SYLIUS_2_1];
+    }
 
     /**
      * Live components that deliberately require no permission -- the counterpart to
@@ -328,7 +352,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Hookables under an "actions" hook that deliberately carry no permission. Listing them is what lets a coverage check tell a decision apart from an oversight.')
                     ->useAttributeAsKey('hook')
                     ->arrayPrototype()->scalarPrototype()->end()->end()
-                    ->defaultValue(self::UNGATED_ACTION_HOOKABLES)
+                    ->defaultValue(self::ungatedActionHookables())
                 ->end()
                 ->arrayNode('live_component_excluded')
                     ->info('Live components that deliberately require no permission, the live-component counterpart to "excluded_routes".')

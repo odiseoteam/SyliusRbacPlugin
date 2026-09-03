@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Odiseo\SyliusRbacPlugin\Compatibility\SyliusVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**
@@ -15,9 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
  * `config.yaml`.
  */
 return static function (ContainerConfigurator $container): void {
-    $syliusVersion = \Composer\InstalledVersions::getVersion('sylius/sylius');
-
-    if (null !== $syliusVersion && version_compare($syliusVersion, '2.1.0', '>=')) {
+    if (SyliusVersion::isAtLeast('2.1.0')) {
         $container->import('app/twig_hooks_sylius_2_1/**/*.yaml');
     }
 };
