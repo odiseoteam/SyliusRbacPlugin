@@ -106,7 +106,7 @@ jobs:
 
             -
                 name: Check for unused Composer dependencies
-                run: vendor/bin/composer-unused
+                run: vendor/bin/composer-dependency-analyser
 
             -
                 name: Run Non-unit PHPUnit tests
