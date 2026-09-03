@@ -67,6 +67,22 @@ bin/console doctrine:migrations:migrate
 bin/console cache:clear
 ```
 
+## 7. Give someone access
+
+An administrator with no role is denied everything, including the screen that assigns roles, so
+right after installing nobody can reach the admin panel. Grant the first one from the console:
+
+```bash
+bin/console odiseo:rbac:grant <username-or-email> super_admin --create
+```
+
+`--create` mints the role if it does not exist yet. Add `--dry-run` to see the plan without
+writing. From then on roles are managed from **Administration › Roles**.
+
+This command never goes through the permission check, so it is also the way back if everyone is
+locked out later — a role deleted by mistake, a database edited by hand, or an upgrade left
+half-applied. Keep console access available to whoever administers the shop.
+
 ## Customizing the administration role entity
 
 `AdminUser` references `AdministrationRoleInterface`, an abstraction over the default

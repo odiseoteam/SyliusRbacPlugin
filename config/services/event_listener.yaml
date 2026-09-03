@@ -20,3 +20,10 @@ services:
             - '@odiseo_rbac.menu.permission_listener'
 
     Odiseo\SyliusRbacPlugin\Menu\UnfilteredMenuProviderInterface: '@odiseo_rbac.menu.unfiltered_provider'
+
+    odiseo_rbac.event_listener.self_lockout:
+        class: Odiseo\SyliusRbacPlugin\Security\SelfLockoutListener
+        arguments:
+            - '@security.token_storage'
+        tags:
+            - { name: kernel.event_listener, event: odiseo_rbac.administration_role.pre_update, method: onPreUpdate }

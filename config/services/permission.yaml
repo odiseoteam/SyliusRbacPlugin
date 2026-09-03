@@ -47,6 +47,17 @@ services:
         tags:
             - { name: console.command }
 
+    odiseo_rbac.command.grant_access:
+        class: Odiseo\SyliusRbacPlugin\Command\GrantAccessCommand
+        arguments:
+            - '@sylius.repository.admin_user'
+            - '@odiseo_rbac.repository.administration_role'
+            - '@odiseo_rbac.factory.administration_role'
+            - '@sylius.repository.locale'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: console.command }
+
     odiseo_rbac.permission.entity_autocomplete_resolver:
         class: Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolver
         arguments:
