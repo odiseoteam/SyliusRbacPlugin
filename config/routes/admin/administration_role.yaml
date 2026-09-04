@@ -1,0 +1,15 @@
+odiseo_rbac_admin_administration_role:
+    resource: |
+        alias: odiseo_rbac.administration_role
+        section: admin
+        templates: "@SyliusAdmin\\shared\\crud"
+        redirect: update
+        grid: odiseo_rbac_admin_administration_role
+        form:
+            type: Odiseo\SyliusRbacPlugin\Form\Type\AdministrationRoleType
+        except: ['show']
+        permission: true
+        vars:
+            all:
+                hook_prefix: 'odiseo_rbac.admin.administration_role'
+    type: sylius.resource

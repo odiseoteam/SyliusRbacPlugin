@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Administration role code cannot be blank'
+            unique: 'This code is already taken'
+            regex: 'Administration role code may only contain letters, numbers, underscores and hyphens'
+            min_length: 'Administration role code must be at least {{ limit }} characters long'
+            max_length: 'Administration role code cannot be longer than {{ limit }} characters'
+        name:
+            not_blank: 'Administration role name cannot be blank'
+            min_length: 'Administration role name must be at least {{ limit }} characters long'
+            max_length: 'Administration role name cannot be longer than {{ limit }} characters'

@@ -1,5 +1,0 @@
-odiseo_sylius_rbac_plugin:
-    administration_role:
-        name:
-            not_blank: 'Administration Role name cannot be blank'
-            unique: 'This name is already taken'

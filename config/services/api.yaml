@@ -1,0 +1,22 @@
+services:
+    odiseo_rbac.security.api.permission_resolver:
+        class: Odiseo\SyliusRbacPlugin\Security\Api\ApiOperationPermissionResolver
+        arguments:
+            - '@api_platform.metadata.resource.metadata_collection_factory'
+            - '@sylius.resource_registry'
+            - '%odiseo_rbac.folded_api_subjects%'
+
+    Odiseo\SyliusRbacPlugin\Security\Api\ApiOperationPermissionResolverInterface: '@odiseo_rbac.security.api.permission_resolver'
+
+    odiseo_rbac.security.listener.admin_api:
+        class: Odiseo\SyliusRbacPlugin\Security\Api\AdminApiAuthorizationListener
+        arguments:
+            - '@security.authorization_checker'
+            - '@odiseo_rbac.security.api.permission_resolver'
+            - '%odiseo_rbac.route_identifiers%'
+            - '%odiseo_rbac.excluded_routes%'
+            - '%sylius.security.api_route%'
+            - '%sylius_admin.path_name%'
+            - '%odiseo_rbac.deny_unprotected_admin_routes%'
+        tags:
+            - { name: kernel.event_subscriber }

@@ -1,3 +1,0 @@
-imports:
-    - { resource: grids/admin/admin_user.yaml }
-    - { resource: grids/admin/administration_role.yaml }

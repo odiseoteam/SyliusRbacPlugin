@@ -1,0 +1,104 @@
+# The admin routes Sylius does not cover on its own.
+#
+# Admin routes in a stock install already declare `permission: true`, and the
+# resource controller turns that into a `{package}.{subject}.{operation}` code by itself. The
+# entries below are the remainder, split into two kinds:
+#
+#   * routes that enforce nothing today and are given a permission here;
+#   * routes that declare `permission: true` but whose controller cannot be mapped to a resource
+#     action, so nothing would ever be checked.
+#
+# Applications and plugins extend this list with their own routes.
+odiseo_sylius_rbac:
+    route_permissions:
+        # --- Routes with no `permission: true` declared ---------------
+        
+        # Signs the administrator in as another user. Filed under Customer in the tree --
+        # see SUBJECT_PARENTS -- since that's the screen the button sits on; the group here
+        # would be overridden anyway.
+        sylius_admin_impersonate_user:
+            permission: sylius.impersonation.execute
+
+        # Just a redirect to the create screen; Sylius excludes taxon's `index` on purpose.
+        sylius_admin_taxon_index:
+            permission: sylius.taxon.index
+            group: catalog
+
+        sylius_admin_admin_user_remove_avatar:
+            permission: sylius.admin_user.update
+            group: administration
+
+        # Own operation, not `update`: resending a confirmation isn't editing the order.
+        sylius_admin_order_resend_confirmation_email:
+            permission: sylius.order.resend_confirmation_email
+            group: sales
+
+        sylius_admin_shipment_resend_confirmation_email:
+            permission: sylius.shipment.resend_confirmation_email
+            group: sales
+
+        # --- Declare `permission: true`, but nothing ever checks it ----------------------
+
+        # An invokable controller, so the resource controller's check never runs.
+        sylius_admin_catalog_promotion_delete:
+            permission: sylius.catalog_promotion.delete
+            group: marketing
+
+        # `generateAction` never checks permission, and a batch isn't the same as one coupon by hand.
+        sylius_admin_promotion_coupon_generate:
+            permission: sylius.promotion_coupon.generate
+            group: marketing
+
+        sylius_admin_customer_orders_statistics:
+            permission: sylius.customer.show
+            group: customers
+
+        # Plain controller, nothing derives a permission, and no resource owns whole-shop numbers.
+        sylius_api_admin_statistics:
+            permission: sylius.statistics.view
+            group: dashboard
+
+        # --- API operations whose own shape names the wrong thing ------------------------
+
+        # DELETE /admin/customers/{id}/user removes the shop user account, not the customer.
+        # The admin screen gates the same button with `sylius.shop_user.delete`.
+        sylius_api_admin_customer_delete:
+            permission: sylius.shop_user.delete
+
+        # The API counterpart of `sylius_admin_customer_orders_statistics`, and granted by the
+        # same permission: one administrator should not be able to read per-customer figures on
+        # one surface and not the other.
+        sylius_api_admin_customer_get_statistics:
+            permission: sylius.customer.show
+
+        # Adding an image is declared on the parent resource, so the last segment of
+        # `/admin/products/{code}/images` is a noun and not the name of an action -- the reading
+        # ApiOperationPermissionResolver would otherwise give it. The admin adds images from the
+        # product form, so it is the same permission as editing the product.
+        sylius_api_admin_product_product_image_post:
+            permission: sylius.product.update
+
+        sylius_api_admin_taxon_taxon_image_post:
+            permission: sylius.taxon.update
+
+    # Deliberately excluded from the permission check. Listed rather than omitted so a coverage
+    # check can tell a considered decision apart from an oversight.
+    excluded_routes:
+        - sylius_admin_login
+        - sylius_admin_login_check
+        - sylius_admin_logout
+        - sylius_admin_request_password_reset
+        - sylius_admin_render_reset_password_page
+        - sylius_admin_password_reset
+        - sylius_admin_render_password_reset
+        # The API's own password reset. Marked PUBLIC_ACCESS by Sylius' access control, so
+        # whoever calls it has no administrator to check a permission against.
+        - sylius_api_admin_reset_password_post
+        - sylius_api_admin_reset_password_patch
+        # Issues the credentials every other API call needs. Asking it for a permission is a
+        # closed loop.
+        - sylius_api_admin_authentication_token
+        # Open so a role missing one widget's permission lands somewhere after logging in
+        # instead of a 403; the widgets on it are gated individually -- see
+        # LIVE_COMPONENT_PERMISSIONS and config/app/twig_hooks/admin/dashboard.yaml.
+        - sylius_admin_dashboard

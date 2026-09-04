@@ -1,0 +1,30 @@
+services:
+    odiseo_rbac.event_listener.admin.menu_builder:
+        class: Odiseo\SyliusRbacPlugin\Menu\AdminMenuListener
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+    odiseo_rbac.menu.permission_listener:
+        class: Odiseo\SyliusRbacPlugin\Menu\MenuPermissionListener
+        arguments:
+            - '@security.authorization_checker'
+            - '@odiseo_rbac.permission.route_map'
+        tags:
+            # Runs last, so it also filters whatever other listeners have added.
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: filterAdminMenu, priority: -1000 }
+
+    odiseo_rbac.menu.unfiltered_provider:
+        class: Odiseo\SyliusRbacPlugin\Menu\UnfilteredMenuProvider
+        arguments:
+            - '@sylius_admin.menu_builder.main'
+            - '@odiseo_rbac.menu.permission_listener'
+
+    Odiseo\SyliusRbacPlugin\Menu\UnfilteredMenuProviderInterface: '@odiseo_rbac.menu.unfiltered_provider'
+
+    odiseo_rbac.event_listener.self_lockout:
+        class: Odiseo\SyliusRbacPlugin\Security\SelfLockoutListener
+        arguments:
+            - '@security.token_storage'
+            - '@translator'
+        tags:
+            - { name: kernel.event_listener, event: odiseo_rbac.administration_role.pre_update, method: onPreUpdate }

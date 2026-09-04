@@ -1,0 +1,3 @@
+odiseo_rbac:
+    administration_role:
+        cannot_revoke_own_role_management: 'You cannot remove permission to %permissions% from a role you hold: it would leave you unable to manage roles, and this screen is the only place to give it back.'

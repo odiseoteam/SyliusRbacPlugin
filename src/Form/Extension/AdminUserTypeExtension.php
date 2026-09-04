@@ -13,9 +13,10 @@ final class AdminUserTypeExtension extends AbstractTypeExtension
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('administrationRole', AdministrationRoleChoiceType::class, [
-            'label' => 'odiseo_sylius_rbac_plugin.ui.rbac_role',
-            'required' => true,
+        $builder->add('administrationRoles', AdministrationRoleChoiceType::class, [
+            'label' => 'odiseo_rbac.ui.administration_roles',
+            'multiple' => true,
+            'required' => false,
         ]);
     }
 

@@ -1,0 +1,9 @@
+services:
+    odiseo_rbac.twig_hooks.permission_gated_renderer:
+        class: Odiseo\SyliusRbacPlugin\TwigHooks\PermissionGatedHookableRenderer
+        arguments:
+            - '@security.authorization_checker'
+            - - '@sylius_twig_hooks.renderer.hookable.component'
+              - '@sylius_twig_hooks.renderer.hookable.template'
+        tags:
+            - { name: sylius_twig_hooks.hookable_renderer, priority: 100 }

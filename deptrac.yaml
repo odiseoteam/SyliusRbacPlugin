@@ -1,0 +1,47 @@
+# Keeps the pre-v3 permission model quarantined.
+#
+# `src/Legacy/` only exists so the data migration command can read what users coming from
+# 1.x / 2.x have stored. Everything else in the plugin must be able to ignore it, and in 4.0
+# both the namespace and its single consumer get deleted together. Enforcing it here means CI
+# answers whether any of the old engine is still wired in, instead of code review.
+#
+# See src/Legacy/README.md.
+deptrac:
+  paths:
+    - ./src
+
+  layers:
+    - name: Legacy
+      collectors:
+        - type: directory
+          value: src/Legacy/.*
+
+    # The only layer allowed to read the old format.
+    - name: DataMigration
+      collectors:
+        - type: directory
+          value: src/DataMigration/.*
+
+    # Everything else: the v3 plugin proper.
+    - name: Plugin
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: src/.*
+          must_not:
+            - type: directory
+              value: src/Legacy/.*
+            - type: directory
+              value: src/DataMigration/.*
+
+  ruleset:
+    # No entry for Legacy: nothing in the new engine may import it.
+    Plugin: ~
+
+    DataMigration:
+      - Legacy
+      - Plugin
+
+    # Frozen code. It depends on nothing but itself.
+    Legacy: ~

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Odiseo\SyliusRbacPlugin\Entity\AdministrationRole" table="odiseo_rbac_administration_role">
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="code" type="string" unique="true"/>
+        <field name="permissions" type="json"/>
+
+        <!--
+            The pre-v3 permission blob. Kept mapped so Doctrine never proposes to drop it: it is
+            the only copy of what users upgrading from 1.x / 2.0 had configured, and the data
+            `odiseo:rbac:migrate-permissions` command reads it through DBAL. Removed in 4.0.
+        -->
+        <field name="legacyPermissions" type="json" column="legacy_permissions"/>
+
+        <field name="createdAt" type="datetime" column="created_at">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" type="datetime" column="updated_at">
+            <gedmo:timestampable on="update"/>
+        </field>
+    </mapped-superclass>
+</doctrine-mapping>

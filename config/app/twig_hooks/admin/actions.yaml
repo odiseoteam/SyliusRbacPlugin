@@ -1,0 +1,196 @@
+# Hides the action buttons a role is not allowed to use, through PermissionGatedHookableRenderer.
+# Presentation only: the routes and live components behind them are already denied on their own.
+#
+# Each permission is the one the *destination* checks, which is not always the one the button's
+# name suggests -- "Delete" on the customer screen posts to `sylius_admin_shop_user_delete`, and
+# there is no `sylius.customer.delete` at all. Check the route before adding an entry.
+#
+# Only gate a hookable that is the button itself. The ones that are a whole `<td>` -- price
+# history, applied promotions, a variant row's edit button -- are left out on purpose: hiding one
+# drops a cell and shifts the row against its header.
+sylius_twig_hooks:
+    hooks:
+        # --- Order: transitions and everything the Actions dropdown offers -------------------
+        #
+        # Gated at this flat hook because it's the one every supported Sylius version declares:
+        # on 2.0 these three are the buttons themselves; on 2.1+ Sylius disables them here and
+        # renders the real ones one hook down, in the Actions dropdown -- see
+        # config/app/twig_hooks_sylius_2_1/admin/order.yaml, loaded only where that hook exists.
+
+        'sylius_admin.order.show.content.header.title_block.actions':
+            cancel:
+                configuration:
+                    permission: sylius.order.cancel
+            resend_confirmation_email:
+                configuration:
+                    permission: sylius.order.resend_confirmation_email
+            # `sylius_admin_order_history` is the order controller's `showAction`.
+            history:
+                configuration:
+                    permission: sylius.order.show
+
+        'sylius_admin.order.show.content.sections.payments.item.actions':
+            complete:
+                configuration:
+                    permission: sylius.payment.complete
+            refund:
+                configuration:
+                    permission: sylius.payment.refund
+            list_payment_requests:
+                configuration:
+                    permission: sylius.payment_request.index
+
+        # `ship` is a component, not a template; the renderer handles both.
+        'sylius_admin.order.show.content.sections.shipments.item.actions':
+            ship:
+                configuration:
+                    permission: sylius.shipment.ship
+            resend_confirmation:
+                configuration:
+                    permission: sylius.shipment.resend_confirmation_email
+            show:
+                configuration:
+                    permission: sylius.shipment.show
+
+        # --- Customer ------------------------------------------------------------------------
+
+        'sylius_admin.customer.show.content.header.title_block':
+            actions:
+                configuration:
+                    permission:
+                        - sylius.customer.update
+                        - sylius.order.index
+                        - sylius.impersonation.execute
+                        - sylius.shop_user.delete
+
+        'sylius_admin.customer.show.content.header.title_block.actions':
+            edit:
+                configuration:
+                    permission: sylius.customer.update
+            show_orders:
+                configuration:
+                    permission: sylius.order.index
+            impersonate:
+                configuration:
+                    permission: sylius.impersonation.execute
+            # Deletes the shop user account, not the customer.
+            delete:
+                configuration:
+                    permission: sylius.shop_user.delete
+
+        # --- Product -------------------------------------------------------------------------
+
+        'sylius_admin.product.show.content.header.title_block.actions':
+            edit:
+                configuration:
+                    permission: sylius.product.update
+
+        'sylius_admin.product.update.content.header.title_block.actions':
+            show:
+                configuration:
+                    permission: sylius.product.show
+            manage_variants:
+                configuration:
+                    permission:
+                        - sylius.product_variant.index
+                        - sylius.product_variant.create
+                        - sylius.product.update
+
+        'sylius_admin.product.update.content.header.title_block.actions.manage_variants':
+            list:
+                configuration:
+                    permission: sylius.product_variant.index
+            create:
+                configuration:
+                    permission: sylius.product_variant.create
+            # `sylius_admin_product_variant_generate` is the product controller's `updateAction`.
+            generate:
+                configuration:
+                    permission: sylius.product.update
+
+        'sylius_admin.product_variant.update.content.header.title_block.actions':
+            price_history:
+                configuration:
+                    permission: sylius.channel_pricing_log_entry.index
+
+        # --- Catalog promotion -----------------------------------------------------------------
+
+        'sylius_admin.catalog_promotion.show.content.header.title_block.actions':
+            edit:
+                configuration:
+                    permission: sylius.catalog_promotion.update
+
+        # --- Promotion -----------------------------------------------------------------------
+
+        'sylius_admin.promotion.update.content.header.title_block.actions':
+            manage_coupons:
+                configuration:
+                    permission: sylius.promotion_coupon.index
+
+        # --- Taxon tree ----------------------------------------------------------------------
+        #
+        # The tree renders on both the create and the update screen, so both hooks are declared.
+        # `move_up` and `move_down` reorder it through the taxon live component.
+
+        'sylius_admin.taxon.update.content.header.title_block.actions':
+            manage_product_positions:
+                configuration:
+                    permission: sylius.product_taxon.update
+
+        'sylius_admin.taxon.create.content.sections.tree.actions':
+            edit:
+                configuration:
+                    permission: sylius.taxon.update
+            dropdown:
+                configuration:
+                    permission:
+                        - sylius.taxon.create
+                        - sylius.taxon.delete
+                        - sylius.taxon.update
+                        - sylius.product_taxon.update
+
+        'sylius_admin.taxon.update.content.sections.tree.actions':
+            edit:
+                configuration:
+                    permission: sylius.taxon.update
+            dropdown:
+                configuration:
+                    permission:
+                        - sylius.taxon.create
+                        - sylius.taxon.delete
+                        - sylius.taxon.update
+                        - sylius.product_taxon.update
+
+        'sylius_admin.taxon.create.content.sections.tree.actions.dropdown':
+            create_child:
+                configuration:
+                    permission: sylius.taxon.create
+            delete:
+                configuration:
+                    permission: sylius.taxon.delete
+            products_positions:
+                configuration:
+                    permission: sylius.product_taxon.update
+            move_up:
+                configuration:
+                    permission: sylius.taxon.update
+            move_down:
+                configuration:
+                    permission: sylius.taxon.update
+
+        'sylius_admin.taxon.update.content.sections.tree.actions.dropdown':
+            create_child:
+                configuration:
+                    permission: sylius.taxon.create
+            delete:
+                configuration:
+                    permission: sylius.taxon.delete
+            products_positions:
+                configuration:
+                    permission: sylius.product_taxon.update
+            move_up:
+                configuration:
+                    permission: sylius.taxon.update
+            move_down:
+                configuration:
+                    permission: sylius.taxon.update

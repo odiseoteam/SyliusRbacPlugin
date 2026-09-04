@@ -1,0 +1,17 @@
+default:
+    suites:
+        ui_managing_administration_roles:
+            contexts:
+                - sylius.behat.context.hook.doctrine_orm
+
+                - odiseo_rbac.behat.context.transform.administration_role
+                - sylius.behat.context.transform.shared_storage
+
+                - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.admin_security
+                - odiseo_rbac.behat.context.setup.administration_role
+
+                - odiseo_rbac.behat.context.ui.admin.managing_administration_roles
+                - sylius.behat.context.ui.admin.notification
+            filters:
+                tags: "@managing_administration_roles&&@ui"

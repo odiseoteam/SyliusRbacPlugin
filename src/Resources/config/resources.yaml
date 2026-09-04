@@ -1,2 +1,0 @@
-imports:
-    - { resource: resources/administration_role.yaml }
