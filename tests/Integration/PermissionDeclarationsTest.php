@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Odiseo\SyliusRbacPlugin\Integration;
 
+use Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRouteFinder;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\RoutePermissionResolver;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\UnmappableRouteException;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionIdentifier;
@@ -104,19 +105,19 @@ final class PermissionDeclarationsTest extends KernelTestCase
         }
     }
 
-    /** @return list<string> */
+    /**
+     * Delegates to the same finder the debug command uses, so the test and the command cannot
+     * disagree on what counts as orphaned.
+     *
+     * @return list<string>
+     */
     private function routesThatNoLongerExist(string $parameter): array
     {
         /** @var array<array-key, string> $declared */
         $declared = self::getContainer()->getParameter($parameter);
-        $routes = self::getContainer()->get(RouterInterface::class)->getRouteCollection();
+        $finder = new OrphanedRouteFinder(self::getContainer()->get(RouterInterface::class));
 
-        $names = array_is_list($declared) ? $declared : array_keys($declared);
-
-        return array_values(array_filter(
-            $names,
-            static fn (string $name): bool => null === $routes->get($name),
-        ));
+        return $finder->find($declared);
     }
 
     private function route(string $name): Route

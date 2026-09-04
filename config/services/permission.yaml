@@ -50,10 +50,21 @@ services:
 
     Odiseo\SyliusRbacPlugin\Permission\PermissionRegistryInterface: '@odiseo_rbac.permission.registry'
 
+    odiseo_rbac.permission.orphaned_route_finder:
+        class: Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRouteFinder
+        arguments:
+            - '@router'
+
     odiseo_rbac.command.debug_permissions:
         class: Odiseo\SyliusRbacPlugin\Command\DebugPermissionsCommand
         arguments:
             - '@odiseo_rbac.permission.discoverer'
+            - '@odiseo_rbac.permission.orphaned_route_finder'
+            - '@odiseo_rbac.permission.route_map'
+            - '@odiseo_rbac.repository.administration_role'
+            - '@router'
+            - '%odiseo_rbac.route_identifiers%'
+            - '%odiseo_rbac.excluded_routes%'
         tags:
             - { name: console.command }
 

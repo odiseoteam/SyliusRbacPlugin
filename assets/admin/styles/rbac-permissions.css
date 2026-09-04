@@ -19,9 +19,11 @@
 .rbac-permission-tree .rbac-group[data-open="false"] .rbac-group-body { display: none; }
 .rbac-permission-tree .rbac-group[data-open="false"] .rbac-chevron { transform: rotate(-90deg); }
 
-/* The subject column absorbs the width, so the checkboxes stay clustered and read as one block. */
+/* The subject column absorbs the width, so the checkboxes stay clustered and read as one block.
+   Without nowrap, a group with enough operation columns squeezes this one below its content's
+   width and wraps the label instead of letting the table grow into the scrollbar below. */
 .rbac-permission-tree table th:first-child,
-.rbac-permission-tree table td:first-child { width: 100%; }
+.rbac-permission-tree table td:first-child { width: 100%; white-space: nowrap; }
 
 /* table-sm's cell padding is narrower than the group header's ps-2, so row checkboxes sit left of the group checkbox above them. */
 .rbac-permission-tree table td:first-child { padding-left: .5rem; }

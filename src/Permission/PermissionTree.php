@@ -36,8 +36,13 @@ final class PermissionTree implements PermissionTreeInterface
      */
     public const COLUMNS = ['index', 'show', 'create', 'update', 'delete', 'bulk_delete'];
 
-    /** What "read only" means when granted in bulk. */
-    public const READ_COLUMNS = ['index', 'show'];
+    /**
+     * What "read only" means when granted in bulk.
+     *
+     * `view` joins the CRUD pair for subjects with no list/detail split of their own, such as
+     * `sylius.statistics.view` -- it shows something without changing it, same as `show`.
+     */
+    public const READ_COLUMNS = ['index', 'show', 'view'];
 
     private const UNGROUPED = 'not_on_the_menu';
 

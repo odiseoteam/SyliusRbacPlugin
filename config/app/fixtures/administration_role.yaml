@@ -46,9 +46,9 @@ sylius_fixtures:
                     options:
                         code: 'read_only'
                         name: 'Read only'
-                        # The two operations that show something without changing it. Anything
+                        # The operations that show something without changing it. Anything
                         # added later is covered too, which is the point of not expanding them.
-                        permissions: ['*.*.index', '*.*.show']
+                        permissions: ['*.*.index', '*.*.show', '*.*.view']
 
                 # Convenience for the demo data: the administrators Sylius' own fixtures create
                 # start as super admins instead of seeing an empty admin. A username nothing

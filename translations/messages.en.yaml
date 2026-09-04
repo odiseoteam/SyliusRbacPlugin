@@ -36,6 +36,8 @@ odiseo_rbac:
             reject: 'Reject'
             generate: 'Generate'
             resend_confirmation_email: 'Resend confirmation email'
+            archive: 'Archive'
+            restore: 'Restore'
         group:
             catalog: 'Catalog'
             sales: 'Sales'
