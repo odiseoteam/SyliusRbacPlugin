@@ -25,5 +25,6 @@ services:
         class: Odiseo\SyliusRbacPlugin\Security\SelfLockoutListener
         arguments:
             - '@security.token_storage'
+            - '@translator'
         tags:
             - { name: kernel.event_listener, event: odiseo_rbac.administration_role.pre_update, method: onPreUpdate }

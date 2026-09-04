@@ -9,6 +9,7 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionIdentifier;
 use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Refuses a change that would leave the administrator making it unable to manage roles.
@@ -32,8 +33,20 @@ final readonly class SelfLockoutListener
         'odiseo_rbac.administration_role.update',
     ];
 
-    public function __construct(private TokenStorageInterface $tokenStorage)
-    {
+    /**
+     * What to call each of those in the message shown to whoever is about to lose it. The raw
+     * identifier reads fine once "Show identifiers" is on, but this message is the one place it
+     * reaches an administrator who has never turned that on.
+     */
+    private const LABELS = [
+        'odiseo_rbac.administration_role.index' => 'odiseo_rbac.ui.administration_role_operation.index',
+        'odiseo_rbac.administration_role.update' => 'odiseo_rbac.ui.administration_role_operation.update',
+    ];
+
+    public function __construct(
+        private TokenStorageInterface $tokenStorage,
+        private TranslatorInterface $translator,
+    ) {
     }
 
     public function onPreUpdate(GenericEvent $event): void
@@ -63,7 +76,10 @@ final readonly class SelfLockoutListener
         $event->stop(
             'odiseo_rbac.administration_role.cannot_revoke_own_role_management',
             GenericEvent::TYPE_ERROR,
-            ['%permissions%' => implode(', ', $lost)],
+            ['%permissions%' => implode(', ', array_map(
+                fn (string $identifier): string => $this->translator->trans(self::LABELS[$identifier]),
+                $lost,
+            ))],
         );
     }
 

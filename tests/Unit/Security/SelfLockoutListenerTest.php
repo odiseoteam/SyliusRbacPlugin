@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class SelfLockoutListenerTest extends TestCase
 {
@@ -73,7 +74,7 @@ final class SelfLockoutListenerTest extends TestCase
     {
         $event = new GenericEvent($this->role('super_admin', []));
 
-        (new SelfLockoutListener(new TokenStorage()))->onPreUpdate($event);
+        (new SelfLockoutListener(new TokenStorage(), $this->createMock(TranslatorInterface::class)))->onPreUpdate($event);
 
         self::assertFalse($event->isStopped());
     }
@@ -111,6 +112,30 @@ final class SelfLockoutListenerTest extends TestCase
         $this->listener($this->administrator($role))->onPreUpdate($event);
 
         self::assertTrue($event->isStopped());
+    }
+
+    /**
+     * The raw identifier means nothing to an administrator who has never toggled "Show
+     * identifiers" -- the message names what would be lost in words instead.
+     */
+    public function testTheMessageNamesWhatWouldBeLostInWordsRatherThanByIdentifier(): void
+    {
+        $role = $this->role('super_admin', ['odiseo_rbac.administration_role.index']);
+        $event = new GenericEvent($role);
+
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')
+            ->with('odiseo_rbac.ui.administration_role_operation.update')
+            ->willReturn('edit roles');
+
+        $token = $this->createMock(TokenInterface::class);
+        $token->method('getUser')->willReturn($this->administrator($role));
+        $storage = $this->createMock(TokenStorageInterface::class);
+        $storage->method('getToken')->willReturn($token);
+
+        (new SelfLockoutListener($storage, $translator))->onPreUpdate($event);
+
+        self::assertSame(['%permissions%' => 'edit roles'], $event->getMessageParameters());
     }
 
     /** @param list<string> $permissions */
@@ -158,6 +183,9 @@ final class SelfLockoutListenerTest extends TestCase
         $storage = $this->createMock(TokenStorageInterface::class);
         $storage->method('getToken')->willReturn($token);
 
-        return new SelfLockoutListener($storage);
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')->willReturnArgument(0);
+
+        return new SelfLockoutListener($storage, $translator);
     }
 }

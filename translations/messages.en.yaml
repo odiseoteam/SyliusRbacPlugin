@@ -38,6 +38,9 @@ odiseo_rbac:
             resend_confirmation_email: 'Resend confirmation email'
             archive: 'Archive'
             restore: 'Restore'
+        administration_role_operation:
+            index: 'list roles'
+            update: 'edit roles'
         group:
             catalog: 'Catalog'
             sales: 'Sales'
