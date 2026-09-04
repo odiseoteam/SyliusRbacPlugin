@@ -35,8 +35,10 @@
 .rbac-permission-tree table th:first-child,
 .rbac-permission-tree table td:first-child { width: 100%; white-space: nowrap; }
 
-/* table-sm's cell padding is narrower than the group header's ps-2, so row checkboxes sit left of the group checkbox above them. */
-.rbac-permission-tree table td:first-child { padding-left: .5rem; }
+/* Indented past the group's own checkbox above, so a subject row reads as hanging off its group
+   rather than sitting at the same level -- one step of the same staircase `.rbac-nested` continues
+   for a subject reached from inside another. */
+.rbac-permission-tree table td:first-child { padding-left: 1.25rem; }
 
 .rbac-permission-tree table th:not(:first-child),
 .rbac-permission-tree table td:not(:first-child) { min-width: 5rem; white-space: nowrap; }
