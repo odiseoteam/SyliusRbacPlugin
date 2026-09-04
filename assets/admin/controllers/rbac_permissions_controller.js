@@ -120,10 +120,13 @@ export default class extends Controller {
         // Target arrays come back in document order, so a group and its own controls line up.
         this.groupTargets.forEach((group, index) => {
             const identifiers = this.subjectsOf(group).flatMap((subject) => this.rules.operationsOf(subject));
+            const granted = this.rules.grantedCount(identifiers);
+            const count = this.groupCountTargets[index];
 
             this.paint(this.groupCheckTargets[index], identifiers);
-            this.groupCountTargets[index].textContent =
-                `${this.rules.grantedCount(identifiers)} / ${identifiers.length}`;
+            count.textContent = `${granted} / ${identifiers.length}`;
+            count.classList.toggle('is-complete', granted > 0 && granted === identifiers.length);
+            count.classList.toggle('is-partial', granted > 0 && granted < identifiers.length);
         });
 
         this.storedTarget.replaceChildren(...this.rules.patterns.map((pattern) => {

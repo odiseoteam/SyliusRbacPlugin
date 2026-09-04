@@ -1,9 +1,12 @@
 /* The permission tree of the administration role form. */
 
+/* More gap than Bootstrap's own `.mb-2`: with several groups expanded, each needs to read as
+   its own card at a glance, not as a border sitting close enough to the next to blur into it. */
 .rbac-permission-tree .rbac-group {
-    border: 1px solid var(--tblr-border-color);
+    border: 1px solid rgba(var(--tblr-primary-rgb), .18);
     border-radius: var(--tblr-border-radius);
     overflow: hidden;
+    margin-bottom: 1.1rem;
 }
 
 /* Matches the active state of the dashboard's own period toggle (`btn-light border`). */
@@ -14,7 +17,14 @@
     --tblr-btn-active-shadow: var(--tblr-shadow-input);
 }
 
-.rbac-permission-tree .rbac-group-head { background: var(--tblr-bg-surface-secondary); border-bottom: 1px solid var(--tblr-border-color); }
+/*
+ * `--tblr-bg-surface-secondary` (the usual choice for a card header) turned out to equal this
+ * theme's page background exactly -- a "gray" header that matched its surroundings pixel for
+ * pixel, so nothing but a 1px border told one group from the next once several were expanded.
+ * A tint of the theme's own primary keeps the header on-brand while actually contrasting with
+ * both the white card body and the page behind it.
+ */
+.rbac-permission-tree .rbac-group-head { background: rgba(var(--tblr-primary-rgb), .07); border-bottom: 1px solid var(--tblr-border-color); }
 .rbac-permission-tree .rbac-group-head > button { background: transparent; border-radius: 0; }
 .rbac-permission-tree .rbac-group[data-open="false"] .rbac-group-body { display: none; }
 .rbac-permission-tree .rbac-group[data-open="false"] .rbac-chevron { transform: rotate(-90deg); }
@@ -35,8 +45,14 @@
 .rbac-permission-tree .rbac-nested {
     margin-left: 1.75rem;
     padding-left: .75rem;
-    border-left: 2px solid var(--tblr-border-color);
+    border-left: 2px solid rgba(var(--tblr-primary-rgb), .35);
 }
+
+/* Set by the controller once a group's count is known, so a role's coverage of a section reads
+   at a glance instead of requiring the fraction to be read and compared. Same tokens `is-rule`
+   above uses, so a complete group and a literal wildcard rule mean the same shade of green. */
+.rbac-permission-tree [data-rbac-permissions-target="groupCount"].is-complete { color: var(--tblr-green) !important; font-weight: 600; }
+.rbac-permission-tree [data-rbac-permissions-target="groupCount"].is-partial { color: var(--tblr-yellow) !important; font-weight: 600; }
 
 .rbac-permission-tree .rbac-rules li {
     padding: 2px 6px;
