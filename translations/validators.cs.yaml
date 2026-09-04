@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Kód administrátorské role nesmí být prázdný'
+            unique: 'Tento kód je již použit'
+            regex: 'Kód administrátorské role může obsahovat pouze písmena, číslice, podtržítka a pomlčky'
+            min_length: 'Kód administrátorské role musí mít alespoň {{ limit }} znaků'
+            max_length: 'Kód administrátorské role nesmí být delší než {{ limit }} znaků'
+        name:
+            not_blank: 'Název administrátorské role nesmí být prázdný'
+            min_length: 'Název administrátorské role musí mít alespoň {{ limit }} znaků'
+            max_length: 'Název administrátorské role nesmí být delší než {{ limit }} znaků'

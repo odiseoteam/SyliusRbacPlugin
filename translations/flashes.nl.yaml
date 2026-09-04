@@ -1,0 +1,3 @@
+odiseo_rbac:
+    administration_role:
+        cannot_revoke_own_role_management: 'Je kunt het recht op %permissions% niet intrekken bij een rol die je zelf hebt: daarmee zou je geen rollen meer kunnen beheren, en dit scherm is de enige plek om het jezelf terug te geven.'

@@ -1,0 +1,5 @@
+{
+    "dependencies": {
+        "@odiseoteam/sylius-rbac-plugin": "file:../../../assets/admin"
+    }
+}

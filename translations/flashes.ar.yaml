@@ -1,0 +1,3 @@
+odiseo_rbac:
+    administration_role:
+        cannot_revoke_own_role_management: 'لا يمكنك سحب صلاحية %permissions% من دور تمتلكه: فذلك سيمنعك من إدارة الأدوار، وهذه الشاشة هي المكان الوحيد لإعادتها إلى نفسك.'

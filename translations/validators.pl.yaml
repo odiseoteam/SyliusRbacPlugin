@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Kod roli administracyjnej nie może być pusty'
+            unique: 'Ten kod jest już zajęty'
+            regex: 'Kod roli administracyjnej może zawierać tylko litery, cyfry, podkreślenia i myślniki'
+            min_length: 'Kod roli administracyjnej musi mieć co najmniej {{ limit }} znaków'
+            max_length: 'Kod roli administracyjnej nie może być dłuższy niż {{ limit }} znaków'
+        name:
+            not_blank: 'Nazwa roli administracyjnej nie może być pusta'
+            min_length: 'Nazwa roli administracyjnej musi mieć co najmniej {{ limit }} znaków'
+            max_length: 'Nazwa roli administracyjnej nie może być dłuższa niż {{ limit }} znaków'

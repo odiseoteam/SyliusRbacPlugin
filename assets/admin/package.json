@@ -1,0 +1,23 @@
+{
+    "name": "@odiseoteam/sylius-rbac-plugin",
+    "version": "3.0.0",
+    "license": "MIT",
+    "author": "Odiseo Team",
+    "private": true,
+    "symfony": {
+        "controllers": {
+            "rbac-permissions": {
+                "main": "controllers/rbac_permissions_controller.js",
+                "name": "rbac-permissions",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true
+            }
+        }
+    },
+    "files": [
+        "./package.json",
+        "./controllers",
+        "./styles"
+    ]
+}

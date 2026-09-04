@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Administratoriaus rolės kodas negali būti tuščias'
+            unique: 'Šis kodas jau užimtas'
+            regex: 'Administratoriaus rolės kodą gali sudaryti tik raidės, skaičiai, pabraukimai ir brūkšneliai'
+            min_length: 'Administratoriaus rolės kodas turi būti bent {{ limit }} simbolių ilgio'
+            max_length: 'Administratoriaus rolės kodas negali būti ilgesnis nei {{ limit }} simbolių'
+        name:
+            not_blank: 'Administratoriaus rolės pavadinimas negali būti tuščias'
+            min_length: 'Administratoriaus rolės pavadinimas turi būti bent {{ limit }} simbolių ilgio'
+            max_length: 'Administratoriaus rolės pavadinimas negali būti ilgesnis nei {{ limit }} simbolių'

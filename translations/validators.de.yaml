@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Der Code der Administratorrolle darf nicht leer sein'
+            unique: 'Dieser Code wird bereits verwendet'
+            regex: 'Der Code der Administratorrolle darf nur Buchstaben, Zahlen, Unterstriche und Bindestriche enthalten'
+            min_length: 'Der Code der Administratorrolle muss mindestens {{ limit }} Zeichen lang sein'
+            max_length: 'Der Code der Administratorrolle darf nicht länger als {{ limit }} Zeichen sein'
+        name:
+            not_blank: 'Der Name der Administratorrolle darf nicht leer sein'
+            min_length: 'Der Name der Administratorrolle muss mindestens {{ limit }} Zeichen lang sein'
+            max_length: 'Der Name der Administratorrolle darf nicht länger als {{ limit }} Zeichen sein'

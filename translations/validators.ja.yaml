@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: '管理ロールのコードは空にできません'
+            unique: 'このコードはすでに使用されています'
+            regex: '管理ロールのコードには、英数字、アンダースコア、ハイフンのみ使用できます'
+            min_length: '管理ロールのコードは{{ limit }}文字以上で入力してください'
+            max_length: '管理ロールのコードは{{ limit }}文字を超えることはできません'
+        name:
+            not_blank: '管理ロールの名前は空にできません'
+            min_length: '管理ロールの名前は{{ limit }}文字以上で入力してください'
+            max_length: '管理ロールの名前は{{ limit }}文字を超えることはできません'

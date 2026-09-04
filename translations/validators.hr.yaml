@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Kôd administratorske uloge ne smije biti prazan'
+            unique: 'Ovaj kôd je već zauzet'
+            regex: 'Kôd administratorske uloge smije sadržavati samo slova, brojeve, podvlake i crtice'
+            min_length: 'Kôd administratorske uloge mora imati najmanje {{ limit }} znakova'
+            max_length: 'Kôd administratorske uloge ne smije biti dulji od {{ limit }} znakova'
+        name:
+            not_blank: 'Naziv administratorske uloge ne smije biti prazan'
+            min_length: 'Naziv administratorske uloge mora imati najmanje {{ limit }} znakova'
+            max_length: 'Naziv administratorske uloge ne smije biti dulji od {{ limit }} znakova'

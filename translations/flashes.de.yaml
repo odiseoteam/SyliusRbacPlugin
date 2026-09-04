@@ -1,0 +1,3 @@
+odiseo_rbac:
+    administration_role:
+        cannot_revoke_own_role_management: 'Sie können sich nicht selbst die Berechtigung für %permissions% entziehen, wenn Sie diese Rolle innehaben: Dadurch könnten Sie keine Rollen mehr verwalten, und dieser Bildschirm ist der einzige Ort, um sie sich zurückzugeben.'

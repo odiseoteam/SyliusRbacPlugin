@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Yönetim rolü kodu boş olamaz'
+            unique: 'Bu kod zaten kullanılıyor'
+            regex: 'Yönetim rolü kodu yalnızca harf, rakam, alt çizgi ve tire içerebilir'
+            min_length: 'Yönetim rolü kodu en az {{ limit }} karakter uzunluğunda olmalıdır'
+            max_length: 'Yönetim rolü kodu {{ limit }} karakterden uzun olamaz'
+        name:
+            not_blank: 'Yönetim rolü adı boş olamaz'
+            min_length: 'Yönetim rolü adı en az {{ limit }} karakter uzunluğunda olmalıdır'
+            max_length: 'Yönetim rolü adı {{ limit }} karakterden uzun olamaz'

@@ -35,7 +35,40 @@ odiseo_sylius_rbac_admin:
     prefix: /admin
 ```
 
-## 5. Make your `AdminUser` administration-role aware
+## 5. Wire the assets
+
+```json
+// package.json
+{
+    "dependencies": {
+        "@odiseoteam/sylius-rbac-plugin": "file:vendor/odiseoteam/sylius-rbac-plugin/assets/admin"
+    }
+}
+```
+
+```json
+// assets/admin/controllers.json
+{
+    "controllers": {
+        "@odiseoteam/sylius-rbac-plugin": {
+            "rbac-permissions": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": {
+                    "@odiseoteam/sylius-rbac-plugin/styles/rbac-permissions.css": true
+                }
+            }
+        }
+    }
+}
+```
+
+```bash
+yarn install --force
+yarn build
+```
+
+## 6. Make your `AdminUser` administration-role aware
 
 ```php
 <?php
@@ -60,14 +93,14 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
 }
 ```
 
-## 6. Update the database schema
+## 7. Update the database schema
 
 ```bash
 bin/console doctrine:migrations:migrate
 bin/console cache:clear
 ```
 
-## 7. Give someone access
+## 8. Give someone access
 
 An administrator with no role is denied everything, including the screen that assigns roles, so
 right after installing nobody can reach the admin panel. Grant the first one from the console:

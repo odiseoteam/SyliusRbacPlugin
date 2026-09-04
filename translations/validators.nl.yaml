@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'De code van de beheerdersrol mag niet leeg zijn'
+            unique: 'Deze code is al in gebruik'
+            regex: 'De code van de beheerdersrol mag alleen letters, cijfers, underscores en streepjes bevatten'
+            min_length: 'De code van de beheerdersrol moet minimaal {{ limit }} tekens lang zijn'
+            max_length: 'De code van de beheerdersrol mag niet langer zijn dan {{ limit }} tekens'
+        name:
+            not_blank: 'De naam van de beheerdersrol mag niet leeg zijn'
+            min_length: 'De naam van de beheerdersrol moet minimaal {{ limit }} tekens lang zijn'
+            max_length: 'De naam van de beheerdersrol mag niet langer zijn dan {{ limit }} tekens'

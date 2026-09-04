@@ -1,0 +1,3 @@
+odiseo_rbac:
+    administration_role:
+        cannot_revoke_own_role_management: 'Nie możesz odebrać sobie uprawnienia do %permissions% w roli, którą posiadasz: uniemożliwiłoby ci to zarządzanie rolami, a ten ekran to jedyne miejsce, by je sobie oddać.'

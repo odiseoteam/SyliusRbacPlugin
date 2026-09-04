@@ -1,4 +1,17 @@
 {
-  "controllers": [],
-  "entrypoints": []
+    "controllers": {
+        "@odiseoteam/sylius-rbac-plugin": {
+            "rbac-permissions": {
+                "main": "controllers/rbac_permissions_controller.js",
+                "name": "rbac-permissions",
+                "webpackMode": "lazy",
+                "fetch": "lazy",
+                "enabled": true,
+                "autoimport": {
+                    "@odiseoteam/sylius-rbac-plugin/styles/rbac-permissions.css": true
+                }
+            }
+        }
+    },
+    "entrypoints": []
 }

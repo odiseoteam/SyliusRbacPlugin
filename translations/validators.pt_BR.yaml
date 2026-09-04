@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'O código da função de administração não pode estar em branco'
+            unique: 'Esse código já está em uso'
+            regex: 'O código da função de administração pode conter apenas letras, números, sublinhados e hífens'
+            min_length: 'O código da função de administração deve ter pelo menos {{ limit }} caracteres'
+            max_length: 'O código da função de administração não pode ter mais de {{ limit }} caracteres'
+        name:
+            not_blank: 'O nome da função de administração não pode estar em branco'
+            min_length: 'O nome da função de administração deve ter pelo menos {{ limit }} caracteres'
+            max_length: 'O nome da função de administração não pode ter mais de {{ limit }} caracteres'

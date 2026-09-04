@@ -1,0 +1,3 @@
+odiseo_rbac:
+    administration_role:
+        cannot_revoke_own_role_management: '你不能从自己持有的角色中移除%permissions%权限：这会导致你无法再管理角色，而此页面是唯一能把它还给自己的地方。'

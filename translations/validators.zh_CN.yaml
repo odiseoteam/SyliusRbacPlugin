@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: '管理角色代码不能为空'
+            unique: '此代码已被使用'
+            regex: '管理角色代码只能包含字母、数字、下划线和连字符'
+            min_length: '管理角色代码长度不能少于{{ limit }}个字符'
+            max_length: '管理角色代码长度不能超过{{ limit }}个字符'
+        name:
+            not_blank: '管理角色名称不能为空'
+            min_length: '管理角色名称长度不能少于{{ limit }}个字符'
+            max_length: '管理角色名称长度不能超过{{ limit }}个字符'

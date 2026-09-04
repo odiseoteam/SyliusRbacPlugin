@@ -1,0 +1,12 @@
+odiseo_rbac:
+    administration_role:
+        code:
+            not_blank: 'Il codice del ruolo di amministrazione non può essere vuoto'
+            unique: 'Questo codice è già in uso'
+            regex: 'Il codice del ruolo di amministrazione può contenere solo lettere, numeri, trattini bassi e trattini'
+            min_length: 'Il codice del ruolo di amministrazione deve avere almeno {{ limit }} caratteri'
+            max_length: 'Il codice del ruolo di amministrazione non può superare i {{ limit }} caratteri'
+        name:
+            not_blank: 'Il nome del ruolo di amministrazione non può essere vuoto'
+            min_length: 'Il nome del ruolo di amministrazione deve avere almeno {{ limit }} caratteri'
+            max_length: 'Il nome del ruolo di amministrazione non può superare i {{ limit }} caratteri'
