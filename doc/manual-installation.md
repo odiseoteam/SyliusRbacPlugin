@@ -37,7 +37,7 @@ imports:
 # config/routes/odiseo_sylius_rbac_plugin.yaml
 odiseo_sylius_rbac_admin:
     resource: "@OdiseoSyliusRbacPlugin/config/routes/admin.yaml"
-    prefix: /admin
+    prefix: '/%sylius_admin.path_name%'
 ```
 
 ## 5. Wire the assets
