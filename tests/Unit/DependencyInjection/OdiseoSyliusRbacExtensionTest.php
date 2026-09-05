@@ -88,6 +88,47 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
         );
     }
 
+    /**
+     * A route only some installations ship is declared with the package that owns it. Without
+     * the package the route is not there either, so keeping the declaration would mean carrying
+     * a permission nothing can reach and reporting it orphaned on every debug run.
+     */
+    public function testADeclarationIsDroppedWhenThePackageItNamesIsNotInstalled(): void
+    {
+        $container = $this->load([[
+            'route_permissions' => [
+                'route_from_a_plugin_nobody_installed' => [
+                    'permission' => 'some_vendor.thing.view',
+                    'package' => 'some-vendor/a-plugin-that-is-not-installed',
+                ],
+            ],
+        ]]);
+
+        self::assertSame([], $container->getParameter('odiseo_rbac.declared_permissions'));
+        self::assertNotContains(
+            'route_from_a_plugin_nobody_installed',
+            $container->getParameter('odiseo_rbac.handled_routes'),
+        );
+    }
+
+    /** Absence is the only thing that excuses it: an installed package is checked like any other. */
+    public function testADeclarationIsKeptWhenThePackageItNamesIsInstalled(): void
+    {
+        $container = $this->load([[
+            'route_permissions' => [
+                'route_from_an_installed_plugin' => [
+                    'permission' => 'sylius.thing.view',
+                    'package' => 'sylius/sylius',
+                ],
+            ],
+        ]]);
+
+        self::assertArrayHasKey(
+            'route_from_an_installed_plugin',
+            $container->getParameter('odiseo_rbac.declared_permissions'),
+        );
+    }
+
     /** @param list<array<string, mixed>> $configs */
     private function load(array $configs = []): ContainerBuilder
     {

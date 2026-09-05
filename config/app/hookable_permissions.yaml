@@ -1,0 +1,150 @@
+# Hides the action buttons and dashboard widgets a role is not allowed to use, through
+# PermissionGatedHookableRenderer. Presentation only: the routes and live components behind them
+# are already denied on their own.
+#
+# Each entry names a hook, a hookable under it, and the permission the *destination* checks, which
+# is not always the one the button's name suggests -- "Delete" on the customer screen posts to
+# `sylius_admin_shop_user_delete`, and there is no `sylius.customer.delete` at all. Check the
+# route before adding an entry. A list grants on any of its permissions, for a dropdown or button
+# group that has no permission of its own.
+#
+# Nothing here declares a hookable: `InjectHookablePermissionsPass` adds the permission to the one
+# Sylius already registered, and skips an entry whose hookable the running version does not ship.
+# That is what lets hooks only some versions have -- the order screen's Actions dropdown, the
+# dashboard's pending actions, both new in 2.1 -- sit here next to the rest.
+#
+# Only gate a hookable that is the button itself. The ones that are a whole `<td>` -- price
+# history, applied promotions, a variant row's edit button -- are left out on purpose: hiding one
+# drops a cell and shifts the row against its header.
+odiseo_sylius_rbac:
+    hookable_permissions:
+
+        # --- Dashboard -----------------------------------------------------------------------
+        #
+        # `channel_selector` is left alone on purpose: see LIVE_COMPONENT_EXCLUDED.
+
+        'sylius_admin.dashboard.index.content':
+            statistics: sylius.statistics.view
+
+        'sylius_admin.dashboard.index.content.latest_statistics':
+            new_orders: sylius.order.index
+
+        'sylius_admin.dashboard.index.content.latest_statistics.pending_actions.body':
+            orders_to_process: sylius.order.index
+            shipments_to_ship: sylius.shipment.index
+            pending_payments: sylius.payment.index
+            product_reviews_to_approve: sylius.product_review.index
+            product_variants_out_of_stock: sylius.product_variant.index
+
+        # --- Order: transitions and everything the Actions dropdown offers ---------------------
+        #
+        # The same three permissions are declared twice, on the two hooks that render them: on 2.0
+        # the buttons live in the flat `.actions` hook, and from 2.1 on Sylius disables them there
+        # and renders the real ones one level down, in `.actions.list`.
+
+        'sylius_admin.order.show.content.header.title_block.actions':
+            cancel: sylius.order.cancel
+            resend_confirmation_email: sylius.order.resend_confirmation_email
+            # `sylius_admin_order_history` is the order controller's `showAction`.
+            history: sylius.order.show
+
+        'sylius_admin.order.show.content.header.title_block.actions.list':
+            cancel: sylius.order.cancel
+            resend_confirmation_email: sylius.order.resend_confirmation_email
+            history: sylius.order.show
+
+        'sylius_admin.order.show.content.sections.payments.item.actions':
+            complete: sylius.payment.complete
+            refund: sylius.payment.refund
+            list_payment_requests: sylius.payment_request.index
+
+        # `ship` is a component, not a template; the pass and the renderer handle both.
+        'sylius_admin.order.show.content.sections.shipments.item.actions':
+            ship: sylius.shipment.ship
+            resend_confirmation: sylius.shipment.resend_confirmation_email
+            show: sylius.shipment.show
+
+        # --- Customer ------------------------------------------------------------------------
+
+        'sylius_admin.customer.show.content.header.title_block':
+            actions:
+                - sylius.customer.update
+                - sylius.order.index
+                - sylius.impersonation.execute
+                - sylius.shop_user.delete
+
+        'sylius_admin.customer.show.content.header.title_block.actions':
+            edit: sylius.customer.update
+            show_orders: sylius.order.index
+            impersonate: sylius.impersonation.execute
+            # Deletes the shop user account, not the customer.
+            delete: sylius.shop_user.delete
+
+        # --- Product -------------------------------------------------------------------------
+
+        'sylius_admin.product.show.content.header.title_block.actions':
+            edit: sylius.product.update
+
+        'sylius_admin.product.update.content.header.title_block.actions':
+            show: sylius.product.show
+            manage_variants:
+                - sylius.product_variant.index
+                - sylius.product_variant.create
+                - sylius.product.update
+
+        'sylius_admin.product.update.content.header.title_block.actions.manage_variants':
+            list: sylius.product_variant.index
+            create: sylius.product_variant.create
+            # `sylius_admin_product_variant_generate` is the product controller's `updateAction`.
+            generate: sylius.product.update
+
+        'sylius_admin.product_variant.update.content.header.title_block.actions':
+            price_history: sylius.channel_pricing_log_entry.index
+
+        # --- Catalog promotion -----------------------------------------------------------------
+
+        'sylius_admin.catalog_promotion.show.content.header.title_block.actions':
+            edit: sylius.catalog_promotion.update
+
+        # --- Promotion -----------------------------------------------------------------------
+
+        'sylius_admin.promotion.update.content.header.title_block.actions':
+            manage_coupons: sylius.promotion_coupon.index
+
+        # --- Taxon tree ----------------------------------------------------------------------
+        #
+        # The tree renders on both the create and the update screen, so both hooks are declared.
+        # `move_up` and `move_down` reorder it through the taxon live component.
+
+        'sylius_admin.taxon.update.content.header.title_block.actions':
+            manage_product_positions: sylius.product_taxon.update
+
+        'sylius_admin.taxon.create.content.sections.tree.actions':
+            edit: sylius.taxon.update
+            dropdown:
+                - sylius.taxon.create
+                - sylius.taxon.delete
+                - sylius.taxon.update
+                - sylius.product_taxon.update
+
+        'sylius_admin.taxon.update.content.sections.tree.actions':
+            edit: sylius.taxon.update
+            dropdown:
+                - sylius.taxon.create
+                - sylius.taxon.delete
+                - sylius.taxon.update
+                - sylius.product_taxon.update
+
+        'sylius_admin.taxon.create.content.sections.tree.actions.dropdown':
+            create_child: sylius.taxon.create
+            delete: sylius.taxon.delete
+            products_positions: sylius.product_taxon.update
+            move_up: sylius.taxon.update
+            move_down: sylius.taxon.update
+
+        'sylius_admin.taxon.update.content.sections.tree.actions.dropdown':
+            create_child: sylius.taxon.create
+            delete: sylius.taxon.delete
+            products_positions: sylius.product_taxon.update
+            move_up: sylius.taxon.update
+            move_down: sylius.taxon.update

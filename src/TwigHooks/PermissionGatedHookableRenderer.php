@@ -17,10 +17,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * `AdminRouteAuthorizationListener` already covers for a component's follow-up interactions. This
  * is the only place that first render can be stopped.
  *
- * A hook opts in with `configuration: {permission: sylius.subject.operation}`; nothing else about
- * it changes. That is a config value, not a copy of the hook, so it keeps working if Sylius
- * changes the component, props or template behind it -- see the dashboard widgets in
- * `config/app/twig_hooks/admin/dashboard.yaml`.
+ * A hookable opts in through `config/app/hookable_permissions.yaml`, which
+ * `InjectHookablePermissionsPass` turns into this `configuration` key; nothing else about it
+ * changes. That is a config value, not a copy of the hook, so it keeps working if Sylius changes
+ * the component, props or template behind it.
  *
  * A list grants on *any* of its permissions, for the container of several gated hookables -- an
  * "Actions" dropdown, a button group -- which has no permission of its own and would otherwise

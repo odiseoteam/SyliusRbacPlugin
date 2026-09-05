@@ -88,7 +88,10 @@ odiseo_sylius_rbac:
         # `permission: true`, the controller is invokable with no action name to read an
         # operation from, or (mollie_subscription's transitions) the service id carries an extra
         # segment RoutePermissionResolver does not expect. Confirmed against a real
-        # sylius-standard install, `odiseo:rbac:debug` scenario -- see ALPHA_VERIFICATION.md.
+        # sylius-standard install, `odiseo:rbac:debug` scenario.
+        #
+        # Each one names its `package`, so an installation without that plugin drops the
+        # declaration instead of carrying a permission for a route it does not have.
 
         # "adyen_order_payment", not "order_payment": the tree's row label drops the vendor
         # prefix, keeping only the subject segment, so a plain "order_payment" here would render
@@ -96,59 +99,72 @@ odiseo_sylius_rbac:
         # no way to tell which is which.
         sylius_adyen_admin_order_payment_generate_pay_link:
             permission: sylius_adyen.adyen_order_payment.generate
+            package: sylius/adyen-plugin
             group: sales
 
         sylius_adyen_admin_order_payment_reverse:
             permission: sylius_adyen.adyen_order_payment.reverse
+            package: sylius/adyen-plugin
             group: sales
 
         sylius_adyen_admin_order_payment_capture:
             permission: sylius_adyen.adyen_order_payment.capture
+            package: sylius/adyen-plugin
             group: sales
 
         sylius_mollie_admin_mollie_methods:
             permission: sylius_mollie.mollie_method.view
+            package: sylius/mollie-plugin
             group: configuration
 
         sylius_mollie_admin_test_api_keys:
             permission: sylius_mollie.mollie_method.execute
+            package: sylius/mollie-plugin
             group: configuration
 
         # Reordering payment methods in the list -- the same operation Sylius' own
         # `updatePositionsAction` maps to.
         sylius_mollie_admin_mollie_method_change_position:
             permission: sylius_mollie.mollie_method.update
+            package: sylius/mollie-plugin
             group: configuration
 
         sylius_mollie_admin_mollie_method_delete_logo:
             permission: sylius_mollie.mollie_method.delete
+            package: sylius/mollie-plugin
             group: configuration
 
         # "mollie_order_payment": same reasoning as Adyen's above, in the other direction.
         sylius_mollie_admin_payment_link_generate:
             permission: sylius_mollie.mollie_order_payment.generate
+            package: sylius/mollie-plugin
             group: sales
 
         sylius_mollie_admin_onboarding_wizard_status:
             permission: sylius_mollie.mollie_onboarding_wizard.view
+            package: sylius/mollie-plugin
             group: configuration
 
         sylius_mollie_admin_onboarding_wizard_completed:
             permission: sylius_mollie.mollie_onboarding_wizard.update
+            package: sylius/mollie-plugin
             group: configuration
 
         # Same subject as the already-auto-discovered `sylius_mollie.mollie_subscription.index`
         # and `.show` -- only these three transitions cannot be resolved automatically.
         sylius_mollie_admin_mollie_subscription_cancel:
             permission: sylius_mollie.mollie_subscription.cancel
+            package: sylius/mollie-plugin
             group: sales
 
         sylius_mollie_admin_mollie_subscription_pause:
             permission: sylius_mollie.mollie_subscription.pause
+            package: sylius/mollie-plugin
             group: sales
 
         sylius_mollie_admin_mollie_subscription_resume:
             permission: sylius_mollie.mollie_subscription.resume
+            package: sylius/mollie-plugin
             group: sales
 
         # Payum's own generic refund endpoint, wired in by sylius/refund-plugin. Same subject as
@@ -157,10 +173,12 @@ odiseo_sylius_rbac:
         # gateway and marking the resulting payment completed are two different moments.
         payum_refund_do:
             permission: sylius_refund.refund_payment.refund
+            package: sylius/refund-plugin
             group: sales
 
         sylius_mollie_admin_order_payment_refund:
             permission: sylius_mollie.mollie_order_payment.refund
+            package: sylius/mollie-plugin
             group: sales
 
         # Both operate on a PaymentMethod (confirmed against sylius/paypal-plugin's own
@@ -171,10 +189,12 @@ odiseo_sylius_rbac:
         # "Payment method" row next to the real payment methods screen.
         sylius_paypal_admin_download_payouts_report:
             permission: sylius.payment_method.download
+            package: sylius/paypal-plugin
             group: sales
 
         sylius_paypal_admin_enable_seller:
             permission: sylius.payment_method.update
+            package: sylius/paypal-plugin
             group: configuration
 
         # "order_refund", not "refund": PermissionTree nests a subject under any sibling whose
@@ -184,27 +204,33 @@ odiseo_sylius_rbac:
         # from Sylius' own `sylius.payment` row.
         sylius_refund_order_refunds_list:
             permission: sylius_refund.order_refund.index
+            package: sylius/refund-plugin
             group: sales
 
         sylius_refund_refund_units:
             permission: sylius_refund.order_refund.view
+            package: sylius/refund-plugin
             group: sales
 
         # Same subject as the already-auto-discovered `sylius_refund.credit_memo.index`.
         sylius_refund_credit_memo_details:
             permission: sylius_refund.credit_memo.show
+            package: sylius/refund-plugin
             group: sales
 
         sylius_refund_admin_credit_memo_download:
             permission: sylius_refund.credit_memo.download
+            package: sylius/refund-plugin
             group: sales
 
         sylius_refund_complete_refund_payment:
             permission: sylius_refund.refund_payment.complete
+            package: sylius/refund-plugin
             group: sales
 
         sylius_refund_admin_credit_memo_send:
             permission: sylius_refund.credit_memo.send
+            package: sylius/refund-plugin
             group: sales
 
     # Deliberately excluded from the permission check. Listed rather than omitted so a coverage
@@ -226,5 +252,5 @@ odiseo_sylius_rbac:
         - sylius_api_admin_authentication_token
         # Open so a role missing one widget's permission lands somewhere after logging in
         # instead of a 403; the widgets on it are gated individually -- see
-        # LIVE_COMPONENT_PERMISSIONS and config/app/twig_hooks/admin/dashboard.yaml.
+        # LIVE_COMPONENT_PERMISSIONS and config/app/hookable_permissions.yaml.
         - sylius_admin_dashboard

@@ -171,7 +171,7 @@ final class Configuration implements ConfigurationInterface
      * `count_shipments_to_ship` to `sylius.shipment.index`, not a blanket `sylius.dashboard.view`
      * -- so a role missing one resource's permission simply does not see that widget, rather than
      * a single dashboard permission gating everything or nothing. See
-     * `config/app/twig_hooks/admin/dashboard.yaml`, where the same permissions gate the initial
+     * `config/app/hookable_permissions.yaml`, where the same permissions gate the initial
      * render through `PermissionGatedHookableRenderer`; this map only covers the follow-up
      * live-action requests. `sylius_admin:dashboard:channel_selector` is not listed: it changes
      * no data of its own, so it is in `live_component_excluded` instead.
@@ -251,10 +251,9 @@ final class Configuration implements ConfigurationInterface
     /**
      * Ungated hookables that only exist from Sylius 2.1 on: `order/index.yaml` -- the order
      * grid's own cancel button -- does not ship before 2.1, and before then the order screen's
-     * `.actions` hook has no `back`/`list` (no Actions dropdown yet, see
-     * `config/app/twig_hooks_sylius_2_1/admin/order.yaml`). A `private const` can't express
-     * that, since it has to be a compile-time literal; `ungatedActionHookables()` is where the
-     * two merge.
+     * `.actions` hook has no `back`/`list`, there being no Actions dropdown yet. A `private
+     * const` can't express that, since it has to be a compile-time literal;
+     * `ungatedActionHookables()` is where the two merge.
      *
      * @var array<string, list<string>>
      */
@@ -309,6 +308,10 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('label')->defaultNull()->end()
                             ->scalarNode('group')->defaultNull()->end()
+                            ->scalarNode('package')
+                                ->defaultNull()
+                                ->info('Composer package the route belongs to, for a route only some installations have. The declaration is dropped when the package is not installed, so it neither covers a route that is not there nor reports itself orphaned. Leave unset for a route that is always present.')
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
@@ -355,6 +358,17 @@ final class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('component')
                     ->scalarPrototype()->end()
                     ->defaultValue(self::LIVE_COMPONENT_PERMISSIONS)
+                ->end()
+                ->arrayNode('hookable_permissions')
+                    ->info('Hookables Sylius already registered, mapped to the permission that has to be granted for them to render. Hook name, then hookable name, then one permission or a list granting on any of them. See InjectHookablePermissionsPass.')
+                    ->useAttributeAsKey('hook')
+                    ->arrayPrototype()
+                        ->useAttributeAsKey('hookable')
+                        ->arrayPrototype()
+                            ->beforeNormalization()->castToArray()->end()
+                            ->scalarPrototype()->end()
+                        ->end()
+                    ->end()
                 ->end()
                 ->arrayNode('ungated_action_hookables')
                     ->info('Hookables under an "actions" hook that deliberately carry no permission. Listing them is what lets a coverage check tell a decision apart from an oversight.')

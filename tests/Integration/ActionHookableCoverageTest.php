@@ -43,7 +43,7 @@ final class ActionHookableCoverageTest extends KernelTestCase
                     $ungated[$hook] ?? [],
                     sprintf(
                         'Hookable "%s" under hook "%s" renders without any permission. Give it one in ' .
-                        'config/app/twig_hooks/admin/actions.yaml, or list it under ' .
+                        'config/app/hookable_permissions.yaml, or list it under ' .
                         '"odiseo_sylius_rbac.ungated_action_hookables" if it is not an action button.',
                         $name,
                         $hook,
@@ -72,6 +72,52 @@ final class ActionHookableCoverageTest extends KernelTestCase
                     $name,
                     $hookables[$hook] ?? [],
                     sprintf('"%s" is declared ungated under hook "%s", which no longer exists.', $name, $hook),
+                );
+            }
+        }
+    }
+
+    /**
+     * That the gating reached the hookables at all. `InjectHookablePermissionsPass` writes into
+     * services Sylius registered and skips an entry it does not find, so a hook renamed upstream
+     * leaves a line that reads as protection and silently is not.
+     *
+     * A hook missing entirely is skipped: the same file declares the flat order actions 2.0
+     * renders and the dropdown 2.1 replaced them with, and only one of the two exists at a time.
+     * A hook that is there with the hookable gone is the rot this catches.
+     */
+    public function testEveryDeclaredPermissionReachesTheHookableItNames(): void
+    {
+        /** @var array<string, array<string, list<string>>> $declared */
+        $declared = self::getContainer()->getParameter('odiseo_rbac.hookable_permissions');
+        $hookables = $this->allHookables();
+
+        self::assertNotEmpty($declared, 'no permission is declared for any hookable');
+
+        foreach ($declared as $hook => $permissions) {
+            if (!isset($hookables[$hook])) {
+                continue;
+            }
+
+            foreach ($permissions as $name => $permission) {
+                self::assertArrayHasKey(
+                    $name,
+                    $hookables[$hook],
+                    sprintf('"%s" is gated under hook "%s", which no longer has it.', $name, $hook),
+                );
+
+                $hookable = $hookables[$hook][$name];
+
+                // Sylius keeps a disabled hookable around for one it replaced; it never renders
+                // and carries no configuration for the pass to write into.
+                if ($hookable instanceof DisabledHookable) {
+                    continue;
+                }
+
+                self::assertSame(
+                    $permission,
+                    $hookable->configuration['permission'] ?? null,
+                    sprintf('"%s" under hook "%s" renders without the permission it declares.', $name, $hook),
                 );
             }
         }

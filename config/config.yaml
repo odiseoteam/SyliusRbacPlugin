@@ -1,6 +1,6 @@
 imports:
+    - { resource: "app/hookable_permissions.yaml" }
     - { resource: "app/twig_hooks/**/*.yaml" }
-    - { resource: "sylius_version_gate.php" }
     - { resource: "app/resources/**/*.yaml" }
     - { resource: "app/grids/**/*.yaml" }
     - { resource: "app/fixtures/**/*.yaml" }

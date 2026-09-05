@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\DependencyInjection;
 
+use Composer\InstalledVersions;
 use Odiseo\SyliusRbacPlugin\Permission\EntityAutocompletePermissionResolverInterface;
 use Odiseo\SyliusRbacPlugin\Permission\LiveComponentPermissionResolverInterface;
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\ComposerResource;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -25,6 +27,13 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $config['route_permissions'] = self::installedOnly($config['route_permissions']);
+
+        /**
+         * What `installedOnly()` just read. Without it, adding or removing a plugin whose routes
+         * are declared leaves the container holding the answer from before.
+         */
+        $container->addResource(new ComposerResource());
 
         $container->setParameter('odiseo_rbac.route_permissions', $config['route_permissions']);
         $container->setParameter('odiseo_rbac.excluded_routes', $config['excluded_routes']);
@@ -32,6 +41,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $container->setParameter('odiseo_rbac.live_component_permissions', $config['live_component_permissions']);
         $container->setParameter('odiseo_rbac.live_component_excluded', $config['live_component_excluded']);
         $container->setParameter('odiseo_rbac.ungated_action_hookables', $config['ungated_action_hookables']);
+        $container->setParameter('odiseo_rbac.hookable_permissions', $config['hookable_permissions']);
         $container->setParameter('odiseo_rbac.mapped_live_components', [
             ...array_keys($config['live_component_permissions']),
             ...$config['live_component_excluded'],
@@ -59,6 +69,32 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
 
         $loader->load('services.yaml');
+    }
+
+    /**
+     * Drops the declarations whose package this installation does not have.
+     *
+     * A route only some installations ship -- the payment plugins `sylius-standard` bundles, a
+     * plugin an application chose not to install -- is declared with the package that owns it.
+     * Without the package there is no route, so the declaration covers nothing and would report
+     * itself orphaned on every `odiseo:rbac:debug`, in an application that did nothing wrong.
+     *
+     * Only absence excuses it: with the package installed the declaration is kept and checked
+     * like any other, so a route that plugin renames still surfaces as orphaned. Removing a
+     * plugin whose permissions roles already hold is caught by `OrphanedRolePermissionFinder`
+     * instead, which is the half of it that needs acting on.
+     *
+     * @param array<string, array{permission: string, label: string|null, group: string|null, package: string|null}> $routePermissions
+     *
+     * @return array<string, array{permission: string, label: string|null, group: string|null, package: string|null}>
+     */
+    private static function installedOnly(array $routePermissions): array
+    {
+        return array_filter(
+            $routePermissions,
+            static fn (array $permission): bool => null === $permission['package'] ||
+                InstalledVersions::isInstalled($permission['package']),
+        );
     }
 
     /**
