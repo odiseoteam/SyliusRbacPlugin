@@ -1,3 +1,4 @@
 imports:
     - suites/ui/managing_administration_roles.yaml
     - suites/ui/enforcing_administrator_permissions.yaml
+    - suites/ui/hiding_actions_a_role_cannot_use.yaml

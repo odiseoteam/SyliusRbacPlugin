@@ -20,6 +20,7 @@
             <argument type="service" id="odiseo_rbac.repository.administration_role" />
             <argument type="service" id="sylius.translation_locale_provider" />
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="router" />
             <tag name="fob.context_service" />
         </service>
 

@@ -1,0 +1,16 @@
+default:
+    suites:
+        ui_hiding_actions_a_role_cannot_use:
+            contexts:
+                - sylius.behat.context.hook.doctrine_orm
+
+                - sylius.behat.context.transform.shared_storage
+                - sylius.behat.context.transform.product
+
+                - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.admin_security
+                - sylius.behat.context.setup.product
+
+                - odiseo_rbac.behat.context.ui.administrator_permissions
+            filters:
+                tags: "@hiding_actions_a_role_cannot_use&&@ui"

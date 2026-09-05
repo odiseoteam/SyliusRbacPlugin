@@ -11,9 +11,11 @@ use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionPattern;
 use Sylius\Behat\Service\SharedStorageInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
 final class AdministratorPermissionsContext extends RawMinkContext
@@ -24,6 +26,7 @@ final class AdministratorPermissionsContext extends RawMinkContext
         private readonly RepositoryInterface $administrationRoleRepository,
         private readonly TranslationLocaleProviderInterface $localeProvider,
         private readonly ObjectManager $objectManager,
+        private readonly RouterInterface $router,
     ) {
     }
 
@@ -64,6 +67,32 @@ final class AdministratorPermissionsContext extends RawMinkContext
     }
 
     /**
+     * @When I try to open the :product product's show page
+     */
+    public function iTryToOpenTheProductsShowPage(ProductInterface $product): void
+    {
+        $this->visitPath($this->router->generate('sylius_admin_product_show', ['id' => $product->getId()]));
+    }
+
+    /**
+     * @Then I should see the :name action
+     * @Then I should see the :name widget
+     */
+    public function iShouldSeeTheHookable(string $name): void
+    {
+        Assert::notNull($this->hookable($name), sprintf('"%s" was not rendered.', $name));
+    }
+
+    /**
+     * @Then I should not see the :name action
+     * @Then I should not see the :name widget
+     */
+    public function iShouldNotSeeTheHookable(string $name): void
+    {
+        Assert::null($this->hookable($name), sprintf('"%s" is still rendered.', $name));
+    }
+
+    /**
      * @Then I should be denied access
      */
     public function iShouldBeDeniedAccess(): void
@@ -93,6 +122,16 @@ final class AdministratorPermissionsContext extends RawMinkContext
     public function theMenuShouldLeadTo(string $path): void
     {
         Assert::notNull($this->menuLinkTo($path), sprintf('The menu does not lead to "%s".', $path));
+    }
+
+    /**
+     * Matched by the test attribute Sylius' own templates carry, for the same reason the menu is
+     * matched by destination: a label is translated and the markup around it moves between
+     * versions, while this attribute is what Sylius' own suite asserts on.
+     */
+    private function hookable(string $name): ?NodeElement
+    {
+        return $this->getSession()->getPage()->find('css', sprintf('[data-test-%s]', $name));
     }
 
     /**
