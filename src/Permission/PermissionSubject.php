@@ -37,6 +37,21 @@ final class PermissionSubject
         return $operations;
     }
 
+    /**
+     * The operations that are this subject's own: everything outside the shared columns.
+     *
+     * They render as labelled checkboxes inside the row instead of as columns, because they are
+     * not a shared axis -- cancel belongs to orders, capture to one payment integration. As
+     * columns each one crossed every row of its group to hold a checkbox or two, and the table
+     * grew one more with every plugin installed.
+     *
+     * @return array<string, PermissionDefinition>
+     */
+    public function extraOperations(): array
+    {
+        return array_diff_key($this->operations(), array_flip(PermissionTree::COLUMNS));
+    }
+
     public function has(string $operation): bool
     {
         return isset($this->operations[$operation]);

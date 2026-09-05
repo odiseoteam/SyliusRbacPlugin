@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: '権限を絞り込む'
         grant: '付与'
         subject: '対象'
+        other_operations: 'その他の操作'
+        operations: '操作'
         all: 'すべて'
         what_gets_stored: '保存される内容'
         rules: '件のルール'

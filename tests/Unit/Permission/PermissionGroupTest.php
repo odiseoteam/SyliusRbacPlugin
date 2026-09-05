@@ -28,7 +28,8 @@ final class PermissionGroupTest extends TestCase
 
     /**
      * A section whose subjects are capabilities rather than resources would otherwise show six
-     * CRUD columns of dots to hold a single checkbox.
+     * CRUD columns of dots to hold a single checkbox. `view` is not one of the shared six, so
+     * such a section ends up with no columns at all and only the operations of its own rows.
      */
     public function testItOnlyPublishesTheColumnsItsSubjectsUse(): void
     {
@@ -37,10 +38,16 @@ final class PermissionGroupTest extends TestCase
             'sylius.statistics.view' => 'Statistics',
         ]);
 
-        self::assertSame(['view'], $group->columns());
+        self::assertSame([], $group->columns());
+        self::assertTrue($group->hasExtraOperations());
     }
 
-    public function testItOrdersTheSharedColumnsAsTheyAreReadAndAppendsTheRest(): void
+    /**
+     * A column has to say something comparable about every row to earn its width. `cancel` and
+     * `ship` belong to one subject each, so they render inside the row instead -- see
+     * `PermissionSubjectTest`.
+     */
+    public function testItOrdersTheSharedColumnsAsTheyAreReadAndLeavesTheRestOut(): void
     {
         $group = $this->group([
             'sylius.order.ship' => 'Orders',
@@ -49,7 +56,20 @@ final class PermissionGroupTest extends TestCase
             'sylius.order.index' => 'Orders',
         ]);
 
-        self::assertSame(['index', 'update', 'cancel', 'ship'], $group->columns());
+        self::assertSame(['index', 'update'], $group->columns());
+    }
+
+    public function testItAnnouncesTheColumnHoldingTheOperationsThatAreASubjectsOwn(): void
+    {
+        self::assertTrue($this->group([
+            'sylius.order.index' => 'Orders',
+            'sylius.order.cancel' => 'Orders',
+        ])->hasExtraOperations());
+
+        self::assertFalse($this->group([
+            'sylius.product.index' => 'Products',
+            'sylius.product.update' => 'Products',
+        ])->hasExtraOperations());
     }
 
     public function testItPutsASubjectReachedFromInsideAnotherOneRightAfterIt(): void

@@ -171,36 +171,65 @@ export default class PermissionRules {
         this.setSubjects(subjectKeys, !identifiers.every((identifier) => this.granted(identifier)));
     }
 
-    toggleColumn(subjectKeys, operation) {
-        const keys = subjectKeys.filter((subjectKey) => this.operationsOf(subjectKey).includes(`${subjectKey}.${operation}`));
-        const identifiers = keys.map((subjectKey) => `${subjectKey}.${operation}`);
+    /**
+     * A set of cells spanning several rows: all on, or all off.
+     *
+     * More than one per row, so a subject granted wholesale has to be spent before part of it can
+     * be taken away — dropping `sylius.order.*` and putting back every operation the set does not
+     * name.
+     *
+     * @param {string[]} identifiers
+     */
+    toggleIdentifiers(identifiers) {
+        if (0 === identifiers.length) {
+            return;
+        }
+
         const allOn = identifiers.every((identifier) => this.granted(identifier));
 
         if (allOn) {
             this.materialise(identifiers);
         }
 
-        keys.forEach((subjectKey) => {
-            const identifier = `${subjectKey}.${operation}`;
+        const bySubject = new Map();
+
+        identifiers.forEach((identifier) => {
+            const subjectKey = PermissionRules.keyOf(identifier);
+
+            bySubject.set(subjectKey, [...(bySubject.get(subjectKey) ?? []), identifier]);
+        });
+
+        bySubject.forEach((owned, subjectKey) => {
             const rule = `${subjectKey}.*`;
 
             if (!allOn) {
-                if (!this.granted(identifier)) {
-                    this.add(identifier);
-                }
+                owned.forEach((identifier) => {
+                    if (!this.granted(identifier)) {
+                        this.add(identifier);
+                    }
+                });
             } else if (this.patterns.includes(rule)) {
                 this.drop(rule);
                 this.operationsOf(subjectKey).forEach((other) => {
-                    if (other !== identifier) {
+                    if (!owned.includes(other)) {
                         this.add(other);
                     }
                 });
             } else {
-                this.drop(identifier);
+                owned.forEach((identifier) => this.drop(identifier));
             }
         });
 
         this.collapseAll();
+    }
+
+    /** One shared operation down every row that has it. */
+    toggleColumn(subjectKeys, operation) {
+        this.toggleIdentifiers(
+            subjectKeys
+                .filter((subjectKey) => this.operationsOf(subjectKey).includes(`${subjectKey}.${operation}`))
+                .map((subjectKey) => `${subjectKey}.${operation}`),
+        );
     }
 
     /**

@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'Filtriraj dozvole'
         grant: 'Dodijeli'
         subject: 'Resurs'
+        other_operations: 'Ostale operacije'
+        operations: 'Operacije'
         all: 'sve'
         what_gets_stored: 'Što se sprema'
         rules: 'pravila'

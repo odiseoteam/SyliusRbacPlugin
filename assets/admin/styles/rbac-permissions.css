@@ -43,6 +43,20 @@
 .rbac-permission-tree table th:not(:first-child),
 .rbac-permission-tree table td:not(:first-child) { min-width: 5rem; white-space: nowrap; }
 
+/*
+ * The operations that belong to one subject rather than to a shared column. They wrap -- a row
+ * with five of them is why they are not columns -- so the nowrap above has to be undone here,
+ * and the subject column stops absorbing all the width once this one has content to hold.
+ */
+.rbac-permission-tree table:has(.rbac-extra) th:first-child,
+.rbac-permission-tree table:has(.rbac-extra) td:first-child { width: auto; }
+.rbac-permission-tree .rbac-extra-head,
+.rbac-permission-tree .rbac-extra { white-space: normal; width: 100%; min-width: 14rem; }
+.rbac-permission-tree .rbac-extra .form-check { margin-right: .9rem; }
+
+/* Same weight as a column header, so the two kinds of control read as one table. */
+.rbac-permission-tree .rbac-extra .form-check-label { color: var(--tblr-secondary); }
+
 /* Reached from inside the row above: indented, with a rule tying it to its parent. */
 .rbac-permission-tree .rbac-nested {
     margin-left: 1.75rem;

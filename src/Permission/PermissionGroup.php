@@ -70,12 +70,17 @@ final class PermissionGroup
     }
 
     /**
-     * The columns this group's table needs: the shared ones, then whatever else it uses.
+     * The columns this group's table needs: the shared operations its subjects use, and only
+     * those.
      *
-     * Operations outside the CRUD set are concentrated in a few sections — cancel, refund and
-     * ship belong to sales and nowhere else — so giving each group only its own keeps them as
-     * checkboxes in the grid instead of a separate kind of control, without adding a column of
-     * dots to every other section.
+     * A column earns its width by saying something comparable about every row -- each resource
+     * has the same six CRUD operations, so the column reads down the table and its "all" toggle
+     * acts on more than one checkbox. Anything else belongs to one subject or two and renders
+     * inside the row instead; see `PermissionSubject::extraOperations()`.
+     *
+     * Only the ones actually used: a section whose subjects are capabilities rather than
+     * resources -- the dashboard is one -- would otherwise show six columns of dots to hold a
+     * single "View" checkbox.
      *
      * @return list<string>
      */
@@ -89,21 +94,22 @@ final class PermissionGroup
             }
         }
 
-        /**
-         * Only the columns this group actually uses, shared ones first.
-         *
-         * A section whose subjects are capabilities rather than resources — the dashboard is one
-         * — would otherwise show six CRUD columns of dots to hold a single "View" checkbox.
-         */
-        $core = array_values(array_filter(
+        return array_values(array_filter(
             PermissionTree::COLUMNS,
             static fn (string $operation): bool => isset($present[$operation]),
         ));
+    }
 
-        $extra = array_values(array_diff(array_keys($present), PermissionTree::COLUMNS));
-        sort($extra);
+    /** Whether any row here has an operation of its own, and so needs the column that holds them. */
+    public function hasExtraOperations(): bool
+    {
+        foreach ($this->subjects as $subject) {
+            if ([] !== $subject->extraOperations()) {
+                return true;
+            }
+        }
 
-        return [...$core, ...$extra];
+        return false;
     }
 
     public function permissionCount(): int

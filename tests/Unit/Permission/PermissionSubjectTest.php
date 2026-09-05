@@ -28,6 +28,22 @@ final class PermissionSubjectTest extends TestCase
         self::assertSame(['cancel', 'index'], array_keys($subject->operations()));
     }
 
+    /**
+     * The split the table is drawn from: the shared operations stay columns, everything else is
+     * this subject's own and renders inside its row.
+     */
+    public function testItSeparatesTheOperationsThatAreItsOwnFromTheSharedOnes(): void
+    {
+        $subject = $this->subject('index', 'update', 'cancel', 'resend_confirmation_email');
+
+        self::assertSame(['cancel', 'resend_confirmation_email'], array_keys($subject->extraOperations()));
+    }
+
+    public function testASubjectWithNothingButCrudHasNoOperationsOfItsOwn(): void
+    {
+        self::assertSame([], $this->subject('index', 'show', 'create', 'update', 'delete', 'bulk_delete')->extraOperations());
+    }
+
     public function testItIsNotNestedUnlessItIsReachedFromAnotherSubject(): void
     {
         self::assertNull($this->subject()->parent);

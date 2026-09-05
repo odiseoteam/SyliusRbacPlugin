@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'Filtruj uprawnienia'
         grant: 'Przyznaj'
         subject: 'Zasób'
+        other_operations: 'Inne operacje'
+        operations: 'Operacje'
         all: 'wszystko'
         what_gets_stored: 'Co zostaje zapisane'
         rules: 'reguł'

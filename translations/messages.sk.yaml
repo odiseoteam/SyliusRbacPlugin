@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'Filtrovať oprávnenia'
         grant: 'Udeliť'
         subject: 'Zdroj'
+        other_operations: 'Ďalšie operácie'
+        operations: 'Operácie'
         all: 'všetko'
         what_gets_stored: 'Čo sa ukladá'
         rules: 'pravidiel'

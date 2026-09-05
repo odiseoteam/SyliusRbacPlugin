@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'Filtruoti leidimus'
         grant: 'Suteikti'
         subject: 'Išteklius'
+        other_operations: 'Kitos operacijos'
+        operations: 'Operacijos'
         all: 'visi'
         what_gets_stored: 'Kas išsaugoma'
         rules: 'taisyklių'

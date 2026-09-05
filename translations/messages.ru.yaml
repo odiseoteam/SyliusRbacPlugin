@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'Фильтр прав доступа'
         grant: 'Предоставить'
         subject: 'Ресурс'
+        other_operations: 'Другие операции'
+        operations: 'Операции'
         all: 'все'
         what_gets_stored: 'Что сохраняется'
         rules: 'правил'

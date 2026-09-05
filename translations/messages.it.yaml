@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'Filtra permessi'
         grant: 'Concedi'
         subject: 'Risorsa'
+        other_operations: 'Altre operazioni'
+        operations: 'Operazioni'
         all: 'tutto'
         what_gets_stored: 'Cosa viene salvato'
         rules: 'regole'

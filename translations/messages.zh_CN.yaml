@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: '筛选权限'
         grant: '授予'
         subject: '资源'
+        other_operations: '其他操作'
+        operations: '操作'
         all: '全部'
         what_gets_stored: '保存的内容'
         rules: '条规则'

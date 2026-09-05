@@ -59,6 +59,16 @@
                                                 data-action="click->rbac-permissions#column">{{ 'odiseo_rbac.ui.all'|trans }}</button>
                                     </th>
                                 {% endfor %}
+
+                                {% if group.hasExtraOperations %}
+                                    {# "Other" than the shared columns -- unless there are none, as in a section whose
+                                       subjects are capabilities rather than resources. #}
+                                    <th class="rbac-extra-head">
+                                        {{ (group.columns is empty ? 'odiseo_rbac.ui.operations' : 'odiseo_rbac.ui.other_operations')|trans }}
+                                        <button type="button" class="btn btn-sm p-0 border-0 ms-2 text-secondary"
+                                                data-action="click->rbac-permissions#extras">{{ 'odiseo_rbac.ui.all'|trans }}</button>
+                                    </th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -89,6 +99,23 @@
                                             {% endif %}
                                         </td>
                                     {% endfor %}
+
+                                    {% if group.hasExtraOperations %}
+                                        <td class="rbac-extra">
+                                            {% for operation, definition in subject.extraOperations %}
+                                                <label class="form-check form-check-inline mb-0">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           data-permission="{{ subject.identifier(operation) }}"
+                                                           data-rbac-permissions-target="cell" data-action="change->rbac-permissions#cell"
+                                                           title="{{ subject.identifier(operation) }}"
+                                                           aria-label="{{ operation }} {{ subject.key }}">
+                                                    <span class="form-check-label">{{ ('odiseo_rbac.ui.operation.' ~ operation)|trans }}</span>
+                                                </label>
+                                            {% else %}
+                                                <span class="text-secondary" aria-hidden="true">·</span>
+                                            {% endfor %}
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         </tbody>

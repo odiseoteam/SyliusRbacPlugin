@@ -62,6 +62,20 @@ export default class extends Controller {
         this.render();
     }
 
+    /**
+     * The same idea as a column's "all", for the operations that are each row's own: they are not
+     * one operation down the table, but they are still a set worth granting in one go.
+     */
+    extras(event) {
+        event.preventDefault();
+
+        this.rules.toggleIdentifiers(
+            [...this.groupOf(event.currentTarget).querySelectorAll('.rbac-extra [data-permission]')]
+                .map((box) => box.dataset.permission),
+        );
+        this.render();
+    }
+
     global(event) {
         event.preventDefault();
         this.rules.setGlobal(event.currentTarget.dataset.blanket);

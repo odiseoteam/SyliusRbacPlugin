@@ -7,6 +7,8 @@ odiseo_rbac:
         filter_permissions: 'İzinleri filtrele'
         grant: 'Ver'
         subject: 'Kaynak'
+        other_operations: 'Diğer işlemler'
+        operations: 'İşlemler'
         all: 'tümü'
         what_gets_stored: 'Neyin kaydedildiği'
         rules: 'kural'
