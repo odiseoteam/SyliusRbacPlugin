@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Resend confirmation email'
             archive: 'Archive'
             restore: 'Restore'
+            capture: 'Capture'
+            reverse: 'Reverse'
+            pause: 'Pause'
+            resume: 'Resume'
+            download: 'Download'
+            send: 'Send'
         administration_role_operation:
             index: 'list roles'
             update: 'edit roles'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Configuration'
             administration: 'Administration'
             dashboard: 'Dashboard'
-            not_on_the_menu: 'Reached from inside another screen'
+            not_on_the_menu: 'Other'

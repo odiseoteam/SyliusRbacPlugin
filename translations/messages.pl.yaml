@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Wyślij ponownie e-mail potwierdzający'
             archive: 'Zarchiwizuj'
             restore: 'Przywróć'
+            capture: 'Przechwyć'
+            reverse: 'Cofnij'
+            pause: 'Wstrzymaj'
+            resume: 'Wznów'
+            download: 'Pobierz'
+            send: 'Wyślij'
         administration_role_operation:
             index: 'wyświetlanie listy ról'
             update: 'edycja ról'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Konfiguracja'
             administration: 'Administracja'
             dashboard: 'Panel'
-            not_on_the_menu: 'Dostępne z innego ekranu'
+            not_on_the_menu: 'Inne'

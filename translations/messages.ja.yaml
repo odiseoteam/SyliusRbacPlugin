@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: '確認メールを再送信'
             archive: 'アーカイブ'
             restore: '復元'
+            capture: '確定'
+            reverse: '取消'
+            pause: '一時停止'
+            resume: '再開'
+            download: 'ダウンロード'
+            send: '送信'
         administration_role_operation:
             index: 'ロール一覧の表示'
             update: 'ロールの編集'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: '設定'
             administration: '管理'
             dashboard: 'ダッシュボード'
-            not_on_the_menu: '他の画面からのみアクセス可能'
+            not_on_the_menu: 'その他'

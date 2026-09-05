@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Bevestigingsmail opnieuw verzenden'
             archive: 'Archiveren'
             restore: 'Herstellen'
+            capture: 'Vastleggen'
+            reverse: 'Terugboeken'
+            pause: 'Pauzeren'
+            resume: 'Hervatten'
+            download: 'Downloaden'
+            send: 'Verzenden'
         administration_role_operation:
             index: 'rollen weergeven'
             update: 'rollen bewerken'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Configuratie'
             administration: 'Beheer'
             dashboard: 'Dashboard'
-            not_on_the_menu: 'Bereikbaar vanuit een ander scherm'
+            not_on_the_menu: 'Overig'

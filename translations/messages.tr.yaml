@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Onay e-postasını yeniden gönder'
             archive: 'Arşivle'
             restore: 'Geri yükle'
+            capture: 'Yakala'
+            reverse: 'Geri al'
+            pause: 'Duraklat'
+            resume: 'Devam ettir'
+            download: 'İndir'
+            send: 'Gönder'
         administration_role_operation:
             index: 'rolleri listele'
             update: 'rolleri düzenle'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Yapılandırma'
             administration: 'Yönetim'
             dashboard: 'Kontrol paneli'
-            not_on_the_menu: 'Başka bir ekrandan ulaşılır'
+            not_on_the_menu: 'Diğer'

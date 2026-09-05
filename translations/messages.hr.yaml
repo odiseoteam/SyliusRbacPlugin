@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Ponovno pošalji e-poštu za potvrdu'
             archive: 'Arhiviraj'
             restore: 'Vrati'
+            capture: 'Zahvati'
+            reverse: 'Storniraj'
+            pause: 'Pauziraj'
+            resume: 'Nastavi'
+            download: 'Preuzmi'
+            send: 'Pošalji'
         administration_role_operation:
             index: 'pregled popisa uloga'
             update: 'uređivanje uloga'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Konfiguracija'
             administration: 'Administracija'
             dashboard: 'Nadzorna ploča'
-            not_on_the_menu: 'Dostupno s drugog zaslona'
+            not_on_the_menu: 'Ostalo'

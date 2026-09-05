@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'إعادة إرسال بريد التأكيد'
             archive: 'أرشفة'
             restore: 'استعادة'
+            capture: 'التقاط'
+            reverse: 'عكس'
+            pause: 'إيقاف مؤقت'
+            resume: 'استئناف'
+            download: 'تنزيل'
+            send: 'إرسال'
         administration_role_operation:
             index: 'عرض قائمة الأدوار'
             update: 'تعديل الأدوار'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'الإعدادات'
             administration: 'الإدارة'
             dashboard: 'لوحة التحكم'
-            not_on_the_menu: 'يُصل إليها من شاشة أخرى'
+            not_on_the_menu: 'أخرى'

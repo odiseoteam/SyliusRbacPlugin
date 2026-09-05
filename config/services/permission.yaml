@@ -13,6 +13,7 @@ services:
     odiseo_rbac.permission.discoverer.declared:
         class: Odiseo\SyliusRbacPlugin\Permission\Discovery\DeclaredPermissionDiscoverer
         arguments:
+            - '@router'
             - '%odiseo_rbac.declared_permissions%'
 
     odiseo_rbac.permission.discoverer.api_operation:
@@ -55,11 +56,18 @@ services:
         arguments:
             - '@router'
 
+    odiseo_rbac.permission.orphaned_role_permission_finder:
+        class: Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRolePermissionFinder
+        arguments:
+            - '@odiseo_rbac.permission.registry'
+            - '@odiseo_rbac.repository.administration_role'
+
     odiseo_rbac.command.debug_permissions:
         class: Odiseo\SyliusRbacPlugin\Command\DebugPermissionsCommand
         arguments:
             - '@odiseo_rbac.permission.discoverer'
             - '@odiseo_rbac.permission.orphaned_route_finder'
+            - '@odiseo_rbac.permission.orphaned_role_permission_finder'
             - '@odiseo_rbac.permission.route_map'
             - '@odiseo_rbac.repository.administration_role'
             - '@router'

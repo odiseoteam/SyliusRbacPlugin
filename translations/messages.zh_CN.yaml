@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: '重新发送确认邮件'
             archive: '归档'
             restore: '恢复'
+            capture: '确认扣款'
+            reverse: '撤销'
+            pause: '暂停'
+            resume: '恢复订阅'
+            download: '下载'
+            send: '发送'
         administration_role_operation:
             index: '查看角色列表'
             update: '编辑角色'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: '配置'
             administration: '管理'
             dashboard: '仪表盘'
-            not_on_the_menu: '需从其他页面进入'
+            not_on_the_menu: '其他'

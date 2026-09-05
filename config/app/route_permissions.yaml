@@ -81,6 +81,132 @@ odiseo_sylius_rbac:
         sylius_api_admin_taxon_taxon_image_post:
             permission: sylius.taxon.update
 
+        # --- Third-party plugins bundled with sylius-standard (adyen, mollie, paypal, refund) --
+        #
+        # None of these follow the `{vendor}.controller.{subject}` convention closely enough for
+        # RoutePermissionResolver to resolve them on its own: either the route never declares
+        # `permission: true`, the controller is invokable with no action name to read an
+        # operation from, or (mollie_subscription's transitions) the service id carries an extra
+        # segment RoutePermissionResolver does not expect. Confirmed against a real
+        # sylius-standard install, `odiseo:rbac:debug` scenario -- see ALPHA_VERIFICATION.md.
+
+        # "adyen_order_payment", not "order_payment": the tree's row label drops the vendor
+        # prefix, keeping only the subject segment, so a plain "order_payment" here would render
+        # identically to Mollie's own row below -- two rows, both labelled "Order payment", with
+        # no way to tell which is which.
+        sylius_adyen_admin_order_payment_generate_pay_link:
+            permission: sylius_adyen.adyen_order_payment.generate
+            group: sales
+
+        sylius_adyen_admin_order_payment_reverse:
+            permission: sylius_adyen.adyen_order_payment.reverse
+            group: sales
+
+        sylius_adyen_admin_order_payment_capture:
+            permission: sylius_adyen.adyen_order_payment.capture
+            group: sales
+
+        sylius_mollie_admin_mollie_methods:
+            permission: sylius_mollie.mollie_method.view
+            group: configuration
+
+        sylius_mollie_admin_test_api_keys:
+            permission: sylius_mollie.mollie_method.execute
+            group: configuration
+
+        # Reordering payment methods in the list -- the same operation Sylius' own
+        # `updatePositionsAction` maps to.
+        sylius_mollie_admin_mollie_method_change_position:
+            permission: sylius_mollie.mollie_method.update
+            group: configuration
+
+        sylius_mollie_admin_mollie_method_delete_logo:
+            permission: sylius_mollie.mollie_method.delete
+            group: configuration
+
+        # "mollie_order_payment": same reasoning as Adyen's above, in the other direction.
+        sylius_mollie_admin_payment_link_generate:
+            permission: sylius_mollie.mollie_order_payment.generate
+            group: sales
+
+        sylius_mollie_admin_onboarding_wizard_status:
+            permission: sylius_mollie.mollie_onboarding_wizard.view
+            group: configuration
+
+        sylius_mollie_admin_onboarding_wizard_completed:
+            permission: sylius_mollie.mollie_onboarding_wizard.update
+            group: configuration
+
+        # Same subject as the already-auto-discovered `sylius_mollie.mollie_subscription.index`
+        # and `.show` -- only these three transitions cannot be resolved automatically.
+        sylius_mollie_admin_mollie_subscription_cancel:
+            permission: sylius_mollie.mollie_subscription.cancel
+            group: sales
+
+        sylius_mollie_admin_mollie_subscription_pause:
+            permission: sylius_mollie.mollie_subscription.pause
+            group: sales
+
+        sylius_mollie_admin_mollie_subscription_resume:
+            permission: sylius_mollie.mollie_subscription.resume
+            group: sales
+
+        # Payum's own generic refund endpoint, wired in by sylius/refund-plugin. Same subject as
+        # `sylius_refund_complete_refund_payment` below -- both act on a RefundPayment -- with its
+        # own operation rather than folding into "complete": executing the refund against the
+        # gateway and marking the resulting payment completed are two different moments.
+        payum_refund_do:
+            permission: sylius_refund.refund_payment.refund
+            group: sales
+
+        sylius_mollie_admin_order_payment_refund:
+            permission: sylius_mollie.mollie_order_payment.refund
+            group: sales
+
+        # Both operate on a PaymentMethod (confirmed against sylius/paypal-plugin's own
+        # DownloadPayoutsReportAction/EnableSellerAction, which look one up by {id} despite the
+        # route and action names suggesting a standalone "payouts report" or "seller" resource) --
+        # so both reuse Sylius' own `sylius.payment_method` subject rather than inventing a
+        # PayPal-specific one that would render as an identical, indistinguishable second
+        # "Payment method" row next to the real payment methods screen.
+        sylius_paypal_admin_download_payouts_report:
+            permission: sylius.payment_method.download
+            group: sales
+
+        sylius_paypal_admin_enable_seller:
+            permission: sylius.payment_method.update
+            group: configuration
+
+        # "order_refund", not "refund": PermissionTree nests a subject under any sibling whose
+        # name is its prefix followed by "_" (the same rule that puts "product taxon" under
+        # "product"). "refund" would have swallowed the already-existing "refund_payment" as a
+        # child, stripping its "Refund " prefix down to a bare "Payments" -- indistinguishable
+        # from Sylius' own `sylius.payment` row.
+        sylius_refund_order_refunds_list:
+            permission: sylius_refund.order_refund.index
+            group: sales
+
+        sylius_refund_refund_units:
+            permission: sylius_refund.order_refund.view
+            group: sales
+
+        # Same subject as the already-auto-discovered `sylius_refund.credit_memo.index`.
+        sylius_refund_credit_memo_details:
+            permission: sylius_refund.credit_memo.show
+            group: sales
+
+        sylius_refund_admin_credit_memo_download:
+            permission: sylius_refund.credit_memo.download
+            group: sales
+
+        sylius_refund_complete_refund_payment:
+            permission: sylius_refund.refund_payment.complete
+            group: sales
+
+        sylius_refund_admin_credit_memo_send:
+            permission: sylius_refund.credit_memo.send
+            group: sales
+
     # Deliberately excluded from the permission check. Listed rather than omitted so a coverage
     # check can tell a considered decision apart from an oversight.
     excluded_routes:

@@ -1,4 +1,9 @@
-# Installation
+# Manual installation
+
+Every step, with nothing delegated to Symfony Flex. Use this if the project doesn't have Flex, if
+`composer require` didn't apply the recipe (contrib recipes need `extra.symfony.allow-contrib`
+in `composer.json`), or to see exactly what the recipe automates. Most installs should follow
+[installation.md](installation.md) instead.
 
 ## 1. Require the plugin
 
@@ -6,15 +11,36 @@
 composer require odiseoteam/sylius-rbac-plugin
 ```
 
-Symfony Flex's recipe registers the bundle and imports `config/packages/` and `config/routes/`
-for you. If your project doesn't use Flex, or the recipe didn't apply (contrib recipes need
-`extra.symfony.allow-contrib` in `composer.json`), follow
-[manual-installation.md](manual-installation.md).
+## 2. Enable the plugin
 
-## 2. Wire the assets
+```php
+<?php
+// config/bundles.php
 
-The role editor's permission tree is a Stimulus controller. Like Sylius' own admin controllers
-and the `symfony/ux-*` packages, it ships as an npm package the consuming app depends on locally.
+return [
+    // ...
+    Odiseo\SyliusRbacPlugin\OdiseoSyliusRbacPlugin::class => ['all' => true],
+];
+```
+
+## 3. Import the plugin configuration
+
+```yaml
+# config/packages/odiseo_sylius_rbac_plugin.yaml
+imports:
+    - { resource: "@OdiseoSyliusRbacPlugin/config/config.yaml" }
+```
+
+## 4. Import the routes
+
+```yaml
+# config/routes/odiseo_sylius_rbac_plugin.yaml
+odiseo_sylius_rbac_admin:
+    resource: "@OdiseoSyliusRbacPlugin/config/routes/admin.yaml"
+    prefix: /admin
+```
+
+## 5. Wire the assets
 
 ```json
 // package.json
@@ -47,11 +73,7 @@ yarn install --force
 yarn build
 ```
 
-Skip this step and the role editor still renders the tree, but checking a permission does
-nothing: the checkbox never reaches the form, so the role saves without it and nothing reports
-the miss.
-
-## 3. Make your `AdminUser` administration-role aware
+## 6. Make your `AdminUser` administration-role aware
 
 ```php
 <?php
@@ -76,14 +98,14 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
 }
 ```
 
-## 4. Update the database schema
+## 7. Update the database schema
 
 ```bash
 bin/console doctrine:migrations:migrate
 bin/console cache:clear
 ```
 
-## 5. Give someone access
+## 8. Give someone access
 
 An administrator with no role is denied everything, including the screen that assigns roles, so
 right after installing nobody can reach the admin panel. Grant the first one from the console:
@@ -96,7 +118,7 @@ bin/console odiseo:rbac:grant <username-or-email> super_admin --create
 writing. From then on roles are managed from **Administration › Roles**.
 
 This command never goes through the permission check, so it is also the way back if everyone is
-locked out later, a role deleted by mistake, a database edited by hand, or an upgrade left
+locked out later — a role deleted by mistake, a database edited by hand, or an upgrade left
 half-applied. Keep console access available to whoever administers the shop.
 
 ## Customizing the administration role entity

@@ -197,6 +197,7 @@ final class Configuration implements ConfigurationInterface
         'sylius_admin:exchange_rate:form' => 'sylius.exchange_rate.update',
         'sylius_admin:locale:form' => 'sylius.locale.update',
         'sylius_admin:order:form' => 'sylius.order.update',
+        'sylius_admin:payment_method:form' => 'sylius.payment_method.update',
         'sylius_admin:product:form' => 'sylius.product.update',
         'sylius_admin:product:generate_product_variants_form' => 'sylius.product.update',
         'sylius_admin:product:product_attribute_autocomplete' => 'sylius.product.update',
@@ -216,6 +217,13 @@ final class Configuration implements ConfigurationInterface
         'sylius_admin:taxon:delete' => 'sylius.taxon.delete',
         'sylius_admin:taxon:form' => 'sylius.taxon.update',
         'sylius_admin:zone:form' => 'sylius.zone.update',
+
+        // --- Third-party plugins bundled with sylius-standard --------------------------
+        'sylius_mollie:admin:email_template:form' => 'sylius_mollie.template_mollie_email.update',
+        // Creates a sandbox PayPal payment method from the payment method grid -- same
+        // permission as sylius_paypal_admin_enable_seller, which acts on the same resource
+        // (see the comment on that route in config/app/route_permissions.yaml).
+        'sylius_paypal:create_sandbox_modal' => 'sylius.payment_method.update',
     ];
 
     /**

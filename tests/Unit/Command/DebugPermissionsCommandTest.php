@@ -7,11 +7,13 @@ namespace Tests\Odiseo\SyliusRbacPlugin\Unit\Command;
 use Odiseo\SyliusRbacPlugin\Command\DebugPermissionsCommand;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\DiscoveredPermissions;
+use Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRolePermissionFinder;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRouteFinder;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\PermissionDiscovererInterface;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionDefinition;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionIdentifier;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionPattern;
+use Odiseo\SyliusRbacPlugin\Permission\PermissionRegistry;
 use Odiseo\SyliusRbacPlugin\Permission\RoutePermissionMapInterface;
 use Odiseo\SyliusRbacPlugin\Repository\AdministrationRoleRepositoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -198,6 +200,58 @@ final class DebugPermissionsCommandTest extends TestCase
     }
 
     /**
+     * A rename (or an uninstalled plugin) leaves the old string sitting in the role, granting
+     * nothing -- silent unless something reads it back against today's registry.
+     */
+    public function testItReportsARoleHoldingAPermissionThatNoLongerExists(): void
+    {
+        $role = $this->createMock(AdministrationRoleInterface::class);
+        $role->method('getCode')->willReturn('catalog_manager');
+        $role->method('getPermissionPatterns')->willReturn([PermissionPattern::fromString('sylius.product.view')]);
+
+        $tester = $this->runCommand(
+            [new PermissionDefinition(PermissionIdentifier::fromString('sylius.product.index'))],
+            [],
+            [],
+            roles: [$role],
+        );
+
+        $output = $tester->getDisplay();
+
+        self::assertStringContainsString('Roles holding a permission that no longer exists', $output);
+        self::assertStringContainsString('catalog_manager', $output);
+        self::assertStringContainsString('sylius.product.view', $output);
+    }
+
+    /** A wildcard is never orphaned: it is meant to keep matching whatever gets added later. */
+    public function testAWildcardPatternMatchingNothingTodayIsNotReportedAsOrphaned(): void
+    {
+        $role = $this->createMock(AdministrationRoleInterface::class);
+        $role->method('getCode')->willReturn('super_admin');
+        $role->method('getPermissionPatterns')->willReturn([PermissionPattern::fromString('sylius_mollie.*.*')]);
+
+        $tester = $this->runCommand([], [], [], roles: [$role]);
+
+        self::assertStringNotContainsString('Roles holding a permission that no longer exists', $tester->getDisplay());
+    }
+
+    public function testStrictFailsWhenARoleHoldsAnOrphanedPermission(): void
+    {
+        $role = $this->createMock(AdministrationRoleInterface::class);
+        $role->method('getCode')->willReturn('catalog_manager');
+        $role->method('getPermissionPatterns')->willReturn([PermissionPattern::fromString('sylius.product.view')]);
+
+        $tester = $this->runCommand(
+            [new PermissionDefinition(PermissionIdentifier::fromString('sylius.product.index'))],
+            ['--strict' => true],
+            [],
+            roles: [$role],
+        );
+
+        self::assertSame(Command::FAILURE, $tester->getStatusCode());
+    }
+
+    /**
      * @param list<PermissionDefinition> $definitions
      * @param array<string, mixed> $input
      * @param array<string, string> $unprotectedRoutes
@@ -249,6 +303,7 @@ final class DebugPermissionsCommandTest extends TestCase
         $tester = new CommandTester(new DebugPermissionsCommand(
             $discoverer,
             new OrphanedRouteFinder($router),
+            new OrphanedRolePermissionFinder(new PermissionRegistry($definitions), $roleRepository),
             $routeMap,
             $roleRepository,
             $router,

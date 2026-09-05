@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Iš naujo siųsti patvirtinimo el. laišką'
             archive: 'Archyvuoti'
             restore: 'Atkurti'
+            capture: 'Fiksuoti'
+            reverse: 'Atšaukti'
+            pause: 'Pristabdyti'
+            resume: 'Tęsti'
+            download: 'Atsisiųsti'
+            send: 'Siųsti'
         administration_role_operation:
             index: 'rolių sąrašo peržiūra'
             update: 'rolių redagavimas'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Konfigūracija'
             administration: 'Administravimas'
             dashboard: 'Skydelis'
-            not_on_the_menu: 'Pasiekiama iš kito ekrano'
+            not_on_the_menu: 'Kita'

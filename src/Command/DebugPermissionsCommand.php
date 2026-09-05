@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Odiseo\SyliusRbacPlugin\Command;
 
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRolePermissionFinder;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\OrphanedRouteFinder;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\PermissionDiscovererInterface;
 use Odiseo\SyliusRbacPlugin\Permission\Exception\InvalidPermissionSyntaxException;
@@ -44,6 +45,7 @@ final class DebugPermissionsCommand extends Command
     public function __construct(
         private readonly PermissionDiscovererInterface $discoverer,
         private readonly OrphanedRouteFinder $orphanedRouteFinder,
+        private readonly OrphanedRolePermissionFinder $orphanedRolePermissionFinder,
         private readonly RoutePermissionMapInterface $routeMap,
         private readonly AdministrationRoleRepositoryInterface $administrationRoleRepository,
         private readonly RouterInterface $router,
@@ -111,13 +113,15 @@ final class DebugPermissionsCommand extends Command
 
         $this->reportUnprotectedRoutes($io, $discovered->unprotectedRoutes);
         $orphaned = $this->reportOrphanedDeclarations($io);
+        $orphanedRolePermissions = $this->reportOrphanedRolePermissions($io);
 
         /**
          * Plain listing always succeeds: this is an inspection tool and scripts that pipe it
          * should not start failing. `--strict` is the opt-in for CI, and exists so a project can
-         * guard itself against a route nobody protected or a declaration nobody cleaned up.
+         * guard itself against a route nobody protected, a declaration nobody cleaned up, or a
+         * role still holding a permission that was renamed or dropped out from under it.
          */
-        if ($strict && ([] !== $discovered->unprotectedRoutes || [] !== $orphaned)) {
+        if ($strict && ([] !== $discovered->unprotectedRoutes || [] !== $orphaned || [] !== $orphanedRolePermissions)) {
             return Command::FAILURE;
         }
 
@@ -174,6 +178,33 @@ final class DebugPermissionsCommand extends Command
         ));
 
         return array_column($rows, 0);
+    }
+
+    /** @return list<string> every role found holding an orphaned permission */
+    private function reportOrphanedRolePermissions(SymfonyStyle $io): array
+    {
+        $stale = $this->orphanedRolePermissionFinder->find();
+
+        if ([] === $stale) {
+            return [];
+        }
+
+        $rows = [];
+
+        foreach ($stale as $role => $patterns) {
+            foreach ($patterns as $pattern) {
+                $rows[] = [$role, $pattern];
+            }
+        }
+
+        $io->section('Roles holding a permission that no longer exists');
+        $io->table(['Role', 'Permission'], $rows);
+        $io->warning(sprintf(
+            '%d role(s) still hold a permission renamed or removed since it was granted. It grants nothing now -- edit the role to drop it.',
+            count($stale),
+        ));
+
+        return array_keys($stale);
     }
 
     private function describeRoute(SymfonyStyle $io, string $route): int

@@ -38,6 +38,12 @@ odiseo_rbac:
             resend_confirmation_email: 'Znovu odeslat potvrzovací e-mail'
             archive: 'Archivovat'
             restore: 'Obnovit'
+            capture: 'Zachytit'
+            reverse: 'Stornovat'
+            pause: 'Pozastavit'
+            resume: 'Obnovit odběr'
+            download: 'Stáhnout'
+            send: 'Odeslat'
         administration_role_operation:
             index: 'zobrazení seznamu rolí'
             update: 'úprava rolí'
@@ -50,4 +56,4 @@ odiseo_rbac:
             configuration: 'Konfigurace'
             administration: 'Administrace'
             dashboard: 'Přehled'
-            not_on_the_menu: 'Dostupné z jiné obrazovky'
+            not_on_the_menu: 'Ostatní'
