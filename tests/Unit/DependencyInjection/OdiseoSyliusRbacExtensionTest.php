@@ -129,6 +129,24 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
         );
     }
 
+    /**
+     * All of them, not any. A route one plugin registers only while a second one is installed is
+     * gone as soon as either leaves, so a declaration naming two packages needs both.
+     */
+    public function testADeclarationNamingSeveralPackagesNeedsEveryOneOfThem(): void
+    {
+        $container = $this->load([[
+            'route_permissions' => [
+                'route_from_an_integration_between_two_plugins' => [
+                    'permission' => 'sylius.thing.view',
+                    'package' => ['sylius/sylius', 'some-vendor/a-plugin-that-is-not-installed'],
+                ],
+            ],
+        ]]);
+
+        self::assertSame([], $container->getParameter('odiseo_rbac.declared_permissions'));
+    }
+
     /** @param list<array<string, mixed>> $configs */
     private function load(array $configs = []): ContainerBuilder
     {

@@ -3,7 +3,7 @@
 ## 1. Require the plugin
 
 ```bash
-composer require odiseoteam/sylius-rbac-plugin
+composer require odiseoteam/sylius-rbac-plugin --no-scripts
 ```
 
 Symfony Flex's recipe registers the bundle and imports `config/packages/` and `config/routes/`
@@ -81,6 +81,7 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
 ```bash
 bin/console doctrine:migrations:migrate
 bin/console cache:clear
+bin/console assets:install public
 ```
 
 ## 5. Give someone access

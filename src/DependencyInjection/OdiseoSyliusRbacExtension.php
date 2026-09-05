@@ -72,28 +72,36 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
     }
 
     /**
-     * Drops the declarations whose package this installation does not have.
+     * Drops the declarations whose packages this installation does not have.
      *
      * A route only some installations ship -- the payment plugins `sylius-standard` bundles, a
-     * plugin an application chose not to install -- is declared with the package that owns it.
-     * Without the package there is no route, so the declaration covers nothing and would report
+     * plugin an application chose not to install -- is declared with the packages it needs to
+     * exist. Without them there is no route, so the declaration covers nothing and would report
      * itself orphaned on every `odiseo:rbac:debug`, in an application that did nothing wrong.
      *
-     * Only absence excuses it: with the package installed the declaration is kept and checked
-     * like any other, so a route that plugin renames still surfaces as orphaned. Removing a
+     * All of them, not any: a route one plugin registers only while a second one is installed --
+     * Mollie's refund screen, which lives under its own `integration/refund-plugin/` -- is gone
+     * as soon as either is. The package that ships the routing file is not always the one that
+     * decides whether it loads, so check where the route is declared rather than whose name it
+     * carries.
+     *
+     * Only absence excuses a declaration: with the packages installed it is kept and checked like
+     * any other, so a route one of those plugins renames still surfaces as orphaned. Removing a
      * plugin whose permissions roles already hold is caught by `OrphanedRolePermissionFinder`
      * instead, which is the half of it that needs acting on.
      *
-     * @param array<string, array{permission: string, label: string|null, group: string|null, package: string|null}> $routePermissions
+     * @param array<string, array{permission: string, label: string|null, group: string|null, package: list<string>}> $routePermissions
      *
-     * @return array<string, array{permission: string, label: string|null, group: string|null, package: string|null}>
+     * @return array<string, array{permission: string, label: string|null, group: string|null, package: list<string>}>
      */
     private static function installedOnly(array $routePermissions): array
     {
         return array_filter(
             $routePermissions,
-            static fn (array $permission): bool => null === $permission['package'] ||
-                InstalledVersions::isInstalled($permission['package']),
+            static fn (array $permission): bool => [] === array_filter(
+                $permission['package'],
+                static fn (string $package): bool => !InstalledVersions::isInstalled($package),
+            ),
         );
     }
 

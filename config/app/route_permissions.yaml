@@ -167,18 +167,25 @@ odiseo_sylius_rbac:
             package: sylius/mollie-plugin
             group: sales
 
-        # Payum's own generic refund endpoint, wired in by sylius/refund-plugin. Same subject as
-        # `sylius_refund_complete_refund_payment` below -- both act on a RefundPayment -- with its
-        # own operation rather than folding into "complete": executing the refund against the
-        # gateway and marking the resulting payment completed are two different moments.
+        # Payum's own generic refund endpoint. The route lives in payum/payum-bundle, but nothing
+        # in Sylius imports it -- `sylius/mollie-plugin` does, from its own admin routing, which
+        # is why the package named here is Mollie and not the bundle the route comes from. Same
+        # subject as `sylius_refund_complete_refund_payment` below -- both act on a RefundPayment
+        # -- with its own operation rather than folding into "complete": executing the refund
+        # against the gateway and marking the resulting payment completed are two different
+        # moments.
         payum_refund_do:
             permission: sylius_refund.refund_payment.refund
-            package: sylius/refund-plugin
+            package: sylius/mollie-plugin
             group: sales
 
+        # Needs both: Mollie ships this one under `config/integration/refund-plugin/`, so it is
+        # registered only while sylius/refund-plugin is installed too.
         sylius_mollie_admin_order_payment_refund:
             permission: sylius_mollie.mollie_order_payment.refund
-            package: sylius/mollie-plugin
+            package:
+                - sylius/mollie-plugin
+                - sylius/refund-plugin
             group: sales
 
         # Both operate on a PaymentMethod (confirmed against sylius/paypal-plugin's own

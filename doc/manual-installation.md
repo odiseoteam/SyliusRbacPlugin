@@ -8,7 +8,7 @@ in `composer.json`), or to see exactly what the recipe automates. Most installs 
 ## 1. Require the plugin
 
 ```bash
-composer require odiseoteam/sylius-rbac-plugin
+composer require odiseoteam/sylius-rbac-plugin --no-scripts
 ```
 
 ## 2. Enable the plugin
@@ -103,6 +103,7 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
 ```bash
 bin/console doctrine:migrations:migrate
 bin/console cache:clear
+bin/console assets:install public
 ```
 
 ## 8. Give someone access
