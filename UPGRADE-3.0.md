@@ -22,7 +22,32 @@ composer require odiseoteam/sylius-rbac-plugin:^3.0
 
 Sylius 2.0 or newer is required. There is no 3.0 for Sylius 1.x.
 
-### 2. Update your `AdminUser`
+### 2. Repoint your config and route imports
+
+Flex only applies a recipe on a fresh install, never on an update of a package it already
+configured, so `composer require` alone leaves your own `config/packages/*.yaml` and
+`config/routes/*.yaml` importing paths that no longer exist:
+
+```diff
+ # config/packages/odiseo_sylius_rbac_plugin.yaml
+ imports:
+-    - { resource: "@OdiseoSyliusRbacPlugin/Resources/config/config.yaml" }
++    - { resource: "@OdiseoSyliusRbacPlugin/config/config.yaml" }
+```
+
+```diff
+ # config/routes/odiseo_sylius_rbac_plugin.yaml
+ odiseo_sylius_rbac_admin:
+-    resource: "@OdiseoSyliusRbacPlugin/Resources/config/routing/admin.yaml"
+-    prefix: /admin
++    resource: "@OdiseoSyliusRbacPlugin/config/routes/admin.yaml"
++    prefix: '/%sylius_admin.path_name%'
+```
+
+Skip this and every command below fails before doing anything, starting with `cache:clear`:
+`Unable to find file "@OdiseoSyliusRbacPlugin/Resources/config/config.yaml"`.
+
+### 3. Update your `AdminUser`
 
 An administrator now holds **several** roles, so the trait's mapping changed from `ManyToOne` to a
 join table. You don't need to touch the class itself if it already uses
@@ -37,7 +62,7 @@ join table. You don't need to touch the class itself if it already uses
 +$adminUser->hasAdministrationRole($role);
 ```
 
-### 3. Run the schema migration
+### 4. Run the schema migration
 
 ```bash
 bin/console doctrine:migrations:migrate
@@ -49,7 +74,7 @@ administrator ↔ role join table. It also copies the old permission blob into
 
 At the end it tells you how many roles are still holding pre-3.0 permissions.
 
-### 4. Translate the stored permissions
+### 5. Translate the stored permissions
 
 ```bash
 bin/console odiseo:rbac:migrate-permissions --dry-run   # read the plan
@@ -66,7 +91,7 @@ before continuing, they're usually sections pointing at routes that don't exist 
 `legacy_permissions` stays in place, so you can re-run the command and check the old values
 whenever you need to.
 
-### 5. Check what your roles ended up with
+### 6. Check what your roles ended up with
 
 ```bash
 bin/console odiseo:rbac:debug <a-route-your-team-uses>
@@ -75,7 +100,7 @@ bin/console odiseo:rbac:debug <a-route-your-team-uses>
 The per-role yes/no table is the fastest way to confirm nobody lost access they actually need.
 Then open a role in the admin and look at *Show identifiers* → *What gets stored*.
 
-### 6. Deal with uncovered routes
+### 7. Deal with uncovered routes
 
 3.0 denies any admin route with no matching permission, including routes from your application
 and from third-party plugins that the old engine let through.
@@ -88,7 +113,7 @@ Declare what it lists ([Extending](doc/extending.md#routes-that-are-not-resource
 there's a lot, `deny_unprotected_admin_routes: false` keeps the application usable while you work
 through them. Turn it back on once the list is empty.
 
-### 7. Wire the role editor's assets
+### 8. Wire the role editor's assets
 
 The permission tree is a Stimulus controller now. That's step 2 of the
 [installation](doc/installation.md). Skip it and the tree still renders, but it won't save
