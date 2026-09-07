@@ -1,3 +1,5 @@
+[← Installation](installation.md) · [Docs index](README.md) · [The permission model →](permissions.md)
+
 # Manual installation
 
 Every step, with nothing delegated to Symfony Flex. Use this if the project doesn't have Flex, if
@@ -122,7 +124,7 @@ bin/console odiseo:rbac:grant <username-or-email> super_admin --create
 writing. From then on roles are managed from **Administration › Roles**.
 
 This command never goes through the permission check, so it is also the way back if everyone is
-locked out later — a role deleted by mistake, a database edited by hand, or an upgrade left
+locked out later: a role deleted by mistake, a database edited by hand, or an upgrade left
 half-applied. Keep console access available to whoever administers the shop.
 
 ## Customizing the administration role entity
@@ -136,3 +138,7 @@ doctrine:
         resolve_target_entities:
             Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
 ```
+
+---
+
+[← Installation](installation.md) · [Docs index](README.md) · [The permission model →](permissions.md)
