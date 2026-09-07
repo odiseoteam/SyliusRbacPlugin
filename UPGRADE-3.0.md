@@ -4,7 +4,7 @@
 administrator can hold several roles, and the API is protected. Stored data is migrated by a
 command; code that touched the plugin's classes needs changes.
 
-Read [the permission model](doc/permissions.md) first — most of the upgrade is understanding what
+Read [the permission model](doc/permissions.md) first: most of the upgrade is understanding what
 your old sections become.
 
 > [!WARNING]
@@ -25,7 +25,7 @@ Sylius 2.0 or newer is required. There is no 3.0 for Sylius 1.x.
 ### 2. Update your `AdminUser`
 
 An administrator now holds **several** roles, so the trait's mapping changed from `ManyToOne` to a
-join table. The class itself needs no edit if it already uses `AdministrationRoleAwareTrait` — but
+join table. The class itself needs no edit if it already uses `AdministrationRoleAwareTrait`, but
 any of your own code calling the old accessors does:
 
 ```diff
@@ -56,8 +56,8 @@ bin/console odiseo:rbac:migrate-permissions --dry-run   # read the plan
 bin/console odiseo:rbac:migrate-permissions             # apply it
 ```
 
-The translation uses your section map — `sylius_sections` and `custom_sections`, including any
-sections your application declared — to work out which routes each stored section reached, and
+The translation uses your section map, `sylius_sections` and `custom_sections`, including any
+sections your application declared, to work out which routes each stored section reached, and
 which permissions those routes require now.
 
 Roles that cannot be translated in full are reported and the command exits non-zero. Read those
@@ -76,7 +76,7 @@ role in the admin and look at *Show identifiers* → *What gets stored*.
 
 ### 6. Deal with uncovered routes
 
-3.0 denies any admin route no permission covers — including routes of your application and of
+3.0 denies any admin route no permission covers, including routes of your application and of
 third-party plugins that the old engine let through.
 
 ```bash
@@ -85,7 +85,7 @@ bin/console odiseo:rbac:debug --strict
 
 Declare what it lists ([Extending](doc/extending.md#routes-that-are-not-resource-routes)). If there
 are many, `deny_unprotected_admin_routes: false` keeps the application usable while you work
-through them — put it back on when the list is empty.
+through them, put it back on when the list is empty.
 
 ### 7. Wire the role editor's assets
 
@@ -108,7 +108,7 @@ New in 3.0: the permission tree is a Stimulus controller. Step 2 of the
 ### Configuration
 
 `sylius_sections` and `custom_sections` still validate, so an upgrading application boots with its
-old configuration in place — but **nothing at runtime reads them**. Only the migration command
+old configuration in place, but **nothing at runtime reads them**. Only the migration command
 does, and they are removed in 4.0.
 
 Everything else under `odiseo_sylius_rbac` is new. See the
@@ -140,7 +140,7 @@ The 2.x permission value objects survive under `Odiseo\SyliusRbacPlugin\Legacy\`
 ```
 
 `AdministrationRoleInterface` is now `CodeAwareInterface` and `TranslatableInterface`: a role has a
-stable `code` — what commands and fixtures refer to — and a translated `name`.
+stable `code` (what commands and fixtures refer to) and a translated `name`.
 
 ### Commands
 
@@ -150,8 +150,8 @@ stable `code` — what commands and fixtures refer to — and a translated `name
 | `odiseo:rbac:normalize-administrators` | removed |
 | `odiseo:rbac:grant-access` | `odiseo:rbac:grant` |
 | `odiseo:rbac:grant-access-to-given-administrator` | `odiseo:rbac:grant <administrator> <role>` |
-| — | `odiseo:rbac:debug` |
-| — | `odiseo:rbac:migrate-permissions` |
+| *(new)* | `odiseo:rbac:debug` |
+| *(new)* | `odiseo:rbac:migrate-permissions` |
 
 ### Templates and layout
 

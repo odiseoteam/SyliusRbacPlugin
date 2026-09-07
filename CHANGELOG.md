@@ -29,11 +29,11 @@ A rewrite of the permission engine. Upgrading requires steps: see [UPGRADE-3.0.m
   grants, a filter, and a panel showing the exact patterns that will be stored.
 - **Anti-lockout guard**: a role change that would leave the administrator making it unable to
   manage roles is refused.
-- **`odiseo:rbac:debug`** — lists the vocabulary, explains one route and which roles cover it,
+- **`odiseo:rbac:debug`**: lists the vocabulary, explains one route and which roles cover it,
   reports uncovered routes, orphaned declarations and roles holding permissions that no longer
   exist. `--strict` makes it CI-usable.
-- **`odiseo:rbac:migrate-permissions`** — translates pre-3.0 section permissions into patterns.
-- **`ScopeResolverInterface`** — an extension point for restricting a permission to part of the
+- **`odiseo:rbac:migrate-permissions`**: translates pre-3.0 section permissions into patterns.
+- **`ScopeResolverInterface`**: an extension point for restricting a permission to part of the
   data.
 - **A Symfony Flex recipe**, cutting installation from eight manual steps to three.
 - **Translations in 18 locales.**

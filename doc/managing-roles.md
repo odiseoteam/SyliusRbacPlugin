@@ -14,12 +14,12 @@ and fixtures refer to; the name is what administrators see, and is translatable 
 Sylius resource.
 
 Nothing here is built in. `super_admin`, `catalog`, `sales` and `read_only` exist only because the
-[fixtures](extending.md#fixtures) created them — rename them, delete them, or start from an empty
+[fixtures](extending.md#fixtures) created them: rename them, delete them, or start from an empty
 list.
 
 > [!WARNING]
 > Deleting a role revokes it from every administrator holding it, immediately. If it was the only
-> role of the person deleting it, they are locked out on the next request — recover with
+> role of the person deleting it, they are locked out on the next request. Recover with
 > [`odiseo:rbac:grant`](console.md#granting-access).
 
 ## Editing permissions
@@ -30,7 +30,7 @@ Each group is a section of the admin menu; each row is a subject; each column is
 
 | Control | What it does |
 |---|---|
-| Row checkbox | Everything on that subject — stored as `sylius.product.*` |
+| Row checkbox | Everything on that subject, stored as `sylius.product.*` |
 | Group checkbox | Everything in that section |
 | Column **all** | That operation on every subject in the section |
 | **Grant: Everything / Read only / Nothing** | Across the whole application: `*.*.*`, the read operations, or clear |
@@ -39,8 +39,8 @@ Each group is a section of the admin menu; each row is a subject; each column is
 Checkboxes are tri-state: a subject or group box is filled when everything below it is granted,
 and shows a dash when only part of it is.
 
-Nesting means *reached from inside another screen* — coupons under promotions, product taxa under
-taxons — so the row above tells you where in the admin that permission is actually used.
+Nesting means *reached from inside another screen*: coupons under promotions, product taxa under
+taxons, so the row above tells you where in the admin that permission is actually used.
 
 ### Seeing what will be stored
 
@@ -52,7 +52,7 @@ Every row gains its identifier, and *What gets stored* lists the exact patterns 
 The two counters next to it read: how many **rules** are stored, and how many **permissions** those
 rules grant today.
 
-The distinction matters. `sylius.product.*` is one rule granting six permissions now — and seven
+The distinction matters. `sylius.product.*` is one rule granting six permissions now, and seven
 after a Sylius release that adds an operation to products. That is the point of storing patterns
 rather than expanding them, and this panel is where you can see which of your choices became a
 wildcard and which became a list.
@@ -67,7 +67,7 @@ without changing it, including resources added later by a plugin you have not in
 ![Assigning administration roles](images/admin-user-roles.png)
 
 The **Roles** field on the administrator's own screen. An administrator may hold **several roles**,
-and permissions add up — there is no ordering and no precedence, because there is nothing to
+and permissions add up. There is no ordering and no precedence, because there is nothing to
 resolve: roles only grant.
 
 An administrator with **no** role is denied everything, including this screen. That is the intended
@@ -82,7 +82,7 @@ naming what you were about to lose.
 
 It checks your effective access, not the checkbox: another of your roles may still grant it, and a
 `*.*.*` in the role you are editing covers it without naming it. Deleting the role, or taking it
-off your own account, are not guarded — see
+off your own account, are not guarded; see
 [Troubleshooting](troubleshooting.md#i-locked-everyone-out).
 
 ## A role that stops working

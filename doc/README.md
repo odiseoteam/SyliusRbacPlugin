@@ -36,14 +36,14 @@ Back to the [project README](../README.md).
 
 ## In one minute
 
-A **permission** is `{package}.{subject}.{operation}` — `sylius.product.update`. It exists because
+A **permission** is `{package}.{subject}.{operation}`, for example `sylius.product.update`. It exists because
 some route, API operation or button requires it; nobody has to declare it by hand.
 
 An **administration role** stores **patterns**, where any segment may be `*`. `sylius.product.*`
 is every operation on products, `*.*.index` is a read-only role, `*.*.*` is a super administrator.
 
-An **administrator** holds any number of roles, and their permissions add up. Everything else —
-the menu, the buttons, the routes, the API — asks the same question of the same voter:
+An **administrator** holds any number of roles, and their permissions add up. Everything else,
+the menu, the buttons, the routes, the API, asks the same question of the same voter:
 
 ```
 may this administrator perform {package}.{subject}.{operation}?

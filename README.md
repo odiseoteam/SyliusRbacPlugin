@@ -29,12 +29,12 @@ This plugin splits that into **roles you define**, granting one operation on one
 
 - **A permission per operation, not per section.** `sylius.product.update` is a different permission from `sylius.product.delete`. Wildcards keep it manageable: `sylius.product.*`, `*.*.index`, `*.*.*`.
 - **Every admin route covered.** Permissions are discovered from Sylius' own resource metadata, so a route added by the next Sylius release, or by any plugin you install, shows up on its own.
-- **Admin API coverage.**
+- **The admin API is protected too.** `/api/v2/admin` operations check the same permissions as the HTML admin, so an administrator's JWT cannot do more than their screens can.
 - **Deny by default.** A route nobody protected is denied, not allowed. Deliberate exceptions are a config list, so "left open" is distinguishable from "forgotten".
-- **Nothing dead on screen.** Menu entries, grid actions, action buttons and dashboard widgets the role cannot use are not rendered.
+- **Menu, grids and buttons are filtered too.** Menu entries, grid actions, action buttons and dashboard widgets the role cannot use are not rendered.
 - **Several roles per administrator**, additive, plus an anti-lockout guard that refuses a change that would leave you unable to manage roles.
 - **Console tooling**: grant access from the CLI, list what exists, find orphans, migrate v2 data.
-- **18 locales** and a Symfony Flex recipe.
+- **18 locales**.
 
 ## Screenshots
 
@@ -67,22 +67,6 @@ This plugin splits that into **roles you define**, granting one operation on one
     </tr>
 </table>
 
-## Quick start
-
-```bash
-composer require odiseoteam/sylius-rbac-plugin
-bin/console doctrine:migrations:migrate
-bin/console odiseo:rbac:grant <your-admin-email> super_admin --create
-```
-
-Two manual steps remain — making your `AdminUser` role-aware and wiring the tree's Stimulus
-controller. Both are in [Installation](doc/installation.md), and skipping either is noisy, not
-silent.
-
-> [!WARNING]
-> An administrator with no role is denied everything, including the screen that assigns roles.
-> Run `odiseo:rbac:grant` right after installing, or nobody can get into the admin.
-
 ## What a permission looks like
 
 Every permission is `{package}.{subject}.{operation}`, the same code Sylius' own resource
@@ -96,7 +80,7 @@ sylius.order.ship                      an operation that is not CRUD
 *.*.*                                  a super administrator
 ```
 
-A role stores the patterns, never their expansion — so `sylius.product.*` keeps covering
+A role stores the patterns, never their expansion, so `sylius.product.*` keeps covering
 operations that Sylius adds after the role was created. See
 [The permission model](doc/permissions.md).
 
@@ -126,22 +110,13 @@ Only the latest minor is supported. Security fixes land on `master`.
 
 ## Demo
 
-Want a live walkthrough of this plugin? [Get in touch](https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin)
-— or browse all our Sylius plugins at [odiseo.io](https://odiseo.io/en/products/sylius-plugins?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin).
+Want a live walkthrough of this plugin? [Get in touch](https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin), or browse all our Sylius plugins at [odiseo.io](https://odiseo.io/en/products/sylius-plugins?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin).
 
 ## Credits
 
-<p>
-    <img src="badge-partner-by-sylius.png" alt="Sylius partner" width="120" align="left" />
-    Maintained by <a href="https://odiseo.io/en?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin">Odiseo</a>,
-    a Sylius partner. Want us to help you with this plugin or any Sylius project?
-    <a href="https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin">Get in touch</a>.
-    <br clear="left" />
-</p>
+This plugin is maintained by [Odiseo](https://odiseo.io/en?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin). Want us to help you with this plugin or any Sylius project? [Get in touch](https://odiseo.io/en/contact-us?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin).
 
-Running a marketplace? Vendor role separation is one of the things a
-[multi-vendor marketplace for Sylius](https://odiseo.io/en/products/sylius-marketplace-plugin?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin)
-has to get right, and this plugin is how we do it.
+Running a marketplace? Vendor role separation is one of the things a [multi-vendor marketplace for Sylius](https://odiseo.io/en/products/sylius-marketplace-plugin?utm_source=github&utm_medium=readme&utm_campaign=sylius-rbac-plugin) has to get right, and this plugin is how we do it.
 
 ## License
 

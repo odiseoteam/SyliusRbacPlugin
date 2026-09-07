@@ -43,7 +43,7 @@ filtered too**, without configuration: both are resolved through the same route 
 
 ## Routes that are not resource routes
 
-An invokable controller, a custom action, an export endpoint — anything the resource controller
+An invokable controller, a custom action, an export endpoint, anything the resource controller
 does not check. Declare what it requires:
 
 ```yaml
@@ -81,7 +81,7 @@ app:
 ```
 
 Group headings come from the admin menu, so `group: catalog` files a permission under the same
-heading as the rest of the catalog. To create a heading of your own, add the menu section — the
+heading as the rest of the catalog. To create a heading of your own, add the menu section: the
 tree follows the menu, not the other way around.
 
 Two more knobs, both presentation only:
@@ -93,7 +93,7 @@ Two more knobs, both presentation only:
 
 ## Buttons, widgets and live components
 
-A button you added through a Twig hook is not gated by the route behind it — the route denies the
+A button you added through a Twig hook is not gated by the route behind it: the route denies the
 request, but the button still renders and invites a 403. Gate it:
 
 ```yaml
@@ -138,7 +138,7 @@ if ($this->authorizationChecker->isGranted('app.supplier.export')) {
 security: "is_granted('app.supplier.export')"
 ```
 
-The attribute is the permission identifier itself — no `ROLE_` prefix, no voter registration.
+The attribute is the permission identifier itself, no `ROLE_` prefix, no voter registration.
 
 ## Restricting a permission to part of the data
 
@@ -168,7 +168,7 @@ services:
         decorates: odiseo_rbac.security.scope_resolver
 ```
 
-The voter calls it on every decision it would otherwise grant, so returning `false` denies — on all
+The voter calls it on every decision it would otherwise grant, so returning `false` denies, on all
 six surfaces at once, with nothing else to change. `$subject` is whatever the caller passed to
 `isGranted()`, and is `null` when the check is about a screen rather than a record.
 

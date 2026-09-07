@@ -63,7 +63,7 @@ Use it for the two kinds of route Sylius does not cover on its own: routes that 
 and routes that declare `permission: true` but whose controller cannot be mapped to a resource
 action, so nothing would ever check it.
 
-Declaring a route is also how you **override** what a resource route asks for — declarations win
+Declaring a route is also how you **override** what a resource route asks for: declarations win
 over discovery, on both the HTML admin and the API.
 
 > [!NOTE]
@@ -96,7 +96,7 @@ password-reset routes, the API's password reset and authentication token endpoin
 `sylius_admin_dashboard`.
 
 The dashboard is open on purpose, so a role missing one widget's permission lands somewhere after
-logging in instead of on a 403 — the widgets themselves are gated individually.
+logging in instead of on a 403; the widgets themselves are gated individually.
 
 > [!WARNING]
 > This list is for permissions that deliberately do not exist, not for skipping one that does.
@@ -150,7 +150,7 @@ buttons. See [`config/app/hookable_permissions.yaml`](../config/app/hookable_per
 
 ## `ungated_action_hookables`
 
-Hookables under an `*.actions*` hook that deliberately carry no permission — form controls
+Hookables under an `*.actions*` hook that deliberately carry no permission: form controls
 (`update`, `cancel`), navigation (`list`, `show`, `view_in_store`), and rows that are not buttons
 despite the hook name.
 
@@ -175,7 +175,7 @@ odiseo_sylius_rbac:
 ```
 
 `sylius_admin_live_component` is one route shared by every live component, so no single declared
-permission means the right thing for all of it — hence one entry per component.
+permission means the right thing for all of it, hence one entry per component.
 
 <details>
 <summary>What the plugin ships</summary>
@@ -232,7 +232,7 @@ odiseo_sylius_rbac:
         sylius.address: sylius.customer
 ```
 
-Presentation only — it never reaches a stored pattern. A subject whose identifier already extends
+Presentation only, it never reaches a stored pattern. A subject whose identifier already extends
 its parent (`sylius.promotion_coupon` under `sylius.promotion`) is nested without being listed.
 
 The defaults exist because the identifier is built from the controller's service name, not from
@@ -242,7 +242,7 @@ where the screen is reached: "Manage product positions" is `sylius.product_taxon
 
 ## `folded_api_subjects`
 
-Resources the API exposes but the admin has no screen for — images, translations, provinces,
+Resources the API exposes but the admin has no screen for, images, translations, provinces,
 promotion rules. Their operations resolve to the parent's `update` or `show` instead of getting
 permissions of their own.
 
@@ -252,8 +252,8 @@ odiseo_sylius_rbac:
         app.supplier_translation: app.supplier
 ```
 
-The rule of thumb behind the defaults: if the admin edits it as part of the parent's form — a row
-of a collection, a translation in the locale accordion — and nobody would grant it separately, it
+The rule of thumb behind the defaults: if the admin edits it as part of the parent's form (a row
+of a collection, a translation in the locale accordion) and nobody would grant it separately, it
 is not a subject of its own. Folding keeps it out of both the registry and the tree, so the tree
 lists screens rather than database tables.
 
@@ -282,7 +282,7 @@ odiseo_sylius_rbac:
 
 They are still accepted so an application upgrading from 2.x boots with its old configuration in
 place, and so a role holding a custom section can be translated into the routes that section
-actually covered. **Nothing at runtime reads them** — only
+actually covered. **Nothing at runtime reads them**, only
 [`odiseo:rbac:migrate-permissions`](console.md#migrating-from-2x) does.
 
 They are removed in 4.0. See [Upgrading to 3.0](../UPGRADE-3.0.md).

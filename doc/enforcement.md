@@ -28,18 +28,18 @@ $this->denyAccessUnlessGranted('sylius.order.refund', $order);
 | [Live components](#live-components) | The live action is denied |
 
 The first two are the boundary; the rest exist so an administrator never sees a control that
-would answer 403. **Hiding is never the protection** — every hidden thing is denied on its own.
+would answer 403. **Hiding is never the protection**: every hidden thing is denied on its own.
 
 ### Admin routes
 
 Three kinds of route reach the admin, and only one is handled by Sylius itself:
 
 1. **A resource route** carrying `_sylius: permission: true`. The resource controller already
-   resolves it to a permission code and checks it — the plugin only fills the authorization socket
+   resolves it to a permission code and checks it, the plugin only fills the authorization socket
    Sylius leaves open, so the check reaches the voter instead of always answering `true`.
 2. **A route named in `route_permissions`.** Checked by the plugin's own listener, because nothing
-   else looks at those declarations. This covers what Sylius leaves uncovered — impersonation,
-   resending a confirmation email, invokable controllers — and anything you declare yourself.
+   else looks at those declarations. This covers what Sylius leaves uncovered (impersonation,
+   resending a confirmation email, invokable controllers) and anything you declare yourself.
 3. **Anything else.** Denied, unless it is listed in `excluded_routes`. See
    [deny by default](#deny-by-default).
 
@@ -50,7 +50,7 @@ resolved per request, from the alias or component name the request carries.
 #### Workflow transitions get their own operation
 
 Sylius applies a state machine transition through `updateAction`, so cancelling an order would ask
-for `sylius.order.update` — the same permission as editing one. The plugin substitutes the
+for `sylius.order.update`, the same permission as editing one. The plugin substitutes the
 transition instead:
 
 ```
@@ -67,7 +67,7 @@ API derives the same operation from the URI so the two cannot disagree.
 Every `/api/v2/admin` operation is checked against the same identifiers as the HTML admin, so an
 administrator's JWT can never do more than their screens can.
 
-Resources with no admin screen of their own — images, translations, provinces, promotion rules —
+Resources with no admin screen of their own, images, translations, provinces, promotion rules,
 do not get permissions of their own. They fold into their parent: any mutation asks for
 `{parent}.update`, any read for `{parent}.show`. Editing a product image is editing the product.
 
@@ -77,7 +77,7 @@ the login redirect an HTML firewall would produce.
 ### The main menu
 
 Menu entries are removed based on **each item's own route**, looked up in the same map the request
-will use — so a visible entry always leads somewhere that opens. A parent left with no children
+will use, so a visible entry always leads somewhere that opens. A parent left with no children
 and no destination of its own is removed too, rather than expanding into nothing.
 
 | Super admin | Catalog manager |
@@ -91,7 +91,7 @@ editing a role.
 ### Grid actions
 
 Grid buttons are filtered by decorating the grid definition converter, which is what makes this
-cover grids the plugin has never heard of — yours included.
+cover grids the plugin has never heard of, yours included.
 
 Two ways an action names what it does, and both are used: the standard resource types (`create`,
 `update`, `delete`, `show`) resolve through the grid's model class exactly as the resource
@@ -111,16 +111,16 @@ of the page that embeds it, never through an HTTP route a listener could interce
 Which hookable requires what is configuration
 ([`hookable_permissions`](configuration.md#hookable_permissions)), not a copy of the hook, so it
 keeps working when Sylius changes the component or template behind it. A denied hookable renders
-nothing rather than throwing — a missing widget is a gap in the layout, not a broken page.
+nothing rather than throwing: a missing widget is a gap in the layout, not a broken page.
 
-A container of gated items — an *Actions* dropdown, a button group — is granted on **any** of the
+A container of gated items (an *Actions* dropdown, a button group) is granted on **any** of the
 permissions inside it, so it does not open onto nothing.
 
 ### Live components
 
 A live component's first render is a hookable; its follow-up requests are the shared
 `sylius_admin_live_component` route. Both are covered, with each component mapped to the permission
-its own screen already checks — the dashboard's "shipments to ship" widget asks for
+its own screen already checks: the dashboard's "shipments to ship" widget asks for
 `sylius.shipment.index`, so a role missing that resource simply does not see the widget.
 
 Components that change nothing and expose nothing, such as the dashboard's channel selector, are
@@ -140,7 +140,7 @@ odiseo_sylius_rbac:
         - sylius_admin_dashboard
 ```
 
-Listing a route is what makes "decided to leave it open" distinguishable from "forgot about it" —
+Listing a route is what makes "decided to leave it open" distinguishable from "forgot about it",
 and the plugin's own test suite verifies the list, failing if something declared public is not
 actually anonymous, or if an entry names a route that no longer exists.
 
@@ -164,7 +164,7 @@ additive, so another of your roles may still grant it, and a `*.*.*` in the role
 covers it without naming it.
 
 Only your own access, and only on update. Deleting a role, or removing it from your own account,
-are deliberately left open — and [`odiseo:rbac:grant`](console.md#granting-access) is the way back
+are deliberately left open, and [`odiseo:rbac:grant`](console.md#granting-access) is the way back
 from any of them.
 
 ## Restricting *which records*, not which screens
@@ -184,7 +184,7 @@ interface ScopeResolverInterface
 ```
 
 The shipped implementation allows everything. Replacing or decorating the service is how you make a
-permission reach only part of the data — the orders of one channel, say — without touching any of
+permission reach only part of the data, the orders of one channel, say, without touching any of
 the six surfaces above. See [Extending](extending.md#restricting-a-permission-to-part-of-the-data).
 
 ---

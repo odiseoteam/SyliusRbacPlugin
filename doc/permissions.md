@@ -15,7 +15,7 @@ A permission identifier is always three segments:
 
 | Segment | What it is | Examples |
 |---|---|---|
-| `package` | The bundle that owns the subject — never a business domain | `sylius`, `odiseo_rbac`, `sylius_refund` |
+| `package` | The bundle that owns the subject, never a business domain | `sylius`, `odiseo_rbac`, `sylius_refund` |
 | `subject` | Usually a resource, sometimes a capability with no resource behind it | `product`, `order`, `impersonation` |
 | `operation` | What is being done to it | `index`, `show`, `create`, `update`, `delete`, `bulk_delete`, `ship`, `refund` |
 
@@ -40,7 +40,7 @@ Two rules the format enforces, both checked when a string is parsed:
 
 `catalog`, `sales` and `marketing` are *not* packages. Domains like those mirror the admin menu,
 which is presentation and moves; the package is the code that owns the resource, which does not.
-The menu still decides where a permission is *shown* — see [the tree](#the-tree) — it just never
+The menu still decides where a permission is *shown* (see [the tree](#the-tree)); it just never
 reaches the stored value.
 
 ## Patterns
@@ -72,7 +72,7 @@ precedence rule, and precedence rules make "can this role do X?" impossible to a
 at the role.
 
 > [!NOTE]
-> Removing access means removing a pattern, or removing a role from an administrator — never
+> Removing access means removing a pattern, or removing a role from an administrator, never
 > adding a negative one.
 
 ## Where identifiers come from
@@ -84,18 +84,18 @@ sources, merged into one registry:
 |---|---|
 | Resource routes | Every admin route whose controller resolves to a resource action, via Sylius' own metadata |
 | API operations | Every `/api/v2/admin` operation, including sub-resources with no admin screen |
-| Declarations | `route_permissions` entries — for routes Sylius leaves uncovered, and for your own |
+| Declarations | `route_permissions` entries, for routes Sylius leaves uncovered, and for your own |
 | Live components | Admin live components mapped to the permission their screen already checks |
 
 The consequence worth remembering: **install a plugin, and its permissions appear in the tree;
-remove it, and they disappear** — no configuration edit either way. What stays behind is any role
+remove it, and they disappear**, no configuration edit either way. What stays behind is any role
 that still holds a pattern naming something that no longer exists, which
 [`odiseo:rbac:debug`](console.md#finding-orphans) reports.
 
 ### Naming and grouping a permission
 
 Discovery gives a permission a machine-made name. To give one a readable label and file it under a
-heading, declare it in configuration. Declaring does not create the permission — it only describes
+heading, declare it in configuration. Declaring does not create the permission, it only describes
 one that discovery already found, or names one for a route nothing else covers. See
 [Extending](extending.md).
 
@@ -111,7 +111,7 @@ operation.
   so the menu can be reorganised without invalidating a single role. Anything with no menu entry
   of its own ends up under **Other**.
 - **Shared columns first**: `index`, `show`, `create`, `update`, `delete`, `bulk_delete`. A row
-  without one of them says something true — that resource has no such operation.
+  without one of them says something true: that resource has no such operation.
 - **Everything else is an extra operation**, shown as a labelled checkbox at the end of the row:
   `ship`, `refund`, `resend_confirmation_email`, `execute`.
 - **Nested rows** are subjects reached only from inside another subject's screen: coupons under
@@ -129,7 +129,7 @@ sylius.product.index   sylius.product.show   sylius.product.update
 sylius.product_taxon.*   sylius.product_variant.*   sylius.taxon.index
 ```
 
-That panel is the answer to "what did this checkbox actually save?" — see
+That panel is the answer to "what did this checkbox actually save?"; see
 [Managing roles](managing-roles.md).
 
 ## Roles

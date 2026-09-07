@@ -14,7 +14,7 @@ bin/console odiseo:rbac:grant <username-or-email> super_admin --create
 It prints who can currently reach the roles screen before writing anything, so you can confirm the
 lockout is real. Add `--dry-run` to see the plan first.
 
-Nothing else is needed — no database edit, no disabling the plugin.
+Nothing else is needed, no database edit, no disabling the plugin.
 
 ## The admin is empty right after installing
 
@@ -33,7 +33,7 @@ The three answers that explain almost every case:
 
 | Output | What it means |
 |---|---|
-| `Requires: x.y.z` and your role says `no` | The role really is missing it — grant it in the tree |
+| `Requires: x.y.z` and your role says `no` | The role really is missing it, grant it in the tree |
 | `No permission covers this route` | Nothing declared it, and [deny-by-default](enforcement.md#deny-by-default) denied it |
 | `Route "..." does not exist` | The name is wrong; the 403 is coming from somewhere else |
 
@@ -66,7 +66,7 @@ bin/console odiseo:rbac:debug --strict
 
 Then declare them, or ask the plugin's author to
 [ship its own declarations](extending.md#shipping-declarations-from-a-plugin). While you work
-through a long list, `deny_unprotected_admin_routes: false` unblocks the application — put it back
+through a long list, `deny_unprotected_admin_routes: false` unblocks the application. Put it back
 on when the list is empty.
 
 ## The permission tree does not save anything
@@ -97,7 +97,7 @@ deny, at runtime, with no explanation.
 ## A permission is granted but the menu entry is missing
 
 Menu entries are filtered by **the route each item points at**, not by the section it sits in. An
-entry can require a different permission than the screens under it — the parent's own destination.
+entry can require a different permission than the screens under it, the parent's own destination.
 Check what the item's route asks for:
 
 ```bash
@@ -114,7 +114,7 @@ Declarations are read at container build time. In `prod`:
 bin/console cache:clear
 ```
 
-The plugin's own files are tracked as container resources, so `dev` rebuilds on its own — but a
+The plugin's own files are tracked as container resources, so `dev` rebuilds on its own, but a
 configuration file added under `config/packages/` in an unusual location may not be.
 
 ## After upgrading from 2.x, roles grant nothing
@@ -132,16 +132,16 @@ The full procedure is in [Upgrading to 3.0](../UPGRADE-3.0.md).
 
 Two lists, neither of which breaks anything at runtime:
 
-- **Orphaned declarations** — a `route_permissions` or `excluded_routes` entry naming a route that
+- **Orphaned declarations**: a `route_permissions` or `excluded_routes` entry naming a route that
   no longer exists. Usually a route Sylius renamed, or a plugin you removed. Delete the entry; if
   the route was renamed, re-point it, because nothing is checking the new name.
-- **Roles holding a permission that no longer exists** — what a removed plugin leaves behind.
+- **Roles holding a permission that no longer exists**: what a removed plugin leaves behind.
   Harmless, and re-installing the plugin makes them meaningful again. Clean them up from the role's
   screen if the plugin is gone for good.
 
 ## The API allows more than the admin does
 
-It should not: both check the same identifiers. Two things to verify —
+It should not: both check the same identifiers. Two things to verify:
 
 1. The request really is an admin API request (`/api/v2/admin/...`). Shop endpoints are outside
    this plugin's scope.

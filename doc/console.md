@@ -28,7 +28,7 @@ bin/console odiseo:rbac:grant sylius@example.com super_admin --create
 The administrator is looked up by **either** username or email, so whoever is locked out does not
 also have to guess which one it is.
 
-Before writing anything the command reports who can currently reach the roles screen — because the
+Before writing anything the command reports who can currently reach the roles screen, because the
 first question is whether the lockout is real. If somebody else can still manage roles, this is the
 wrong tool: do it from the admin panel.
 
@@ -93,7 +93,7 @@ Roles
 ```
 
 The answer per role is computed exactly the way the voter computes it at runtime, wildcards
-included — this is the fastest way to settle "why can't this person open that screen?".
+included, which is the fastest way to settle "why can't this person open that screen?".
 
 Three other outcomes:
 
@@ -108,7 +108,7 @@ $ bin/console odiseo:rbac:debug not_a_route
  [ERROR] Route "not_a_route" does not exist.
 ```
 
-A route that does not exist is reported as such, rather than as "nobody checks it" — a typo should
+A route that does not exist is reported as such, rather than as "nobody checks it": a typo should
 not invite you to declare a permission for a phantom route.
 
 ### The coverage check
@@ -122,8 +122,8 @@ and the thing to run after upgrading Sylius or installing a plugin.
 
 ### Finding orphans
 
-The normal output also lists **orphaned declarations** — a `route_permissions` or `excluded_routes`
-entry naming a route that no longer exists — and **roles holding a permission that no longer
+The normal output also lists **orphaned declarations** (a `route_permissions` or `excluded_routes`
+entry naming a route that no longer exists) and **roles holding a permission that no longer
 exists**, which is what a removed plugin leaves behind.
 
 Neither breaks anything at runtime. Both are worth cleaning up: an orphaned declaration is usually
@@ -136,7 +136,7 @@ bin/console odiseo:rbac:migrate-permissions [--dry-run] [--overwrite]
 ```
 
 Translates the pre-3.0 section-based permissions stored on each role into the new patterns, using
-the section map — including any `custom_sections` your application declared — to work out which
+the section map, including any `custom_sections` your application declared, to work out which
 routes each stored section actually reached.
 
 | Option | Effect |
