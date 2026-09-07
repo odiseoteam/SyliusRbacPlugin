@@ -6,12 +6,12 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
-### 3.0.0
+## [3.0.0] - 2026-09-07
 
 A full rewrite of the permission engine. See [UPGRADE-3.0.md](UPGRADE-3.0.md) for the upgrade
 steps.
 
-#### Added
+### Added
 
 - **Per-operation permissions**, `{package}.{subject}.{operation}`, using Sylius' own permission
   codes. Roles store patterns with wildcards (`sylius.product.*`, `*.*.index`, `*.*.*`), never
@@ -40,7 +40,7 @@ steps.
 - **Translations in 18 locales.**
 - Predefined roles as fixtures: `super_admin`, `catalog`, `sales`, `read_only`.
 
-#### Changed
+### Changed
 
 - Administrators hold a collection of roles: `getAdministrationRole()` /
   `setAdministrationRole()` are replaced by `getAdministrationRoles()`, `addAdministrationRole()`,
@@ -52,7 +52,7 @@ steps.
   root instead of `src/Resources/`.
 - Sylius 2.0, 2.1 and 2.2 are supported; PHP 8.2+; Symfony 6.4 and 7.x.
 
-#### Removed
+### Removed
 
 - The section-based engine: `Access\Checker\*`, `Access\Listener\AccessCheckListener`,
   `Access\Creator\*`, `Access\Menu\AdminMenuAccessListener`, `Provider\*`, the `Action\*`
@@ -60,12 +60,12 @@ steps.
 - `odiseo:rbac:install` and `odiseo:rbac:normalize-administrators`.
 - Support for Sylius 1.x.
 
-#### Deprecated
+### Deprecated
 
 - `sylius_sections` and `custom_sections` are read only by the migration command, and are removed
   in 4.0.
 
-#### Fixed
+### Fixed
 
 - Administrators without a role no longer trigger a 500; they are denied, which is an ordinary
   state.
@@ -84,6 +84,7 @@ Sylius 2.0 support.
 Releases before 3.0 are listed on the
 [releases page](https://github.com/odiseoteam/SyliusRbacPlugin/releases).
 
-[Unreleased]: https://github.com/odiseoteam/SyliusRbacPlugin/compare/v2.0.1...master
+[Unreleased]: https://github.com/odiseoteam/SyliusRbacPlugin/compare/v3.0.0...master
+[3.0.0]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v3.0.0
 [2.0.1]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v2.0.1
 [2.0.0]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v2.0.0
