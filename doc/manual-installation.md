@@ -1,3 +1,5 @@
+[← Installation](installation.md) · [Docs index](README.md) · [The permission model →](permissions.md)
+
 # Manual installation
 
 Every step, with nothing delegated to Symfony Flex. Use this if the project doesn't have Flex, if
@@ -136,3 +138,7 @@ doctrine:
         resolve_target_entities:
             Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
 ```
+
+---
+
+[← Installation](installation.md) · [Docs index](README.md) · [The permission model →](permissions.md)

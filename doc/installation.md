@@ -1,3 +1,5 @@
+[Docs index](README.md) · [Manual installation](manual-installation.md) · [The permission model →](permissions.md)
+
 # Installation
 
 ## 1. Require the plugin
@@ -114,3 +116,7 @@ doctrine:
         resolve_target_entities:
             Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
 ```
+
+---
+
+[Docs index](README.md) · [Manual installation](manual-installation.md) · [The permission model →](permissions.md)
