@@ -2,9 +2,9 @@
 
 # Extending
 
-How your own resources, routes and plugins take part in the permission system. The full list of
-configuration keys is in the [configuration reference](configuration.md); this page is the "when do
-I need which" version.
+How to hook your own resources, routes and plugins into the permission system. The full list of
+configuration keys is in the [configuration reference](configuration.md); this page is more about
+when you'd actually reach for each one.
 
 ## A custom resource needs nothing
 
@@ -18,8 +18,8 @@ app_admin_supplier_delete
 app_admin_supplier_bulk_delete
 ```
 
-Because it is a Sylius resource, its routes already carry `permission: true` and the resource
-controller already resolves them to permission codes. They show up in the tree on their own:
+Since it's a Sylius resource, its routes already carry `permission: true`, and the resource
+controller already resolves them to permission codes. They just show up in the tree:
 
 ```bash
 bin/console odiseo:rbac:debug | grep supplier
@@ -34,17 +34,17 @@ app.supplier.update
 ```
 
 The `package` segment comes from the resource's own alias (`app.supplier` → `app`), so it lands
-where the rest of your application's permissions do. **Grid buttons and menu entries for it are
-filtered too**, without configuration: both are resolved through the same route map.
+next to the rest of your application's permissions. **Grid buttons and menu entries get filtered
+too**, with no configuration needed, since both go through the same route map.
 
 > [!TIP]
-> If a resource does *not* appear, its routes are probably declared without `permission: true`.
-> That is the one thing worth checking before reaching for configuration.
+> If a resource doesn't show up, check whether its routes are missing `permission: true`. That's
+> the usual reason before you reach for any configuration.
 
 ## Routes that are not resource routes
 
 An invokable controller, a custom action, an export endpoint, anything the resource controller
-does not check. Declare what it requires:
+doesn't check on its own. Declare what it needs:
 
 ```yaml
 # config/packages/odiseo_sylius_rbac_plugin.yaml
@@ -57,10 +57,10 @@ odiseo_sylius_rbac:
 ```
 
 Without this the route is **denied** to everyone, because
-[deny-by-default](enforcement.md#deny-by-default) is on. That is the intended failure mode: you
-find out immediately, not the day someone discovers the endpoint is open.
+[deny-by-default](enforcement.md#deny-by-default) is on. That's on purpose: you find out right
+away instead of finding out the day someone notices the endpoint is wide open.
 
-If it should require nothing at all, say so explicitly:
+If the route really doesn't need a permission, say so explicitly:
 
 ```yaml
 odiseo_sylius_rbac:
@@ -80,21 +80,21 @@ app:
             supplier_export: 'Export suppliers'
 ```
 
-Group headings come from the admin menu, so `group: catalog` files a permission under the same
-heading as the rest of the catalog. To create a heading of your own, add the menu section: the
+Group headings come from the admin menu, so `group: catalog` puts a permission under the same
+heading as the rest of catalog. If you want a heading of your own, add the menu section first, the
 tree follows the menu, not the other way around.
 
-Two more knobs, both presentation only:
+Two more settings, both just for presentation:
 
 - [`subject_parents`](configuration.md#subject_parents) nests a subject under the one whose screen
   reaches it.
 - [`folded_api_subjects`](configuration.md#folded_api_subjects) folds an API-only resource into its
-  parent, so it never becomes a row of its own.
+  parent, so it never shows up as its own row.
 
 ## Buttons, widgets and live components
 
-A button you added through a Twig hook is not gated by the route behind it: the route denies the
-request, but the button still renders and invites a 403. Gate it:
+A button you added through a Twig hook isn't gated by the route behind it. The route will deny the
+request, but the button still renders, so it just invites a 403. Gate it directly:
 
 ```yaml
 odiseo_sylius_rbac:
@@ -103,7 +103,7 @@ odiseo_sylius_rbac:
             export: app.supplier.export
 ```
 
-A live component follows the same idea, mapped to the permission its screen already checks:
+A live component works the same way, just map it to the permission its screen already checks:
 
 ```yaml
 odiseo_sylius_rbac:
@@ -121,7 +121,7 @@ Inside a Twig template you can also ask directly:
 
 ## In your own code
 
-The voter answers to `is_granted()` everywhere Symfony does:
+The voter works with `is_granted()` wherever Symfony calls it:
 
 ```php
 // A controller
@@ -138,12 +138,12 @@ if ($this->authorizationChecker->isGranted('app.supplier.export')) {
 security: "is_granted('app.supplier.export')"
 ```
 
-The attribute is the permission identifier itself, no `ROLE_` prefix, no voter registration.
+Notice the identifier is used directly, there's no `ROLE_` prefix and nothing to register.
 
 ## Restricting a permission to part of the data
 
-Permissions answer *which screens*. To answer *which records*, implement `ScopeResolverInterface`
-and decorate the shipped service:
+Permissions only answer *which screens*. If you also need *which records*, implement
+`ScopeResolverInterface` and decorate the default service:
 
 ```php
 final readonly class ChannelScopeResolver implements ScopeResolverInterface
@@ -168,15 +168,15 @@ services:
         decorates: odiseo_rbac.security.scope_resolver
 ```
 
-The voter calls it on every decision it would otherwise grant, so returning `false` denies, on all
-six surfaces at once, with nothing else to change. `$subject` is whatever the caller passed to
-`isGranted()`, and is `null` when the check is about a screen rather than a record.
+The voter calls this on every decision it would otherwise grant, so returning `false` denies it
+across all six surfaces at once, with nothing else to change. `$subject` is whatever got passed to
+`isGranted()`, and it's `null` when the check is about a screen rather than a record.
 
 ## Shipping declarations from a plugin
 
-A plugin should declare its own permissions, so that installing it puts them in the tree and
-removing it takes them out. Prepend them from your extension rather than relying on the
-application's imports:
+If you're building a plugin, declare its permissions so installing it puts them in the tree and
+removing it takes them back out. Prepend them from your extension instead of relying on the
+application to import them:
 
 ```php
 public function prepend(ContainerBuilder $container): void
@@ -192,12 +192,12 @@ public function prepend(ContainerBuilder $container): void
 }
 ```
 
-Guarding on the extension being present keeps the plugin usable without this one. Prepending also
-means the application can still override any single entry by key.
+Checking the extension is present keeps your plugin usable without this one installed. Prepending
+also means the application can still override any single entry by key.
 
 ## Fixtures
 
-Roles can be seeded like any other Sylius resource:
+You can seed roles like any other Sylius resource:
 
 ```yaml
 sylius_fixtures:
@@ -221,13 +221,13 @@ sylius_fixtures:
                         usernames: ['supplier@example.com']
 ```
 
-Both are re-runnable: an existing code is reused rather than inserted twice, and a username nothing
-created is skipped.
+Both fixtures are safe to run again: an existing code gets reused instead of duplicated, and a
+username nothing created just gets skipped.
 
 ## Replacing the role entity
 
-`AdminUser` references `AdministrationRoleInterface`, so pointing it at your own implementation is
-a `resolve_target_entities` entry:
+`AdminUser` references `AdministrationRoleInterface`, so to point it at your own implementation,
+add a `resolve_target_entities` entry:
 
 ```yaml
 doctrine:

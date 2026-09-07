@@ -8,7 +8,8 @@ All notable changes to this project are documented here. The format is based on
 
 ### 3.0.0
 
-A rewrite of the permission engine. Upgrading requires steps: see [UPGRADE-3.0.md](UPGRADE-3.0.md).
+A full rewrite of the permission engine. See [UPGRADE-3.0.md](UPGRADE-3.0.md) for the upgrade
+steps.
 
 #### Added
 

@@ -59,12 +59,12 @@ odiseo_sylius_rbac:
 | `label` | no | Translation key shown in the tree; a machine-made name is used otherwise |
 | `group` | no | Which tree heading to file it under; presentation only |
 
-Use it for the two kinds of route Sylius does not cover on its own: routes that enforce nothing,
-and routes that declare `permission: true` but whose controller cannot be mapped to a resource
-action, so nothing would ever check it.
+Use it for two kinds of routes Sylius doesn't cover on its own: routes that enforce nothing at
+all, and routes that declare `permission: true` but whose controller can't be mapped to a resource
+action, so nothing ever checks it.
 
-Declaring a route is also how you **override** what a resource route asks for: declarations win
-over discovery, on both the HTML admin and the API.
+You can also use it to **override** what a resource route asks for. Declarations always win over
+discovery, on both the HTML admin and the API.
 
 > [!NOTE]
 > These declarations are loaded by the plugin itself, not by your `config.yaml` imports: they are
@@ -95,8 +95,8 @@ Defaults: `sylius_admin_login`, `sylius_admin_login_check`, `sylius_admin_logout
 password-reset routes, the API's password reset and authentication token endpoints, and
 `sylius_admin_dashboard`.
 
-The dashboard is open on purpose, so a role missing one widget's permission lands somewhere after
-logging in instead of on a 403; the widgets themselves are gated individually.
+The dashboard is left open on purpose. If a role is missing one widget's permission, you land on
+the dashboard after logging in instead of hitting a 403, since the widgets are gated one by one.
 
 > [!WARNING]
 > This list is for permissions that deliberately do not exist, not for skipping one that does.
@@ -109,12 +109,12 @@ odiseo_sylius_rbac:
     deny_unprotected_admin_routes: true   # default
 ```
 
-When on, an admin route that no permission covers is denied. A route nobody protected is the
-failure this plugin exists to prevent.
+When it's on, an admin route with no matching permission gets denied. That's the whole point of
+the plugin: a route nobody protected shouldn't be reachable.
 
-Turn it off only while migrating an application that has many uncovered routes, and use
-[`odiseo:rbac:debug --strict`](console.md#the-coverage-check) to work the list down before turning
-it back on.
+Only turn it off while migrating an application with a lot of uncovered routes, and use
+[`odiseo:rbac:debug --strict`](console.md#the-coverage-check) to work through the list before
+turning it back on.
 
 ## `hookable_permissions`
 
@@ -132,12 +132,12 @@ odiseo_sylius_rbac:
             list: ['sylius.order.cancel', 'sylius.order.resend_confirmation_email']
 ```
 
-Nothing here *declares* a hookable: the permission is added to the one Sylius (or another plugin)
-already registered, and an entry naming a hookable the installed version does not ship is skipped.
-That is what lets hooks that only exist from Sylius 2.1 on sit next to the rest.
+This doesn't create a hookable, it just adds a permission to one Sylius (or another plugin) has
+already registered. An entry naming a hookable the installed version doesn't ship just gets
+skipped, which is why hooks that only exist from Sylius 2.1 on can sit right next to the rest.
 
-Gate the button itself, not a whole table cell: hiding a `<td>` drops a cell and shifts the row
-against its header.
+Gate the button itself, not a whole table cell. Hiding a `<td>` drops a cell and shifts the row
+out of line with its header.
 
 <details>
 <summary>What the plugin ships</summary>
@@ -160,9 +160,9 @@ odiseo_sylius_rbac:
         'app_admin.supplier.update.content.header.title_block.actions': ['cancel', 'update']
 ```
 
-Runtime ignores this key: it exists so a coverage test can tell a decision apart from an oversight,
-and so a new button shipped by Sylius shows up as a red build rather than as a button that invites
-a 403.
+The runtime ignores this key. It only exists so a coverage test can tell a deliberate decision
+apart from something you just forgot, so a new button Sylius ships breaks the build instead of
+sitting there inviting a 403.
 
 ## `live_component_permissions`
 
@@ -174,8 +174,8 @@ odiseo_sylius_rbac:
         'app_admin:supplier:form': app.supplier.update
 ```
 
-`sylius_admin_live_component` is one route shared by every live component, so no single declared
-permission means the right thing for all of it, hence one entry per component.
+`sylius_admin_live_component` is one route shared by every live component, so a single declared
+permission wouldn't make sense for all of them. Hence one entry per component.
 
 <details>
 <summary>What the plugin ships</summary>
@@ -197,8 +197,8 @@ odiseo_sylius_rbac:
         - 'sylius_admin:dashboard:channel_selector'   # default
 ```
 
-The channel selector only changes which channel the *other* widgets are filtered by: it exposes
-nothing and mutates nothing on its own.
+The channel selector only changes which channel the *other* widgets filter by. It doesn't expose
+or change anything on its own.
 
 ## `entity_autocomplete_permissions`
 
@@ -214,13 +214,13 @@ odiseo_sylius_rbac:
         sylius_admin_product_attribute: sylius.product_attribute.index
 ```
 
-Grid filter aliases are deliberately absent: they are reused across every grid, so their target
-travels with the request and is resolved from it.
+Grid filter aliases aren't listed here on purpose. They're reused across every grid, so their
+target travels with the request and gets resolved from that instead.
 
 ## `subject_parents`
 
-Nests a subject under another in the tree, for the cases the identifier cannot express or gets
-wrong.
+Nests a subject under another one in the tree, for the cases where the identifier doesn't say
+where it belongs, or gets it wrong.
 
 ```yaml
 odiseo_sylius_rbac:
@@ -232,17 +232,18 @@ odiseo_sylius_rbac:
         sylius.address: sylius.customer
 ```
 
-Presentation only, it never reaches a stored pattern. A subject whose identifier already extends
-its parent (`sylius.promotion_coupon` under `sylius.promotion`) is nested without being listed.
+This is presentation only, it never touches a stored pattern. A subject whose identifier already
+extends its parent, like `sylius.promotion_coupon` under `sylius.promotion`, gets nested without
+needing an entry here.
 
-The defaults exist because the identifier is built from the controller's service name, not from
-where the screen is reached: "Manage product positions" is `sylius.product_taxon` but lives on the
-*taxon* screen, and "Price history" is `sylius.channel_pricing_log_entry` but lives on the
-*variant* screen.
+You need the defaults because the identifier comes from the controller's service name, not from
+where you actually reach the screen. "Manage product positions" is `sylius.product_taxon`, but you
+get to it from the *taxon* screen. "Price history" is `sylius.channel_pricing_log_entry`, but it
+lives on the *variant* screen.
 
 ## `folded_api_subjects`
 
-Resources the API exposes but the admin has no screen for, images, translations, provinces,
+Resources the API exposes but the admin has no screen for: images, translations, provinces,
 promotion rules. Their operations resolve to the parent's `update` or `show` instead of getting
 permissions of their own.
 
@@ -252,10 +253,10 @@ odiseo_sylius_rbac:
         app.supplier_translation: app.supplier
 ```
 
-The rule of thumb behind the defaults: if the admin edits it as part of the parent's form (a row
-of a collection, a translation in the locale accordion) and nobody would grant it separately, it
-is not a subject of its own. Folding keeps it out of both the registry and the tree, so the tree
-lists screens rather than database tables.
+The rule we followed for the defaults: if you edit it as part of the parent's form (a row in a
+collection, a translation in the locale accordion) and nobody would grant it separately, it's not
+really its own subject. Folding it in keeps it out of the registry and the tree, so the tree shows
+screens instead of database tables.
 
 <details>
 <summary>What the plugin ships</summary>
@@ -280,12 +281,12 @@ odiseo_sylius_rbac:
             - app_admin_supplier
 ```
 
-They are still accepted so an application upgrading from 2.x boots with its old configuration in
-place, and so a role holding a custom section can be translated into the routes that section
-actually covered. **Nothing at runtime reads them**, only
+They're still accepted so an application upgrading from 2.x can boot with its old configuration
+in place, and so a role holding a custom section can be translated into the routes that section
+actually covered. **Nothing at runtime reads them.** Only
 [`odiseo:rbac:migrate-permissions`](console.md#migrating-from-2x) does.
 
-They are removed in 4.0. See [Upgrading to 3.0](../UPGRADE-3.0.md).
+They'll be removed in 4.0. See [Upgrading to 3.0](../UPGRADE-3.0.md).
 
 ---
 

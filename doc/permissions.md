@@ -2,8 +2,9 @@
 
 # The permission model
 
-Three concepts, and nothing else: an **identifier** names one thing an administrator can do, a
-**pattern** is what a role stores, and the **tree** is how the two are presented in the admin.
+There are three things to know: an **identifier** names one thing an administrator can do, a
+**pattern** is what a role actually stores, and the **tree** is how you see both of these in the
+admin.
 
 ## Identifiers
 
@@ -26,27 +27,27 @@ sylius.impersonation.execute
 odiseo_rbac.administration_role.create
 ```
 
-This is **Sylius' own format**: `Sylius\Resource\Metadata::getPermissionCode()` builds exactly
-this string, and the resource controller already hands it to an authorization checker. Adopting it
-verbatim is why most admin routes are covered without anyone declaring anything.
+This isn't a format we invented. It's Sylius' own: `Sylius\Resource\Metadata::getPermissionCode()`
+builds exactly this string, and the resource controller already passes it to an authorization
+checker. That's why most admin routes are covered without anyone declaring anything.
 
-Two rules the format enforces, both checked when a string is parsed:
+The format is validated when a string is parsed:
 
-- **Always exactly three segments.** `sylius.product` is rejected; two spellings of one concept
-  would make patterns ambiguous to compare.
+- **Always exactly three segments.** `sylius.product` gets rejected. Two ways to write the same
+  thing would make patterns hard to compare.
 - **Lowercase, `[a-z][a-z0-9_]*` per segment.**
 
 ### `package` is not a domain
 
-`catalog`, `sales` and `marketing` are *not* packages. Domains like those mirror the admin menu,
-which is presentation and moves; the package is the code that owns the resource, which does not.
-The menu still decides where a permission is *shown* (see [the tree](#the-tree)); it just never
-reaches the stored value.
+`catalog`, `sales` and `marketing` are *not* packages. Those are menu sections, and the menu
+changes over time. The package is the code that owns the resource, and that doesn't change. The
+menu still decides where a permission shows up in [the tree](#the-tree), it just never ends up in
+the stored value.
 
 ## Patterns
 
-A role does not store identifiers. It stores **patterns**: an identifier where any segment may be
-the wildcard `*`.
+A role doesn't store identifiers directly. It stores **patterns**, identifiers where any segment
+can be the wildcard `*`.
 
 ```
 sylius.product.update      exactly one permission
@@ -56,20 +57,20 @@ sylius.*.index             list every Sylius resource
 *.*.*                      a super administrator
 ```
 
-A pattern matches an identifier when every segment either is equal or is `*`. An administrator is
-allowed to do something when **any** pattern of **any** of their roles matches it.
+A pattern matches an identifier when every segment is either equal or `*`. An administrator can
+do something if **any** pattern in **any** of their roles matches it.
 
 ### Patterns are never expanded
 
-Saving `sylius.product.*` stores that string, not the six identifiers it covers today. This is
-deliberate: expanding at save time would freeze the role, and the next Sylius release that adds an
-operation to products would leave every existing role without it.
+Saving `sylius.product.*` stores that string, not the six identifiers it happens to cover right
+now. That's on purpose: if we expanded it at save time, the role would freeze, and the next time
+Sylius adds an operation to products, every role using this pattern would miss it.
 
 ### There are no deny patterns
 
-Everything is additive: roles grant, they never revoke. Mixing allow and deny would force a
-precedence rule, and precedence rules make "can this role do X?" impossible to answer by looking
-at the role.
+Roles only grant, they never take away. If we allowed deny patterns too, you'd need a precedence
+rule to decide which one wins, and then "can this role do X?" stops being something you can answer
+just by reading the role.
 
 > [!NOTE]
 > Removing access means removing a pattern, or removing a role from an administrator, never
@@ -77,8 +78,8 @@ at the role.
 
 ## Where identifiers come from
 
-Nobody maintains a list. Permissions are **discovered** at container-compile time from four
-sources, merged into one registry:
+Nobody maintains a list by hand. Permissions are **discovered** when the container compiles, from
+four sources merged into one registry:
 
 | Source | What it contributes |
 |---|---|
@@ -87,29 +88,29 @@ sources, merged into one registry:
 | Declarations | `route_permissions` entries, for routes Sylius leaves uncovered, and for your own |
 | Live components | Admin live components mapped to the permission their screen already checks |
 
-The consequence worth remembering: **install a plugin, and its permissions appear in the tree;
-remove it, and they disappear**, no configuration edit either way. What stays behind is any role
-that still holds a pattern naming something that no longer exists, which
-[`odiseo:rbac:debug`](console.md#finding-orphans) reports.
+In practice: **install a plugin and its permissions show up in the tree, remove it and they're
+gone**, without touching any configuration. The one thing left over is a role that still holds a
+pattern for something that no longer exists, and
+[`odiseo:rbac:debug`](console.md#finding-orphans) will tell you about those.
 
 ### Naming and grouping a permission
 
-Discovery gives a permission a machine-made name. To give one a readable label and file it under a
-heading, declare it in configuration. Declaring does not create the permission, it only describes
-one that discovery already found, or names one for a route nothing else covers. See
+By default a discovered permission gets a machine-made name. If you want a readable label and a
+place in the tree for it, declare it in configuration. That doesn't create the permission, it just
+describes one that's already there, or names one for a route nothing else covers. See
 [Extending](extending.md).
 
 ## The tree
 
-The role editor renders the vocabulary as a table per group, one row per subject, one column per
+The role editor shows the vocabulary as a table per group, one row per subject, one column per
 operation.
 
 ![The permission tree](images/role-form-identifiers.png)
 
-- **Groups come from the admin menu.** A permission is filed where the administrator already looks
-  for the screens it governs. The group is presentation only and never reaches the stored pattern,
-  so the menu can be reorganised without invalidating a single role. Anything with no menu entry
-  of its own ends up under **Other**.
+- **Groups come from the admin menu.** A permission shows up where an administrator would already
+  look for that screen. This is only presentation, it's never part of the stored pattern, so
+  reorganizing the menu doesn't break any existing role. Anything with no menu entry of its own
+  ends up under **Other**.
 - **Shared columns first**: `index`, `show`, `create`, `update`, `delete`, `bulk_delete`. A row
   without one of them says something true: that resource has no such operation.
 - **Everything else is an extra operation**, shown as a labelled checkbox at the end of the row:
@@ -120,25 +121,26 @@ operation.
   indeterminate when part of it is.
 - **Read only**, applied in bulk, means `index`, `show` and `view`.
 
-The footer counts the **rules** stored versus the **permissions granted** by them, and
-*Show identifiers* reveals both the identifier of every row and the exact patterns that will be
-written:
+The footer counts the **rules** you've stored against the **permissions** those rules actually
+grant, and *Show identifiers* shows the identifier for every row plus the exact patterns that
+will be saved:
 
 ```
 sylius.product.index   sylius.product.show   sylius.product.update
 sylius.product_taxon.*   sylius.product_variant.*   sylius.taxon.index
 ```
 
-That panel is the answer to "what did this checkbox actually save?"; see
+That panel answers "what did this checkbox actually save?"; see
 [Managing roles](managing-roles.md).
 
 ## Roles
 
-An **administration role** is a resource of its own: a code, a translated name, and its patterns.
-An administrator holds **any number of roles**, and their permissions add up.
+An **administration role** is a resource like any other: a code, a translated name, and its
+patterns. An administrator can hold **any number of roles**, and their permissions add up.
 
-Nothing is hard-coded. `super_admin`, `catalog`, `sales` and `read_only` exist because the
-[fixtures](extending.md#fixtures) create them, not because the plugin knows about them.
+None of the default roles are hard-coded. `super_admin`, `catalog`, `sales` and `read_only` exist
+because the [fixtures](extending.md#fixtures) create them, not because the plugin knows about
+them.
 
 ---
 

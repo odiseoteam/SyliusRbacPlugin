@@ -69,16 +69,16 @@ MySQL 8.4, plus:
 - PHPStan at level max, ECS, Deptrac and the Composer dependency analyser.
 
 A red build on the coverage tests usually means Sylius added something, not that your change is
-wrong; declare it and say so in the pull request.
+wrong. Just declare it and mention that in the pull request.
 
 ## Conventions
 
-- Comments explain **why**, not what. If the code says it, do not repeat it.
-- Anything version-specific about Sylius goes through `Compatibility\SyliusVersion`, not an inline
-  version check.
-- The `Legacy\` namespace may only be imported from `DataMigration\`; Deptrac enforces this.
-- New permissions are discovered, not hard-coded. If you find yourself writing a list of
-  identifiers, check whether discovery should be producing them.
+- Comments should explain **why**, not what. If the code already says it, don't repeat it.
+- Anything version-specific about Sylius should go through `Compatibility\SyliusVersion`, not an
+  inline version check.
+- The `Legacy\` namespace can only be imported from `DataMigration\`; Deptrac enforces this.
+- New permissions should be discovered, not hard-coded. If you find yourself writing a list of
+  identifiers, check whether discovery should be producing them instead.
 
 ## Reporting a security issue
 

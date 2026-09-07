@@ -25,16 +25,17 @@ bin/console odiseo:rbac:grant sylius@example.com super_admin --create
 | `--create` | Create the role if no role has that code, granting `*.*.*` |
 | `--dry-run` | Print the plan and exit without writing |
 
-The administrator is looked up by **either** username or email, so whoever is locked out does not
-also have to guess which one it is.
+You can look up the administrator by **either** username or email, so if someone is locked out you
+don't have to guess which one to use.
 
-Before writing anything the command reports who can currently reach the roles screen, because the
-first question is whether the lockout is real. If somebody else can still manage roles, this is the
-wrong tool: do it from the admin panel.
+Before writing anything, the command shows you who can currently reach the roles screen. That's
+worth checking first: if somebody else can still manage roles, use the admin panel instead of this
+command.
 
-**This command never goes through the permission check.** That is the point: it is the way in right
-after installing, and the way back from a role deleted by mistake, a database edited by hand, or an
-upgrade left half-applied. Keep console access available to whoever administers the shop.
+**This command skips the permission check entirely.** That's the point of it: it's what gets you
+in right after installing, and what gets you back in after a role gets deleted by mistake, a
+database gets edited by hand, or an upgrade only half-applies. Keep console access available to
+whoever runs the shop.
 
 ## Inspecting permissions
 
@@ -64,10 +65,10 @@ RBAC permissions
  [OK] Every admin route is either covered by a permission or declared excluded.
 ```
 
-`--subject=sylius.taxon` narrows the listing by identifier prefix.
+`--subject=sylius.taxon` narrows the listing to identifiers with that prefix.
 
-The count reads: how many distinct permissions exist, how many the filter left, and how many
-declarations (routes, API operations, configuration entries) produced them.
+The count at the bottom shows how many distinct permissions exist, how many are left after your
+filter, and how many declarations (routes, API operations, configuration entries) produced them.
 
 ### One route
 
@@ -92,10 +93,10 @@ Roles
  ----------------- -------------------
 ```
 
-The answer per role is computed exactly the way the voter computes it at runtime, wildcards
-included, which is the fastest way to settle "why can't this person open that screen?".
+Each role's answer is computed exactly the way the voter does it at runtime, wildcards included.
+It's the fastest way to answer "why can't this person open that screen?".
 
-Three other outcomes:
+There are three other things this command can tell you:
 
 ```console
 $ bin/console odiseo:rbac:debug sylius_admin_login
@@ -108,8 +109,8 @@ $ bin/console odiseo:rbac:debug not_a_route
  [ERROR] Route "not_a_route" does not exist.
 ```
 
-A route that does not exist is reported as such, rather than as "nobody checks it": a typo should
-not invite you to declare a permission for a phantom route.
+A route that doesn't exist gets reported as such, instead of "nobody checks it". Otherwise a typo
+would look like an invitation to declare a permission for a route that isn't even real.
 
 ### The coverage check
 
@@ -117,17 +118,17 @@ not invite you to declare a permission for a phantom route.
 bin/console odiseo:rbac:debug --strict
 ```
 
-Exits non-zero when an admin route is left unchecked or a declaration is orphaned. Suitable for CI,
-and the thing to run after upgrading Sylius or installing a plugin.
+This exits non-zero if an admin route is left unchecked, or a declaration is orphaned. Good for
+CI, and worth running after upgrading Sylius or installing a plugin.
 
 ### Finding orphans
 
-The normal output also lists **orphaned declarations** (a `route_permissions` or `excluded_routes`
-entry naming a route that no longer exists) and **roles holding a permission that no longer
-exists**, which is what a removed plugin leaves behind.
+The normal output also lists **orphaned declarations**, a `route_permissions` or `excluded_routes`
+entry pointing at a route that no longer exists, and **roles holding a permission that no longer
+exists**, which is what's left over after you remove a plugin.
 
-Neither breaks anything at runtime. Both are worth cleaning up: an orphaned declaration is usually
-a route someone renamed and never followed up on.
+Neither one breaks anything at runtime, but both are worth cleaning up. An orphaned declaration
+usually just means someone renamed a route and never went back to fix it.
 
 ## Migrating from 2.x
 
@@ -135,18 +136,18 @@ a route someone renamed and never followed up on.
 bin/console odiseo:rbac:migrate-permissions [--dry-run] [--overwrite]
 ```
 
-Translates the pre-3.0 section-based permissions stored on each role into the new patterns, using
-the section map, including any `custom_sections` your application declared, to work out which
-routes each stored section actually reached.
+This translates the old section-based permissions stored on each role into the new patterns. It
+uses your section map, including any `custom_sections` your application declared, to work out
+which routes each stored section actually covered.
 
 | Option | Effect |
 |---|---|
 | `--dry-run` | Print the plan and exit without writing |
 | `--overwrite` | Also rewrite roles that already hold 3.0 permissions |
 
-Run it with `--dry-run` first and read the plan. Roles that cannot be translated in full are
-reported as problems and the command exits non-zero, so a partial migration cannot pass unnoticed
-in a deployment script. The old values are left in `legacy_permissions` either way.
+Run it with `--dry-run` first and read the plan. If a role can't be fully translated, it's
+reported as a problem and the command exits non-zero, so a partial migration won't slip through a
+deployment script unnoticed. The old values stay in `legacy_permissions` either way.
 
 The full procedure, including what to check afterwards, is in [Upgrading to 3.0](../UPGRADE-3.0.md).
 

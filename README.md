@@ -7,10 +7,6 @@
 <h1 align="center">Sylius RBAC Plugin</h1>
 
 <p align="center">
-    <strong>Per-operation role-based access control for the Sylius admin.</strong>
-</p>
-
-<p align="center">
     <a href="https://packagist.org/packages/odiseoteam/sylius-rbac-plugin"><img src="https://img.shields.io/packagist/v/odiseoteam/sylius-rbac-plugin.svg?style=flat-square" alt="Version" /></a>
     <a href="https://packagist.org/packages/odiseoteam/sylius-rbac-plugin"><img src="https://img.shields.io/packagist/dt/odiseoteam/sylius-rbac-plugin.svg?style=flat-square" alt="Downloads" /></a>
     <a href="https://github.com/odiseoteam/SyliusRbacPlugin/actions/workflows/build.yaml"><img src="https://img.shields.io/github/actions/workflow/status/odiseoteam/SyliusRbacPlugin/build.yaml?branch=master&style=flat-square" alt="Build status" /></a>
@@ -21,19 +17,17 @@
 
 ---
 
-Sylius ships one level of admin access. Whoever has it can do everything such as refund an order, delete a product, impersonate a customer, change a payment gateway.
-
-This plugin splits that into **roles you define**, granting one operation on one resource at a time, and enforces them everywhere the admin can be reached.
+This plugin adds role-based access control to the Sylius admin: you define your own roles, one permission per operation on one resource, and it enforces them everywhere.
 
 ## What you get
 
-- **A permission per operation, not per section.** `sylius.product.update` is a different permission from `sylius.product.delete`. Wildcards keep it manageable: `sylius.product.*`, `*.*.index`, `*.*.*`.
-- **Every admin route covered.** Permissions are discovered from Sylius' own resource metadata, so a route added by the next Sylius release, or by any plugin you install, shows up on its own.
-- **The admin API is protected too.** `/api/v2/admin` operations check the same permissions as the HTML admin, so an administrator's JWT cannot do more than their screens can.
-- **Deny by default.** A route nobody protected is denied, not allowed. Deliberate exceptions are a config list, so "left open" is distinguishable from "forgotten".
-- **Menu, grids and buttons are filtered too.** Menu entries, grid actions, action buttons and dashboard widgets the role cannot use are not rendered.
-- **Several roles per administrator**, additive, plus an anti-lockout guard that refuses a change that would leave you unable to manage roles.
-- **Console tooling**: grant access from the CLI, list what exists, find orphans, migrate v2 data.
+- **One permission per operation, not per section.** `sylius.product.update` and `sylius.product.delete` are different permissions. Wildcards keep it manageable: `sylius.product.*`, `*.*.index`, `*.*.*`.
+- **Every admin route covered.** Permissions are discovered from Sylius' own resource metadata, so a route added by the next Sylius release, or by a plugin you install, shows up on its own.
+- **Admin API coverage.** This plugin covers all the APIs operations.
+- **Deny by default.** A route nobody protected is denied, not allowed. If you want to leave one open on purpose, you can define it.
+- **Menu, grids and buttons are filtered too.** If a role can't use something, it's not just blocked, it's not shown.
+- **An administrator can hold several roles**, and they're additive. There's also a guard that stops you from saving a change that would lock you out of the roles screen.
+- **Console tooling**: grant access from the CLI, list what exists, find orphaned permissions, migrate v2 data.
 - **18 locales**.
 
 ## Screenshots
@@ -80,8 +74,8 @@ sylius.order.ship                      an operation that is not CRUD
 *.*.*                                  a super administrator
 ```
 
-A role stores the patterns, never their expansion, so `sylius.product.*` keeps covering
-operations that Sylius adds after the role was created. See
+A role stores the pattern as written, not the list of operations it matches today, so
+`sylius.product.*` keeps working when Sylius adds a new operation to products later. See
 [The permission model](doc/permissions.md).
 
 ## Documentation

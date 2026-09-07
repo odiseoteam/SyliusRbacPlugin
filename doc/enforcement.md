@@ -2,11 +2,10 @@
 
 # What gets enforced
 
-Every check ends in the same place: a Symfony voter answering *may this administrator perform
-`{package}.{subject}.{operation}`?* The surfaces below only differ in how they arrive at the
-question.
+Every check ends up asking the same Symfony voter the same question: *may this administrator
+perform `{package}.{subject}.{operation}`?* The surfaces below just differ in how they get there.
 
-That single answer is also available to your own code:
+You can ask that same question from your own code:
 
 ```twig
 {% if is_granted('sylius.product.update') %}...{% endif %}
@@ -27,31 +26,33 @@ $this->denyAccessUnlessGranted('sylius.order.refund', $order);
 | [Action buttons and widgets](#action-buttons-and-dashboard-widgets) | The hookable renders nothing |
 | [Live components](#live-components) | The live action is denied |
 
-The first two are the boundary; the rest exist so an administrator never sees a control that
-would answer 403. **Hiding is never the protection**: every hidden thing is denied on its own.
+The first two actually block the request. The rest just make sure nobody sees a button they'd
+get a 403 from. Hiding a button isn't the protection by itself, though: every one of those things
+is also denied on its own if you hit it directly.
 
 ### Admin routes
 
-Three kinds of route reach the admin, and only one is handled by Sylius itself:
+Admin routes reach the plugin in three ways, and Sylius only handles one of them on its own:
 
 1. **A resource route** carrying `_sylius: permission: true`. The resource controller already
-   resolves it to a permission code and checks it, the plugin only fills the authorization socket
-   Sylius leaves open, so the check reaches the voter instead of always answering `true`.
-2. **A route named in `route_permissions`.** Checked by the plugin's own listener, because nothing
-   else looks at those declarations. This covers what Sylius leaves uncovered (impersonation,
-   resending a confirmation email, invokable controllers) and anything you declare yourself.
-3. **Anything else.** Denied, unless it is listed in `excluded_routes`. See
+   resolves it to a permission code and checks it. The plugin just fills in the authorization
+   check that Sylius leaves open, so it actually reaches the voter instead of always saying yes.
+2. **A route named in `route_permissions`.** The plugin's own listener checks it, because nothing
+   else looks at those declarations. This is how it covers what Sylius leaves uncovered
+   (impersonation, resending a confirmation email, invokable controllers) plus anything you
+   declare yourself.
+3. **Anything else.** Denied, unless it's listed in `excluded_routes`. See
    [deny by default](#deny-by-default).
 
-Two routes are a case of their own, because each is a single route shared by many different
-things: `sylius_admin_entity_autocomplete` and `sylius_admin_live_component`. Their permission is
-resolved per request, from the alias or component name the request carries.
+Two routes don't fit this: `sylius_admin_entity_autocomplete` and `sylius_admin_live_component`
+are each a single route shared by lots of different things, so their permission gets worked out
+per request, from the alias or component name in the request.
 
 #### Workflow transitions get their own operation
 
-Sylius applies a state machine transition through `updateAction`, so cancelling an order would ask
-for `sylius.order.update`, the same permission as editing one. The plugin substitutes the
-transition instead:
+Sylius runs a state machine transition through `updateAction`, so cancelling an order would ask
+for `sylius.order.update`, the same permission you'd need to edit one. The plugin swaps in the
+transition's own operation instead:
 
 ```
 sylius.order.cancel        cancelling an order
@@ -59,44 +60,47 @@ sylius.shipment.ship       marking a shipment shipped
 sylius.payment.complete    completing a payment
 ```
 
-That is what makes "may cancel orders" grantable without also granting "may edit orders", and the
-API derives the same operation from the URI so the two cannot disagree.
+That's how you can grant "may cancel orders" without also granting "may edit orders". The API
+figures out the same operation from the URI, so the two never disagree.
 
 ### The admin API
 
-Every `/api/v2/admin` operation is checked against the same identifiers as the HTML admin, so an
-administrator's JWT can never do more than their screens can.
+Every `/api/v2/admin` operation checks the same identifiers as the HTML admin, so an
+administrator's JWT can never do more than what their screens let them do.
 
-Resources with no admin screen of their own, images, translations, provinces, promotion rules,
-do not get permissions of their own. They fold into their parent: any mutation asks for
-`{parent}.update`, any read for `{parent}.show`. Editing a product image is editing the product.
+Resources with no admin screen of their own, like images, translations, provinces, or promotion
+rules, don't get their own permissions. They fold into their parent instead: any write asks for
+`{parent}.update`, any read for `{parent}.show`. Editing a product image is really editing the
+product.
 
-Denials raise `AccessDeniedException`, which API Platform renders as a 403 JSON response, never as
-the login redirect an HTML firewall would produce.
+Denials raise `AccessDeniedException`, and API Platform turns that into a 403 JSON response,
+not the login redirect you'd get from an HTML firewall.
 
 ### The main menu
 
-Menu entries are removed based on **each item's own route**, looked up in the same map the request
-will use, so a visible entry always leads somewhere that opens. A parent left with no children
-and no destination of its own is removed too, rather than expanding into nothing.
+Menu entries get removed based on **each item's own route**, looked up in the same map the
+request uses. So if you can see an entry, it leads somewhere that actually opens. A parent left
+with no children and no destination of its own gets removed too, instead of expanding into an
+empty page.
 
 | Super admin | Catalog manager |
 |---|---|
 | <img src="images/menu-super-admin.png" alt="Full menu" height="380" /> | <img src="images/menu-catalog-manager.png" alt="Filtered menu" height="380" /> |
 
-The role editor is the one screen that builds the menu unfiltered: the tree derives its groups from
-the admin menu, and deriving them from *your* menu would hide whole sections from whoever is
-editing a role.
+The role editor is the one screen where the menu isn't filtered: the tree builds its groups from
+the admin menu, and if you filtered that menu first, whoever is editing a role would lose entire
+sections from view.
 
 ### Grid actions
 
-Grid buttons are filtered by decorating the grid definition converter, which is what makes this
-cover grids the plugin has never heard of, yours included.
+Grid buttons get filtered by decorating the grid definition converter. That's what lets this cover
+grids the plugin has never seen before, including yours.
 
-Two ways an action names what it does, and both are used: the standard resource types (`create`,
-`update`, `delete`, `show`) resolve through the grid's model class exactly as the resource
-controller resolves them, and anything carrying a route resolves through the route map. A `links`
-action keeps only the destinations that are allowed, and disappears when none of them is.
+An action names what it does in one of two ways, and both get handled: the standard resource
+types (`create`, `update`, `delete`, `show`) resolve through the grid's model class, the same way
+the resource controller resolves them, and anything carrying a route resolves through the route
+map instead. A `links` action only keeps the destinations you're allowed to reach, and disappears
+entirely if none of them are.
 
 | Super admin | A role without create or delete |
 |---|---|
@@ -104,34 +108,37 @@ action keeps only the destinations that are allowed, and disappears when none of
 
 ### Action buttons and dashboard widgets
 
-Buttons and widgets rendered through Sylius' Twig hooks are gated before Sylius' own renderer sees
-them. This is the only place their first render can be stopped: a hookable renders inline as part
-of the page that embeds it, never through an HTTP route a listener could intercept.
+Buttons and widgets that render through Sylius' Twig hooks get checked before Sylius' own renderer
+even sees them. This has to happen here, because a hookable renders inline as part of the page
+that embeds it, it never goes through an HTTP route a listener could intercept.
 
-Which hookable requires what is configuration
-([`hookable_permissions`](configuration.md#hookable_permissions)), not a copy of the hook, so it
-keeps working when Sylius changes the component or template behind it. A denied hookable renders
-nothing rather than throwing: a missing widget is a gap in the layout, not a broken page.
+Which hookable needs which permission lives in configuration
+([`hookable_permissions`](configuration.md#hookable_permissions)) instead of being copied from
+the hook itself, so it keeps working even after Sylius changes the component or template behind
+it. A denied hookable just renders nothing instead of throwing: a missing widget is a gap in the
+layout, not a broken page.
 
-A container of gated items (an *Actions* dropdown, a button group) is granted on **any** of the
-permissions inside it, so it does not open onto nothing.
+If several gated items sit inside one container (an *Actions* dropdown, a button group), the
+container shows up as long as you have **any** one of the permissions inside it. Otherwise you'd
+open a dropdown with nothing in it.
 
 ### Live components
 
-A live component's first render is a hookable; its follow-up requests are the shared
-`sylius_admin_live_component` route. Both are covered, with each component mapped to the permission
+A live component's first render is a hookable. Its follow-up requests go through the shared
+`sylius_admin_live_component` route. Both are checked, and each component maps to the permission
 its own screen already checks: the dashboard's "shipments to ship" widget asks for
-`sylius.shipment.index`, so a role missing that resource simply does not see the widget.
+`sylius.shipment.index`, so a role without that permission just doesn't see the widget.
 
-Components that change nothing and expose nothing, such as the dashboard's channel selector, are
-listed as deliberately ungated.
+Some components change nothing and expose nothing, like the dashboard's channel selector. Those
+are listed as ungated on purpose.
 
 ## Deny by default
 
-A route no permission covers is **denied**. This is the failure the plugin exists to prevent: the
-pre-v3 engine let an unmapped route through, so every route added by a third-party plugin was open.
+A route with no matching permission is **denied**. This is the exact bug the plugin exists to
+fix: the old engine let unmapped routes through, so every route a third-party plugin added was
+wide open.
 
-Deliberate exceptions are configuration, not silence:
+Exceptions have to go in configuration, they can't just be left silently open:
 
 ```yaml
 odiseo_sylius_rbac:
@@ -140,11 +147,12 @@ odiseo_sylius_rbac:
         - sylius_admin_dashboard
 ```
 
-Listing a route is what makes "decided to leave it open" distinguishable from "forgot about it",
-and the plugin's own test suite verifies the list, failing if something declared public is not
-actually anonymous, or if an entry names a route that no longer exists.
+Listing a route this way tells you it was left open on purpose, not forgotten. The plugin's own
+test suite checks the list too, and fails if something marked public isn't actually anonymous, or
+if an entry points at a route that no longer exists.
 
-While migrating an application with many uncovered routes you can invert this temporarily:
+If you're migrating an application with a lot of uncovered routes, you can turn this off for a
+while:
 
 ```yaml
 odiseo_sylius_rbac:
@@ -156,20 +164,20 @@ before turning it back on.
 
 ## Anti-lockout
 
-Saving a role that would leave *you* unable to reach the roles screen is refused, with a flash
-message naming what you were about to lose.
+If saving a role would leave *you* unable to reach the roles screen, the save is refused, and you
+get a message telling you what you'd lose.
 
-The question asked is "would this leave me without it?", never "was the box unticked": roles are
-additive, so another of your roles may still grant it, and a `*.*.*` in the role you are editing
-covers it without naming it.
+It doesn't just check whether you unticked a box. It checks whether you'd actually end up without
+that access: another of your roles might still grant it, or a `*.*.*` in the role you're editing
+might cover it without spelling it out.
 
-Only your own access, and only on update. Deleting a role, or removing it from your own account,
-are deliberately left open, and [`odiseo:rbac:grant`](console.md#granting-access) is the way back
-from any of them.
+This only protects your own access, and only when you save a role. Deleting a role, or removing
+one from your own account, still works even if it locks you out; [`odiseo:rbac:grant`](console.md#granting-access)
+is how you get back in either way.
 
 ## Restricting *which records*, not which screens
 
-The voter asks two questions: does the administrator hold a matching pattern, **and** does the
+The voter checks two things: does the administrator have a matching pattern, **and** does the
 scope resolver accept the subject?
 
 ```php
@@ -183,9 +191,10 @@ interface ScopeResolverInterface
 }
 ```
 
-The shipped implementation allows everything. Replacing or decorating the service is how you make a
-permission reach only part of the data, the orders of one channel, say, without touching any of
-the six surfaces above. See [Extending](extending.md#restricting-a-permission-to-part-of-the-data).
+The default implementation just allows everything. Replace or decorate the service if you want a
+permission to reach only part of the data, say only orders from one channel, and it'll apply to
+all six surfaces above without you touching any of them. See
+[Extending](extending.md#restricting-a-permission-to-part-of-the-data).
 
 ---
 
