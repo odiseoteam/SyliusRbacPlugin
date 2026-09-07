@@ -81,7 +81,7 @@ final class ApiOperationPermissionResolverTest extends TestCase
     }
 
     /**
-     * The case `FOLDED_API_SUBJECTS` exists for: a resource the API gives a full CRUD of its
+     * The case `folded_api_subjects` exists for: a resource the API gives a full CRUD of its
      * own, but that the admin never asks a permission of independently of its parent -- a
      * shipment's own image field, say. Every mutation folds to the parent's `update`.
      */

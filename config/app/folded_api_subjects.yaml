@@ -1,0 +1,37 @@
+# API-only resources with no admin screen of their own -- images, translations, provinces --
+# whose operations resolve to the parent's "update" or "show" instead of a permission of their
+# own.
+#
+# Applications and plugins extend this list with their own subjects. As a real YAML source merged
+# by Symfony rather than a schema default, adding an entry here does not drop the rest.
+odiseo_sylius_rbac:
+    folded_api_subjects:
+        sylius.product_image: sylius.product
+        sylius.product_translation: sylius.product
+        sylius.product_association: sylius.product
+        sylius.taxon_image: sylius.taxon
+        sylius.taxon_translation: sylius.taxon
+        sylius.product_variant_translation: sylius.product_variant
+        sylius.channel_pricing: sylius.product_variant
+        sylius.product_attribute_value: sylius.product_attribute
+        sylius.product_attribute_translation: sylius.product_attribute
+        sylius.product_option_value: sylius.product_option
+        sylius.product_option_value_translation: sylius.product_option
+        sylius.product_option_translation: sylius.product_option
+        sylius.product_association_type_translation: sylius.product_association_type
+        sylius.province: sylius.country
+        sylius.promotion_rule: sylius.promotion
+        sylius.promotion_action: sylius.promotion
+        sylius.promotion_translation: sylius.promotion
+        sylius.catalog_promotion_action: sylius.catalog_promotion
+        sylius.catalog_promotion_scope: sylius.catalog_promotion
+        sylius.catalog_promotion_translation: sylius.catalog_promotion
+        sylius.shipping_method_rule: sylius.shipping_method
+        sylius.shipping_method_translation: sylius.shipping_method
+        sylius.payment_method_translation: sylius.payment_method
+        sylius.gateway_config: sylius.payment_method
+        sylius.avatar_image: sylius.admin_user
+        sylius.order_item: sylius.order
+        sylius.order_item_unit: sylius.order
+        sylius.adjustment: sylius.order
+        sylius.address_log_entry: sylius.order

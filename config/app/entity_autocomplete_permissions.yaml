@@ -1,0 +1,14 @@
+# `sylius_admin_entity_autocomplete` is one route shared by every autocomplete field, so no single
+# permission covers all of it. These aliases each query one fixed entity, so they get the
+# permission its own index screen already checks. The grid filter aliases are not listed: they are
+# reused across every grid, so their target travels with the request instead -- see
+# `EntityAutocompletePermissionResolver`.
+#
+# Applications and plugins extend this list with their own aliases. As a real YAML source merged
+# by Symfony rather than a schema default, adding an entry here does not drop the rest.
+odiseo_sylius_rbac:
+    entity_autocomplete_permissions:
+        sylius_admin_taxon: sylius.taxon.index
+        sylius_admin_product: sylius.product.index
+        sylius_admin_product_variant: sylius.product_variant.index
+        sylius_admin_product_attribute: sylius.product_attribute.index

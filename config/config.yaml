@@ -1,5 +1,9 @@
 imports:
     - { resource: "app/hookable_permissions.yaml" }
+    - { resource: "app/live_component_permissions.yaml" }
+    - { resource: "app/entity_autocomplete_permissions.yaml" }
+    - { resource: "app/subject_parents.yaml" }
+    - { resource: "app/folded_api_subjects.yaml" }
     - { resource: "app/twig_hooks/**/*.yaml" }
     - { resource: "app/resources/**/*.yaml" }
     - { resource: "app/grids/**/*.yaml" }

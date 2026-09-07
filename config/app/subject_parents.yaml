@@ -1,0 +1,28 @@
+# Subjects reached only from inside another subject's screen, where the identifier does not say
+# so on its own, or says so wrong.
+#
+# Most sub-resources are derived instead: `sylius.promotion_coupon` extends `sylius.promotion`, so
+# the tree nests it without being told. The rest share a prefix with the wrong subject, because the
+# identifier is built from the controller's service name, not from where the screen is actually
+# reached:
+#
+#   * `sylius.shop_user` is the customer's login account, edited from the customer screen, sharing
+#     no prefix with it.
+#   * `sylius.product_taxon` ("Manage product positions") is reached from editing a taxon, not a
+#     product, despite the `product_` prefix.
+#   * `sylius.channel_pricing_log_entry` ("Price history") is reached from editing a product
+#     variant's price in one channel, not from managing channels, despite the `channel_` prefix.
+#   * `sylius.impersonation` is a header button on the customer screen, right next to the one that
+#     deletes the shop user account -- same screen as `sylius.shop_user`, sharing no prefix with
+#     either.
+#
+# Applications and plugins extend this list with their own subjects. As a real YAML source merged
+# by Symfony rather than a schema default, adding an entry here does not drop the rest.
+odiseo_sylius_rbac:
+    subject_parents:
+        sylius.shop_user: sylius.customer
+        sylius.product_taxon: sylius.taxon
+        sylius.channel_pricing_log_entry: sylius.product_variant
+        sylius.impersonation: sylius.customer
+        # No single owner -- shared by a customer's address book and an order's addresses.
+        sylius.address: sylius.customer

@@ -105,7 +105,7 @@ final class AdminApiCoverageTest extends KernelTestCase
     }
 
     /**
-     * `FOLDED_API_SUBJECTS` exists so a subject with no screen of its own -- an image, a
+     * `folded_api_subjects` exists so a subject with no screen of its own -- an image, a
      * translation, a province -- never becomes a row in the tree that looks exactly like a real
      * one and does nothing when unchecked. Checked here because the fold happens in the
      * resolver, and nothing stops a route being added later for one of these that the resolver

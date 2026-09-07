@@ -1,0 +1,63 @@
+# `sylius_admin_live_component` is one route shared by every live component in the admin, so no
+# single permission covers all of it. Each is mapped here to the permission its own screen already
+# checks. `sylius_admin:taxon:tree` is not listed: `LiveComponentPermissionResolver` gives it its
+# own rule, because its default action only renders the tree but `moveUp` and `moveDown` reorder
+# it for real.
+#
+# The dashboard widgets are mapped to the resource each one is actually a summary of --
+# `count_shipments_to_ship` to `sylius.shipment.index`, not a blanket `sylius.dashboard.view` -- so
+# a role missing one resource's permission simply does not see that widget, rather than a single
+# dashboard permission gating everything or nothing. See `config/app/hookable_permissions.yaml`,
+# where the same permissions gate the initial render through `PermissionGatedHookableRenderer`;
+# this map only covers the follow-up live-action requests. `sylius_admin:dashboard:channel_selector`
+# is not listed: it changes no data of its own, so it is in `live_component_excluded` instead.
+#
+# Applications and plugins extend this list with their own live components. As a real YAML source
+# merged by Symfony rather than a schema default, adding an entry here does not drop the rest.
+odiseo_sylius_rbac:
+    live_component_permissions:
+        'sylius_admin:customer:order_statistics': sylius.customer.show
+        'sylius_admin:dashboard:new_orders': sylius.order.index
+        'sylius_admin:dashboard:statistics': sylius.statistics.view
+        'sylius_admin:dashboard:pending_action:count_orders_to_process': sylius.order.index
+        'sylius_admin:dashboard:pending_action:count_pending_payments': sylius.payment.index
+        'sylius_admin:dashboard:pending_action:count_product_reviews_to_approve': sylius.product_review.index
+        'sylius_admin:dashboard:pending_action:count_product_variants_out_of_stock': sylius.product_variant.index
+        'sylius_admin:dashboard:pending_action:count_shipments_to_ship': sylius.shipment.index
+        'sylius_admin:admin_user:form': sylius.admin_user.update
+        'sylius_admin:catalog_promotion:form': sylius.catalog_promotion.update
+        'sylius_admin:channel:form': sylius.channel.update
+        'sylius_admin:country:form': sylius.country.update
+        'sylius_admin:currency:form': sylius.currency.update
+        'sylius_admin:customer:form': sylius.customer.update
+        'sylius_admin:customer_group:form': sylius.customer_group.update
+        'sylius_admin:exchange_rate:form': sylius.exchange_rate.update
+        'sylius_admin:locale:form': sylius.locale.update
+        'sylius_admin:order:form': sylius.order.update
+        'sylius_admin:payment_method:form': sylius.payment_method.update
+        'sylius_admin:product:form': sylius.product.update
+        'sylius_admin:product:generate_product_variants_form': sylius.product.update
+        'sylius_admin:product:product_attribute_autocomplete': sylius.product.update
+        'sylius_admin:product_association_type:form': sylius.product_association_type.update
+        'sylius_admin:product_attribute:form': sylius.product_attribute.update
+        'sylius_admin:product_option:form': sylius.product_option.update
+        'sylius_admin:product_review:form': sylius.product_review.update
+        'sylius_admin:product_variant:form': sylius.product_variant.update
+        'sylius_admin:promotion:form': sylius.promotion.update
+        'sylius_admin:promotion_coupon:form': sylius.promotion_coupon.update
+        'sylius_admin:promotion_coupon:generator_instruction_form': sylius.promotion_coupon.generate
+        'sylius_admin:shipment:ship_form': sylius.shipment.ship
+        'sylius_admin:shipping_category:form': sylius.shipping_category.update
+        'sylius_admin:shipping_method:form': sylius.shipping_method.update
+        'sylius_admin:tax_category:form': sylius.tax_category.update
+        'sylius_admin:tax_rate:form': sylius.tax_rate.update
+        'sylius_admin:taxon:delete': sylius.taxon.delete
+        'sylius_admin:taxon:form': sylius.taxon.update
+        'sylius_admin:zone:form': sylius.zone.update
+
+        # --- Third-party plugins bundled with sylius-standard --------------------------
+        'sylius_mollie:admin:email_template:form': sylius_mollie.template_mollie_email.update
+        # Creates a sandbox PayPal payment method from the payment method grid -- same
+        # permission as sylius_paypal_admin_enable_seller, which acts on the same resource
+        # (see the comment on that route in config/app/route_permissions.yaml).
+        'sylius_paypal:create_sandbox_modal': sylius.payment_method.update

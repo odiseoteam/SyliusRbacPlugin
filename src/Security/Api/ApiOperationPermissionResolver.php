@@ -29,7 +29,7 @@ use Sylius\Resource\ResourceActions;
  * `foldedSubjects` catches a different case: a resource the API models with a full CRUD of its
  * own, but that the admin never asks a permission of independently of its parent -- a product's
  * images, a country's provinces, a promotion's rules. Those resolve to the parent's identifier
- * instead of their own; see `Configuration::FOLDED_API_SUBJECTS` for why.
+ * instead of their own; see `config/app/folded_api_subjects.yaml` for why.
  */
 final class ApiOperationPermissionResolver implements ApiOperationPermissionResolverInterface
 {
