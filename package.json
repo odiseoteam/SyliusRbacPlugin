@@ -1,0 +1,12 @@
+{
+    "name": "sylius-rbac-plugin-development",
+    "description": "Test tooling for the plugin's own JavaScript. Not the package an application installs -- that one is assets/admin/package.json, and nothing here reaches it.",
+    "private": true,
+    "license": "MIT",
+    "scripts": {
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "vitest": "^3.2.4"
+    }
+}

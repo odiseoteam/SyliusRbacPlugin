@@ -6,6 +6,7 @@
 /node_modules/
 /drivers/
 /composer.lock
+/yarn.lock
 
 /etc/build/*
 !/etc/build/.gitignore

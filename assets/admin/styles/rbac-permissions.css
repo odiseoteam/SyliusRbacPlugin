@@ -29,9 +29,12 @@
 .rbac-permission-tree .rbac-group[data-open="false"] .rbac-group-body { display: none; }
 .rbac-permission-tree .rbac-group[data-open="false"] .rbac-chevron { transform: rotate(-90deg); }
 
-/* The subject column absorbs the width, so the checkboxes stay clustered and read as one block.
-   Without nowrap, a group with enough operation columns squeezes this one below its content's
-   width and wraps the label instead of letting the table grow into the scrollbar below. */
+/* The subject column absorbs the width, so the checkboxes stay clustered and read as one block
+   at the right instead of huddling against a narrow first column. Without nowrap, a group with
+   enough operation columns squeezes this one below its content's width and wraps the label
+   instead of letting the table grow into the scrollbar below. Kept even once "Other operations"
+   is in play: giving that column the same width:100% instead only split the two evenly, which
+   starved Subject down to its content width and dragged every column in between against it. */
 .rbac-permission-tree table th:first-child,
 .rbac-permission-tree table td:first-child { width: 100%; white-space: nowrap; }
 
@@ -40,22 +43,39 @@
    for a subject reached from inside another. */
 .rbac-permission-tree table td:first-child { padding-left: 1.25rem; }
 
-.rbac-permission-tree table th:not(:first-child),
-.rbac-permission-tree table td:not(:first-child) { min-width: 5rem; white-space: nowrap; }
+/*
+ * Excludes the "Other operations" column rather than overriding it below: `:not(:first-child)`
+ * is a pseudo-*class*, so it already outweighs a plain two-class selector on specificity --
+ * `.rbac-extra { white-space: normal }` here would lose to this rule regardless of source order,
+ * and silently render as one unbroken line the width of its longest row.
+ */
+.rbac-permission-tree table th:not(:first-child):not(.rbac-extra-head),
+.rbac-permission-tree table td:not(:first-child):not(.rbac-extra) { min-width: 5rem; white-space: nowrap; }
 
 /*
  * The operations that belong to one subject rather than to a shared column. They wrap -- a row
- * with five of them is why they are not columns -- so the nowrap above has to be undone here,
- * and the subject column stops absorbing all the width once this one has content to hold.
+ * with five of them is why they are not columns. Only a floor on the width, not a share of the
+ * table's own: that stays Subject's, above.
  */
-.rbac-permission-tree table:has(.rbac-extra) th:first-child,
-.rbac-permission-tree table:has(.rbac-extra) td:first-child { width: auto; }
 .rbac-permission-tree .rbac-extra-head,
-.rbac-permission-tree .rbac-extra { white-space: normal; width: 100%; min-width: 14rem; }
+.rbac-permission-tree .rbac-extra { white-space: normal; min-width: 14rem; }
 .rbac-permission-tree .rbac-extra .form-check { margin-right: .9rem; }
 
 /* Same weight as a column header, so the two kinds of control read as one table. */
 .rbac-permission-tree .rbac-extra .form-check-label { color: var(--tblr-secondary); }
+
+/*
+ * Tabler's base `.btn` carries a faint box-shadow (`--tblr-shadow-input`) even once `.border-0`
+ * strips the border -- border and shadow are different properties, so the "all" toggle kept
+ * reading as a pale, barely-visible box instead of the plain link it is. An underline is what
+ * actually signals "click me" here, so the shadow comes off and the underline goes on; color
+ * stays whatever `.text-secondary` already gave it.
+ */
+.rbac-permission-tree .rbac-all-toggle {
+    box-shadow: none;
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+}
 
 /* Reached from inside the row above: indented, with a rule tying it to its parent. */
 .rbac-permission-tree .rbac-nested {

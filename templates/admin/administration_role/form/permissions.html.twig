@@ -54,7 +54,7 @@
                                 {% for column in group.columns %}
                                     <th class="text-center">
                                         {{ ('odiseo_rbac.ui.operation.' ~ column)|trans }}
-                                        <button type="button" class="btn btn-sm p-0 border-0 d-block mx-auto text-secondary"
+                                        <button type="button" class="btn btn-sm p-0 border-0 d-block mx-auto text-secondary rbac-all-toggle"
                                                 data-operation="{{ column }}"
                                                 data-action="click->rbac-permissions#column">{{ 'odiseo_rbac.ui.all'|trans }}</button>
                                     </th>
@@ -63,9 +63,9 @@
                                 {% if group.hasExtraOperations %}
                                     {# "Other" than the shared columns -- unless there are none, as in a section whose
                                        subjects are capabilities rather than resources. #}
-                                    <th class="rbac-extra-head">
+                                    <th class="rbac-extra-head text-center">
                                         {{ (group.columns is empty ? 'odiseo_rbac.ui.operations' : 'odiseo_rbac.ui.other_operations')|trans }}
-                                        <button type="button" class="btn btn-sm p-0 border-0 ms-2 text-secondary"
+                                        <button type="button" class="btn btn-sm p-0 border-0 d-block mx-auto text-secondary rbac-all-toggle"
                                                 data-action="click->rbac-permissions#extras">{{ 'odiseo_rbac.ui.all'|trans }}</button>
                                     </th>
                                 {% endif %}
