@@ -16,7 +16,7 @@ services:
     odiseo_rbac.menu.unfiltered_provider:
         class: Odiseo\SyliusRbacPlugin\Menu\UnfilteredMenuProvider
         arguments:
-            - '@sylius_admin.menu_builder.main'
+            - '@?sylius_admin.menu_builder.main'
             - '@odiseo_rbac.menu.permission_listener'
 
     Odiseo\SyliusRbacPlugin\Menu\UnfilteredMenuProviderInterface: '@odiseo_rbac.menu.unfiltered_provider'

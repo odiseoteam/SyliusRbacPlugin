@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-09-07
+
+### Fixed
+
+- `cache:clear` no longer fails on a bare Symfony skeleton, right after `composer require`,
+  before `sylius/sylius-admin-bundle` is registered.
+
 ## [3.0.0] - 2026-09-07
 
 A full rewrite of the permission engine. See [UPGRADE-3.0.md](UPGRADE-3.0.md) for the upgrade
@@ -84,7 +91,8 @@ Sylius 2.0 support.
 Releases before 3.0 are listed on the
 [releases page](https://github.com/odiseoteam/SyliusRbacPlugin/releases).
 
-[Unreleased]: https://github.com/odiseoteam/SyliusRbacPlugin/compare/v3.0.0...master
+[Unreleased]: https://github.com/odiseoteam/SyliusRbacPlugin/compare/v3.0.1...master
+[3.0.1]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v3.0.1
 [3.0.0]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v3.0.0
 [2.0.1]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v2.0.1
 [2.0.0]: https://github.com/odiseoteam/SyliusRbacPlugin/releases/tag/v2.0.0
