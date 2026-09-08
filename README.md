@@ -21,14 +21,15 @@ This plugin adds role-based access control to the Sylius admin: you define your 
 
 ## What you get
 
-- **One permission per operation, not per section.** `sylius.product.update` and `sylius.product.delete` are different permissions. Wildcards keep it manageable: `sylius.product.*`, `*.*.index`, `*.*.*`.
-- **Every admin route covered.** Permissions are discovered from Sylius' own resource metadata, so a route added by the next Sylius release, or by a plugin you install, shows up on its own.
-- **Admin API coverage.** This plugin covers all the APIs operations.
-- **Deny by default.** A route nobody protected is denied, not allowed. If you want to leave one open on purpose, you can define it.
-- **Menu, grids and buttons are filtered too.** If a role can't use something, it's not just blocked, it's not shown.
-- **An administrator can hold several roles**, and they're additive. There's also a guard that stops you from saving a change that would lock you out of the roles screen.
-- **Console tooling**: grant access from the CLI, list what exists, find orphaned permissions, migrate v2 data.
-- **18 locales**.
+- **One permission per operation**: `sylius.product.update` and `sylius.product.delete` are separate permissions. Wildcards keep it manageable: `sylius.product.*`, `*.*.index`, `*.*.*`.
+- **Every admin route covered**: Permissions are discovered from Sylius' own resource metadata, so routes added by Sylius or by other plugins are covered automatically.
+- **Admin API coverage**: This plugin covers all the APIs operations.
+- **Deny by default**: An unprotected route is denied, not allowed. Exceptions are explicit, in config.
+- **UI filtered, not just routes**: Menu entries, grid buttons and dashboard widgets check the same permission, so what a role can't use isn't rendered.
+- **Workflow transitions have their own permission**: Cancelling an order asks for `sylius.order.cancel`, not `sylius.order.update`.
+- **Multiple roles per administrator**: Roles are additive, with a lockout guard on the roles screen.
+- **Console tooling**: Grant access from the CLI, list permissions, find orphaned ones, migrate v2 data.
+- **18 locales**: Including English, Spanish, French, German, Polish, Portuguese, Simplified Chinese and Arabic.
 
 ## Screenshots
 
