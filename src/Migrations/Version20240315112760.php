@@ -42,9 +42,12 @@ final class Version20240315112760 extends AbstractPostgreSQLMigration
 
     public function up(Schema $schema): void
     {
+        // A sequence rather than SERIAL, as Sylius does: Doctrine's AUTO strategy expects one on
+        // PostgreSQL, and the column default SERIAL leaves shows up in `doctrine:schema:validate`.
+        $this->addSql('CREATE SEQUENCE odiseo_rbac_administration_role_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql(
             'CREATE TABLE odiseo_rbac_administration_role (' .
-            'id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, permissions JSON NOT NULL, ' .
+            'id INT NOT NULL, name VARCHAR(255) NOT NULL, permissions JSON NOT NULL, ' .
             'created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, ' .
             'updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))',
         );
@@ -64,5 +67,6 @@ final class Version20240315112760 extends AbstractPostgreSQLMigration
         $this->addSql('DROP INDEX IDX_88D5CC4D913437BF');
         $this->addSql('ALTER TABLE sylius_admin_user DROP COLUMN administration_role_id');
         $this->addSql('DROP TABLE odiseo_rbac_administration_role');
+        $this->addSql('DROP SEQUENCE odiseo_rbac_administration_role_id_seq');
     }
 }

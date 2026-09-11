@@ -47,9 +47,10 @@ final class Version20260828120001 extends AbstractPostgreSQLMigration
         $this->addSql('DROP INDEX UNIQ_BEFDB7615E237E06');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_BEFDB76177153098 ON odiseo_rbac_administration_role (code)');
 
+        $this->addSql('CREATE SEQUENCE odiseo_rbac_administration_role_translation_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql(
             'CREATE TABLE odiseo_rbac_administration_role_translation (' .
-            'id SERIAL NOT NULL, translatable_id INT NOT NULL, name VARCHAR(255) NOT NULL, ' .
+            'id INT NOT NULL, translatable_id INT NOT NULL, name VARCHAR(255) NOT NULL, ' .
             'locale VARCHAR(255) NOT NULL, PRIMARY KEY(id))',
         );
         $this->addSql(
@@ -68,8 +69,9 @@ final class Version20260828120001 extends AbstractPostgreSQLMigration
         );
 
         $this->addSql(
-            'INSERT INTO odiseo_rbac_administration_role_translation (translatable_id, name, locale) ' .
-            "SELECT r.id, r.name, COALESCE((SELECT l.code FROM sylius_locale l ORDER BY l.id LIMIT 1), 'en_US') " .
+            'INSERT INTO odiseo_rbac_administration_role_translation (id, translatable_id, name, locale) ' .
+            "SELECT nextval('odiseo_rbac_administration_role_translation_id_seq'), r.id, r.name, " .
+            "COALESCE((SELECT l.code FROM sylius_locale l ORDER BY l.id LIMIT 1), 'en_US') " .
             'FROM odiseo_rbac_administration_role r',
         );
         $this->addSql('ALTER TABLE odiseo_rbac_administration_role DROP COLUMN name');
@@ -132,6 +134,7 @@ final class Version20260828120001 extends AbstractPostgreSQLMigration
         $this->addSql('ALTER TABLE odiseo_rbac_administration_role ALTER COLUMN name SET NOT NULL');
         $this->addSql('ALTER TABLE odiseo_rbac_administration_role ALTER COLUMN name DROP DEFAULT');
         $this->addSql('DROP TABLE odiseo_rbac_administration_role_translation');
+        $this->addSql('DROP SEQUENCE odiseo_rbac_administration_role_translation_id_seq');
 
         $this->addSql('DROP INDEX UNIQ_BEFDB76177153098');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_BEFDB7615E237E06 ON odiseo_rbac_administration_role (name)');
