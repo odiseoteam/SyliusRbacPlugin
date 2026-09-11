@@ -74,6 +74,17 @@ administrator ↔ role join table. It also copies the old permission blob into
 
 At the end it tells you how many roles are still holding pre-3.0 permissions.
 
+There are two migrations for this step, one for MySQL/MariaDB and one for PostgreSQL, and each
+skips on the platform the other one handles — that's normal, and the one that runs is the one
+you need. On PostgreSQL you'll see the pre-v3 table's own migration go past as well: it never
+shipped for this platform, so it's there for installations that built the table with
+`doctrine:schema:update`, and it skips when the table is already present. On any other engine both skip and neither does anything, while Doctrine still records
+them as executed: don't run `doctrine:schema:update` to catch up. It reads the rename of
+`permissions` to `legacy_permissions` as a drop and an add, which is every role's grants gone.
+Write the migration for your engine from
+[`src/Migrations/`](src/Migrations/) first, keeping the same order and the same handling of the
+old blob.
+
 ### 5. Translate the stored permissions
 
 ```bash
@@ -83,10 +94,18 @@ bin/console odiseo:rbac:migrate-permissions             # apply it
 
 This uses your section map, `sylius_sections` and `custom_sections`, including any sections your
 application declared, to figure out which routes each stored section reached, and which
-permissions those routes need now.
+permissions those routes need now. A section over your own routes is translated through your
+`route_permissions` declarations, the same ones the runtime gates those routes on — so declare
+them before running this, or the section translates to nothing.
+
+The sections the plugin ships are defaults you add to, not defaults you replace: declaring a
+`custom_sections` entry of your own keeps `rbac`, and adding a prefix to a `sylius_sections`
+entry keeps the prefixes already there.
 
 If a role can't be fully translated, it's reported and the command exits non-zero. Read those
-before continuing, they're usually sections pointing at routes that don't exist anymore.
+before continuing. There are two kinds: a section that isn't configured at all, usually left
+over from a plugin you no longer have, and a section that is configured but covers no
+permission — routes with nothing declared for them, which the runtime denies as well.
 
 `legacy_permissions` stays in place, so you can re-run the command and check the old values
 whenever you need to.
@@ -136,7 +155,8 @@ anything.
 
 `sylius_sections` and `custom_sections` still validate, so an upgrading application boots fine
 with its old configuration in place, but **nothing at runtime reads them anymore**. Only the
-migration command does, and they'll be removed in 4.0.
+migration command does, and they'll be removed in 4.0. Yours merge with the ones the plugin
+ships rather than replacing them.
 
 Everything else under `odiseo_sylius_rbac` is new. See the
 [configuration reference](doc/configuration.md).

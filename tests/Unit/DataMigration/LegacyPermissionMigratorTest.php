@@ -64,6 +64,21 @@ final class LegacyPermissionMigratorTest extends TestCase
         self::assertStringContainsString('loyalty_management', $migrations[0]->problems[0]);
     }
 
+    /**
+     * A configured section whose routes translate to nothing used to pass silently, looking
+     * exactly like a successful migration.
+     */
+    public function testAConfiguredSectionThatCoversNoPermissionIsReported(): void
+    {
+        $migrations = $this->migrator([
+            new LegacyRole(1, 'dispatch', ['unified_orders' => true]),
+        ])->plan();
+
+        self::assertTrue($migrations[0]->grantsNothing());
+        self::assertCount(1, $migrations[0]->problems);
+        self::assertStringContainsString('covers no permission', $migrations[0]->problems[0]);
+    }
+
     public function testProblemsFoundWhileReadingTheRowAreCarriedThrough(): void
     {
         $migrations = $this->migrator([
@@ -118,6 +133,11 @@ final class LegacyPermissionMigratorTest extends TestCase
             ]));
         }
 
+        // Matched by its section's prefix, but enforces nothing and declares nothing.
+        $collection->add('app_component_unified_orders_admin_index', new Route('/admin/whatever', [
+            '_controller' => 'App\\Controller\\UnifiedOrdersAction',
+        ]));
+
         $router = $this->createMock(RouterInterface::class);
         $router->method('getRouteCollection')->willReturn($collection);
 
@@ -125,6 +145,7 @@ final class LegacyPermissionMigratorTest extends TestCase
             'catalog_management' => ['sylius_admin_product'],
             'sales_management' => ['sylius_admin_order'],
             'legacy_product_screen' => ['app_legacy_product_screen'],
+            'unified_orders' => ['app_component_unified_orders'],
         ]);
     }
 }

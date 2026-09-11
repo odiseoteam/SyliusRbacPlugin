@@ -52,7 +52,20 @@ final readonly class LegacyPermissionMigrator
                 continue;
             }
 
-            $patterns = [...$patterns, ...$this->translator->translate($section, $writeAllowed)];
+            $translated = $this->translator->translate($section, $writeAllowed);
+
+            if ([] === $translated) {
+                // Configured, but its prefixes match no route or the routes carry no permission.
+                // Silence here would read exactly like a successful translation.
+                $problems[] = sprintf(
+                    'section "%s" is configured but covers no permission, so nothing was granted for it',
+                    $section,
+                );
+
+                continue;
+            }
+
+            $patterns = [...$patterns, ...$translated];
         }
 
         return new RoleMigration($role, $this->collapse($patterns), $problems);

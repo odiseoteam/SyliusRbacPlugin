@@ -6,6 +6,7 @@ namespace Odiseo\SyliusRbacPlugin\DataMigration;
 
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\RoutePermissionResolver;
 use Odiseo\SyliusRbacPlugin\Permission\Discovery\UnmappableRouteException;
+use Odiseo\SyliusRbacPlugin\Permission\Exception\InvalidPermissionSyntaxException;
 use Odiseo\SyliusRbacPlugin\Permission\PermissionIdentifier;
 use Sylius\Resource\ResourceActions;
 use Symfony\Component\Routing\RouterInterface;
@@ -18,6 +19,9 @@ use Symfony\Component\Routing\RouterInterface;
  * configuration, so the section-to-permission table is derived from what the installation is
  * actually running rather than hard-coded here. That covers `custom_sections` as well.
  *
+ * A route reaches its identifier as it does at runtime: a `route_permissions` declaration first,
+ * the resource controller behind it otherwise.
+ *
  * The two rules are deliberately not symmetric:
  *
  * - **write** becomes `{package}.{subject}.*` for every subject the section reached. The old
@@ -25,7 +29,8 @@ use Symfony\Component\Routing\RouterInterface;
  *   administrator has today.
  * - **read** becomes only `index` and `show`, never `*`. A legacy read grant opened the edit
  *   form (a GET) but could not submit it (a PUT). Both halves are the same `update` permission
- *   now, so a wildcard would turn every read-only administrator into a writer.
+ *   now, so a wildcard would turn every read-only administrator into a writer. A section with
+ *   no `index` or `show` translates a read grant to nothing, which the migrator reports.
  */
 final readonly class LegacySectionPermissionTranslator
 {
@@ -55,11 +60,14 @@ final readonly class LegacySectionPermissionTranslator
      * @param array<string, list<string>> $sectionRoutePrefixes section name => route name
      *        prefixes, as configured under `odiseo_sylius_rbac.sylius_sections` and
      *        `custom_sections` before v3
+     * @param array<string, string> $declaredIdentifiers route name => permission identifier, as
+     *        configured under `odiseo_sylius_rbac.route_permissions`
      */
     public function __construct(
         private RouterInterface $router,
         private RoutePermissionResolver $resolver,
         array $sectionRoutePrefixes,
+        private array $declaredIdentifiers = [],
     ) {
         $this->sectionRoutePrefixes = self::inPrecedenceOrder($sectionRoutePrefixes);
     }
@@ -106,6 +114,16 @@ final readonly class LegacySectionPermissionTranslator
                 continue;
             }
 
+            // A declaration wins over the controller, as at runtime. It is also the only way a
+            // section over invokable controllers translates to anything.
+            $declared = $this->declaredIdentifierOf((string) $name);
+
+            if (null !== $declared) {
+                $identifiers[] = $declared;
+
+                continue;
+            }
+
             if (!$this->resolver->enforcesPermission($route)) {
                 continue;
             }
@@ -124,6 +142,25 @@ final readonly class LegacySectionPermissionTranslator
         }
 
         return $identifiers;
+    }
+
+    /**
+     * An unparsable declaration is `odiseo:rbac:debug`'s problem, not this command's; skipping
+     * it leaves the section granting nothing, which the migrator reports anyway.
+     */
+    private function declaredIdentifierOf(string $routeName): ?PermissionIdentifier
+    {
+        $identifier = $this->declaredIdentifiers[$routeName] ?? null;
+
+        if (null === $identifier) {
+            return null;
+        }
+
+        try {
+            return PermissionIdentifier::fromString($identifier);
+        } catch (InvalidPermissionSyntaxException) {
+            return null;
+        }
     }
 
     private function sectionOf(string $routeName): ?string

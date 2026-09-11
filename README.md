@@ -96,10 +96,14 @@ A role stores the pattern as written, not the list of operations it matches toda
 
 ## Compatibility
 
-| Plugin | Sylius          | PHP             | Symfony   |
-| ------ | --------------- | --------------- | --------- |
-| `^3.0` | 2.0 · 2.1 · 2.2 | 8.2 · 8.3 · 8.4 | 6.4 · 7.x |
-| `^2.0` | 1.12 · 2.0      | 8.0+            | 5.4 · 6.x |
+| Plugin | Sylius          | PHP             | Symfony   | Database                       |
+| ------ | --------------- | --------------- | --------- | ------------------------------ |
+| `^3.0` | 2.0 · 2.1 · 2.2 | 8.2 · 8.3 · 8.4 | 6.4 · 7.x | MySQL · MariaDB · PostgreSQL   |
+| `^2.0` | 1.12 · 2.0      | 8.0+            | 5.4 · 6.x | MySQL · MariaDB                |
+
+The schema migrations ship for MySQL/MariaDB and PostgreSQL. On any other engine they skip, and
+Doctrine records them as executed even so, so write your own before upgrading a 2.x database,
+see [Upgrading to 3.0](UPGRADE-3.0.md).
 
 Only the latest minor is supported. Security fixes land on `master`.
 

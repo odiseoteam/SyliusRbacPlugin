@@ -5,6 +5,7 @@ services:
             - '@router'
             - '@odiseo_rbac.permission.route_resolver'
             - '%odiseo_rbac.legacy_section_routes%'
+            - '%odiseo_rbac.route_identifiers%'
 
     odiseo_rbac.data_migration.role_factory:
         class: Odiseo\SyliusRbacPlugin\DataMigration\LegacyRoleFactory

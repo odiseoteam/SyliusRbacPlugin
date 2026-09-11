@@ -6,6 +6,30 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Added
+
+- PostgreSQL schema migrations, alongside the MySQL ones: one for the 3.0 model and one for the
+  pre-v3 table it transforms, which had never shipped for this platform. Each skips on the
+  platform the other handles. `doctrine:schema:update` was never an alternative for the 3.0 one:
+  it reads the rename of `permissions` to `legacy_permissions` as a drop and an add, losing every
+  role's grants.
+- CI runs the whole suite on PostgreSQL as well as MySQL. The test application is built by
+  running the migrations, so the job fails if they stop applying.
+- `odiseo:rbac:migrate-permissions` reports a section that is configured but covers no
+  permission. It used to be indistinguishable from a section that translated cleanly.
+
+### Fixed
+
+- `sylius_sections` and `custom_sections` no longer lose the sections the plugin ships when an
+  application declares its own. They came from a schema default, which is dropped as soon as the
+  node is set anywhere: declaring one custom section silently dropped `rbac`, and redeclaring one
+  Sylius section dropped the other four, taking those roles' migration with them. They now come
+  from `config/app/legacy_sections.yaml` and merge.
+- `odiseo:rbac:migrate-permissions` translates sections over routes declared in
+  `route_permissions`. A section covering invokable controllers — the case `Extending` documents
+  — used to translate to nothing at all, without a word, leaving the panel denied for everyone.
+- `symfony/yaml` accepts `^7.0` instead of `^7.4`, so the plugin installs on Symfony 7.0–7.3.
+
 ## [3.0.1] - 2026-09-07
 
 ### Fixed

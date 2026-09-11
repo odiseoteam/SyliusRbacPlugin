@@ -22,7 +22,18 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
 {
     use PrependDoctrineMigrationsTrait;
 
-    private const ROUTE_PERMISSIONS_FILE = __DIR__ . '/../../config/app/route_permissions.yaml';
+    /**
+     * Config the plugin loads itself instead of leaving it to the application's imports:
+     * `route_permissions.yaml` because these declarations cannot be optional -- a missing grid
+     * gets noticed, an unguarded impersonation endpoint does not; `legacy_sections.yaml` because
+     * a schema default is dropped as soon as the application sets the node.
+     *
+     * @var list<string>
+     */
+    private const PREPENDED_FILES = [
+        __DIR__ . '/../../config/app/route_permissions.yaml',
+        __DIR__ . '/../../config/app/legacy_sections.yaml',
+    ];
 
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -147,31 +158,23 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
     {
         $this->prependDoctrineMigrations($container);
 
-        /**
-         * Loaded here rather than left to the application's imports on purpose. Everything else
-         * the plugin ships degrades gracefully if `config/config.yaml` is not imported — a grid
-         * goes missing and someone notices. These declarations are the only thing standing
-         * between an administrator and the impersonation endpoint, so they cannot be optional.
-         *
-         * Prepending also means the application still overrides any single entry by key.
-         */
-        /**
-         * Tracked explicitly: the file is read here instead of being loaded through a loader,
-         * so nothing else tells the container to rebuild when a declaration changes. Without
-         * this, editing a permission has no effect until the cache is cleared by hand.
-         */
-        $container->addResource(new FileResource(self::ROUTE_PERMISSIONS_FILE));
+        foreach (self::PREPENDED_FILES as $file) {
+            // Read directly rather than through a loader, so nothing else tells the container
+            // to rebuild when the file changes.
+            $container->addResource(new FileResource($file));
 
-        $defaults = Yaml::parseFile(self::ROUTE_PERMISSIONS_FILE);
+            $defaults = Yaml::parseFile($file);
 
-        if (!is_array($defaults) || !is_array($defaults['odiseo_sylius_rbac'] ?? null)) {
-            throw new \LogicException(sprintf(
-                'Expected "%s" to declare an "odiseo_sylius_rbac" section.',
-                self::ROUTE_PERMISSIONS_FILE,
-            ));
+            if (!is_array($defaults) || !is_array($defaults['odiseo_sylius_rbac'] ?? null)) {
+                throw new \LogicException(sprintf(
+                    'Expected "%s" to declare an "odiseo_sylius_rbac" section.',
+                    $file,
+                ));
+            }
+
+            // Prepended, so the application still overrides any entry by key.
+            $container->prependExtensionConfig('odiseo_sylius_rbac', $defaults['odiseo_sylius_rbac']);
         }
-
-        $container->prependExtensionConfig('odiseo_sylius_rbac', $defaults['odiseo_sylius_rbac']);
     }
 
     protected function getMigrationsNamespace(): string

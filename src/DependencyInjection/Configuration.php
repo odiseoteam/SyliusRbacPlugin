@@ -12,71 +12,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     /**
-     * The section map the plugin shipped before v3, reproduced verbatim from the old
-     * `src/Resources/config/config.yaml`.
-     *
-     * It is a default rather than a constant of the migration because an installation was free
-     * to override it, and the override is what its stored roles actually mean.
-     *
-     * @var array<string, list<string>>
-     */
-    private const LEGACY_SYLIUS_SECTIONS = [
-        'catalog_management' => [
-            'sylius_admin_inventory',
-            'sylius_admin_product',
-            'sylius_admin_product_association_type',
-            'sylius_admin_product_attribute',
-            'sylius_admin_product_option',
-            'sylius_admin_product_variant',
-            'sylius_admin_taxon',
-        ],
-        'configuration' => [
-            'sylius_admin_admin_user',
-            'sylius_admin_channel',
-            'sylius_admin_country',
-            'sylius_admin_currency',
-            'sylius_admin_exchange_rate',
-            'sylius_admin_locale',
-            'sylius_admin_payment_method',
-            'sylius_admin_shipping_category',
-            'sylius_admin_shipping_method',
-            'sylius_admin_tax_category',
-            'sylius_admin_tax_rate',
-            'sylius_admin_zone',
-        ],
-        'customers_management' => [
-            'sylius_admin_customer',
-            'sylius_admin_customer_group',
-            'sylius_admin_shop_user',
-        ],
-        'marketing_management' => [
-            'sylius_admin_product_review',
-            'sylius_admin_promotion',
-            'sylius_admin_catalog_promotion',
-        ],
-        'sales_management' => [
-            'sylius_admin_order',
-            'sylius_admin_payment',
-            'sylius_admin_shipment',
-        ],
-    ];
-
-    /**
-     * The plugin's own routes were a custom section called `rbac`. Both the old and the new
-     * route names are listed: the old one is what pre-v3 installations configured, the new one
-     * is what the router answers to today, and a role holding `rbac` has to end up able to
-     * manage roles either way.
-     *
-     * @var array<string, list<string>>
-     */
-    private const LEGACY_CUSTOM_SECTIONS = [
-        'rbac' => [
-            'odiseo_sylius_rbac_plugin',
-            'odiseo_rbac_admin_administration_role',
-        ],
-    ];
-
-    /**
      * Hookables under an "actions" hook that deliberately carry no permission: form controls
      * (`update`, `cancel`...), navigation (`list`, `show`, `view_in_store`), and the catalog
      * promotion's discount rows, which aren't action buttons despite the hook name. Listed so a
@@ -167,16 +102,14 @@ final class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('sylius_sections')
-                    ->info('Pre-v3 map of section name to admin route name prefixes. Read only by odiseo:rbac:migrate-permissions, to know what each stored section used to reach. Removed in 4.0.')
+                    ->info('Pre-v3 map of section name to admin route name prefixes. Read only by odiseo:rbac:migrate-permissions. Defaults come from config/app/legacy_sections.yaml and merge with what the app declares. Removed in 4.0.')
                     ->useAttributeAsKey('section')
                     ->arrayPrototype()->scalarPrototype()->end()->end()
-                    ->defaultValue(self::LEGACY_SYLIUS_SECTIONS)
                 ->end()
                 ->arrayNode('custom_sections')
-                    ->info('Pre-v3 sections declared by the application or by third-party plugins, in the same shape as sylius_sections. Still accepted so an upgrading application boots with its old configuration in place, and so roles holding a custom section migrate to the routes it actually covered. Removed in 4.0.')
+                    ->info('Pre-v3 sections declared by the application or by third-party plugins, in the same shape as sylius_sections. Still accepted so an upgrading application boots with its old configuration in place, and so roles holding a custom section migrate to the routes it covered. Defaults come from config/app/legacy_sections.yaml and merge by key. Removed in 4.0.')
                     ->useAttributeAsKey('section')
                     ->arrayPrototype()->scalarPrototype()->end()->end()
-                    ->defaultValue(self::LEGACY_CUSTOM_SECTIONS)
                 ->end()
                 ->arrayNode('subject_parents')
                     ->info('Subjects that belong under another subject in the permission tree, for the cases the identifier cannot express or gets wrong. A subject whose identifier correctly extends its parent -- sylius.promotion_coupon under sylius.promotion -- is nested without being listed here. Defaults come from config/app/subject_parents.yaml, a real config source merged with whatever an app adds, not a schema default an app override would replace.')

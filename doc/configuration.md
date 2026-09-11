@@ -286,6 +286,17 @@ in place, and so a role holding a custom section can be translated into the rout
 actually covered. **Nothing at runtime reads them.** Only
 [`odiseo:rbac:migrate-permissions`](console.md#migrating-from-2x) does.
 
+The plugin ships the pre-v3 map — the five Sylius sections and its own `rbac` — from
+`config/app/legacy_sections.yaml`, which it loads itself. Yours merge with it: a section of your
+own is added, and prefixes you list under a section that's already there join the ones already
+in it. Nothing you declare takes away a section you didn't mention, which is what would leave a
+role holding it with nothing after the migration.
+
+A custom section over routes the resource controller doesn't handle — invokable controllers,
+custom actions — is translated through your [`route_permissions`](#route_permissions)
+declarations. Without them the section covers no permission the migration can grant, and the
+command reports it.
+
 They'll be removed in 4.0. See [Upgrading to 3.0](../UPGRADE-3.0.md).
 
 ---
