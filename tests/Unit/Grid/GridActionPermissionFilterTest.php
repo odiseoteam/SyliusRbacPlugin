@@ -49,6 +49,17 @@ final class GridActionPermissionFilterTest extends TestCase
         self::assertTrue($allowed->getActionGroup('item')->getAction('impersonate')->isEnabled());
     }
 
+    /**
+     * A toggle switches between two routes and only the row knows which applies, so the button
+     * stays while either is allowed.
+     */
+    public function testAToggleBetweenTwoRoutesStaysWhileEitherIsAllowed(): void
+    {
+        self::assertFalse($this->filter([])->getActionGroup('item')->getAction('toggle')->isEnabled());
+        self::assertTrue($this->filter(['sylius.product.enable'])->getActionGroup('item')->getAction('toggle')->isEnabled());
+        self::assertTrue($this->filter(['sylius.product.disable'])->getActionGroup('item')->getAction('toggle')->isEnabled());
+    }
+
     /** A dropdown keeps the destinations that are allowed and drops the rest. */
     public function testALinksActionKeepsOnlyThePermittedLinks(): void
     {
@@ -96,6 +107,12 @@ final class GridActionPermissionFilterTest extends TestCase
         $impersonate = Action::fromNameAndType('impersonate', 'link');
         $impersonate->setOptions(['link' => ['route' => 'sylius_admin_impersonate_user']]);
         $item->addAction($impersonate);
+        $toggle = Action::fromNameAndType('toggle', 'toggle_enable_disable');
+        $toggle->setOptions(['link' => ['route' => [
+            'enable' => 'sylius_admin_product_enable',
+            'disable' => 'sylius_admin_product_disable',
+        ]]]);
+        $item->addAction($toggle);
         $item->addAction(Action::fromNameAndType('mystery', 'something_custom'));
         $grid->addActionGroup($item);
 
@@ -113,6 +130,8 @@ final class GridActionPermissionFilterTest extends TestCase
             'sylius_admin_impersonate_user' => 'sylius.impersonation.execute',
             'sylius_admin_product_create_simple' => 'sylius.product.create',
             'sylius_admin_product_create_configurable' => 'sylius.product_variant.create',
+            'sylius_admin_product_enable' => 'sylius.product.enable',
+            'sylius_admin_product_disable' => 'sylius.product.disable',
             default => null,
         });
 
