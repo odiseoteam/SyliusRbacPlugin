@@ -1,17 +1,21 @@
-# Takes over the `roles` section of the administrator form.
-#
-# The key and the slot are Sylius' own: declaring `roles` at the same priority in the same hook
-# replaces the section Sylius registers there. Renaming the key brings that one back alongside
-# this one, so keep both as they are.
+# Replaces the Sylius Plus placeholder in the `roles` section of the administrator form with our
+# own card, under its own key rather than reusing `roles`: an application may have already
+# disabled that placeholder itself, and `enabled: false` on someone else's key wins over us
+# redeclaring it. The nested `sections.roles` hook below is unaffected -- its prefix comes from
+# the parent hookable, not from this key's name.
 sylius_twig_hooks:
     hooks:
         'sylius_admin.admin_user.create.content.form.sections#left':
             roles:
+                enabled: false
+            administration_roles:
                 template: '@OdiseoSyliusRbacPlugin/admin/user/roles.html.twig'
                 priority: -100
 
         'sylius_admin.admin_user.update.content.form.sections#left':
             roles:
+                enabled: false
+            administration_roles:
                 template: '@OdiseoSyliusRbacPlugin/admin/user/roles.html.twig'
                 priority: -100
 
