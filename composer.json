@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.2",
         "sylius/sylius": "^2.0",
-        "symfony/yaml": "^6.4 || ^7.4"
+        "symfony/yaml": "^6.4 || ^7.0"
     },
     "require-dev": {
         "behat/behat": "^3.16",

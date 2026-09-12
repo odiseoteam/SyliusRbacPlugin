@@ -1,0 +1,48 @@
+# The pre-v3 section map, reproduced verbatim from the old `src/Resources/config/config.yaml`.
+# Read only by `odiseo:rbac:migrate-permissions`; both keys go away in 4.0.
+#
+# Prepended as a config source rather than set as a schema default: a default is dropped as soon
+# as the application sets the node, which silently lost the migration of every section it did
+# not redeclare. Sections merge by name and prefixes are added, never replaced.
+odiseo_sylius_rbac:
+    sylius_sections:
+        catalog_management:
+            - sylius_admin_inventory
+            - sylius_admin_product
+            - sylius_admin_product_association_type
+            - sylius_admin_product_attribute
+            - sylius_admin_product_option
+            - sylius_admin_product_variant
+            - sylius_admin_taxon
+        configuration:
+            - sylius_admin_admin_user
+            - sylius_admin_channel
+            - sylius_admin_country
+            - sylius_admin_currency
+            - sylius_admin_exchange_rate
+            - sylius_admin_locale
+            - sylius_admin_payment_method
+            - sylius_admin_shipping_category
+            - sylius_admin_shipping_method
+            - sylius_admin_tax_category
+            - sylius_admin_tax_rate
+            - sylius_admin_zone
+        customers_management:
+            - sylius_admin_customer
+            - sylius_admin_customer_group
+            - sylius_admin_shop_user
+        marketing_management:
+            - sylius_admin_product_review
+            - sylius_admin_promotion
+            - sylius_admin_catalog_promotion
+        sales_management:
+            - sylius_admin_order
+            - sylius_admin_payment
+            - sylius_admin_shipment
+
+    # The plugin's own routes were a custom section called `rbac`. Both the old and the current
+    # route names are listed so a role holding it can still manage roles.
+    custom_sections:
+        rbac:
+            - odiseo_sylius_rbac_plugin
+            - odiseo_rbac_admin_administration_role

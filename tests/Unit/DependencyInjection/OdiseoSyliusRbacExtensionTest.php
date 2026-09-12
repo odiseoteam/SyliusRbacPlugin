@@ -37,7 +37,7 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
 
         self::assertNotSame([], $configs, 'the extension prepended no configuration at all');
 
-        $routePermissions = $configs[0]['route_permissions'] ?? [];
+        $routePermissions = self::prependedKey($container, 'route_permissions');
 
         self::assertArrayHasKey('sylius_admin_impersonate_user', $routePermissions);
         self::assertSame('sylius.impersonation.execute', $routePermissions['sylius_admin_impersonate_user']['permission']);
@@ -50,7 +50,7 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
 
         $extension->prepend($container);
 
-        $excludedRoutes = $container->getExtensionConfig('odiseo_sylius_rbac')[0]['excluded_routes'] ?? [];
+        $excludedRoutes = self::prependedKey($container, 'excluded_routes');
 
         self::assertContains('sylius_admin_login', $excludedRoutes);
         self::assertContains('sylius_admin_logout', $excludedRoutes);
@@ -145,6 +145,71 @@ final class OdiseoSyliusRbacExtensionTest extends TestCase
         ]]);
 
         self::assertSame([], $container->getParameter('odiseo_rbac.declared_permissions'));
+    }
+
+    /**
+     * A schema default is dropped the moment the node is set anywhere: declaring one section used
+     * to lose `rbac`, and redeclaring a Sylius section lost the other four.
+     */
+    public function testAnApplicationDeclaringItsOwnLegacySectionKeepsTheOnesThePluginShips(): void
+    {
+        $sections = $this->loadWithPrepended([[
+            'custom_sections' => ['unified_orders' => ['app_component_unified_orders']],
+        ]])->getParameter('odiseo_rbac.legacy_section_routes');
+
+        self::assertArrayHasKey('unified_orders', $sections);
+        self::assertArrayHasKey('rbac', $sections);
+        self::assertArrayHasKey('catalog_management', $sections);
+        self::assertArrayHasKey('sales_management', $sections);
+    }
+
+    /**
+     * Prefixes are added to the section, not replaced: the roles being migrated were granted over
+     * both halves.
+     */
+    public function testPrefixesAnApplicationAddsToASyliusSectionJoinTheOnesAlreadyThere(): void
+    {
+        $sections = $this->loadWithPrepended([[
+            'sylius_sections' => ['sales_management' => ['app_admin_dispatch']],
+        ]])->getParameter('odiseo_rbac.legacy_section_routes');
+
+        self::assertContains('sylius_admin_order', $sections['sales_management']);
+        self::assertContains('app_admin_dispatch', $sections['sales_management']);
+    }
+
+    /**
+     * As an application goes through it: the prepended files first, its own config on top.
+     *
+     * @param list<array<string, mixed>> $configs
+     */
+    private function loadWithPrepended(array $configs): ContainerBuilder
+    {
+        $container = new ContainerBuilder();
+        $container->registerExtension($extension = new OdiseoSyliusRbacExtension());
+
+        $extension->prepend($container);
+        $extension->load(
+            [...$container->getExtensionConfig('odiseo_sylius_rbac'), ...$configs],
+            $container,
+        );
+
+        return $container;
+    }
+
+    /**
+     * One key across everything prepended; which index a file lands at is an implementation detail.
+     *
+     * @return array<mixed>
+     */
+    private static function prependedKey(ContainerBuilder $container, string $key): array
+    {
+        $values = [];
+
+        foreach ($container->getExtensionConfig('odiseo_sylius_rbac') as $config) {
+            $values = [...$values, ...($config[$key] ?? [])];
+        }
+
+        return $values;
     }
 
     /** @param list<array<string, mixed>> $configs */

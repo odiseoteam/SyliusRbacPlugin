@@ -88,6 +88,38 @@ final class LegacySectionPermissionTranslatorTest extends TestCase
         self::assertSame([], $translator->translate('loyalty', true));
     }
 
+    /**
+     * A section over invokable controllers is gated on its `route_permissions` declaration alone;
+     * reading only the resource controller used to translate it to nothing.
+     */
+    public function testADeclaredRouteIsGrantedByWhatItDeclares(): void
+    {
+        $translator = $this->translator(
+            ['unified_orders' => ['app_component_unified_orders']],
+            ['app_component_unified_orders_admin_index' => 'app.unified_order.index'],
+            ['app_component_unified_orders_admin_index' => 'App\\Controller\\UnifiedOrdersAction'],
+        );
+
+        self::assertSame(['app.unified_order.*'], $translator->translate('unified_orders', true));
+        self::assertSame(['app.unified_order.index'], $translator->translate('unified_orders', false));
+    }
+
+    /**
+     * Same rule as the runtime: a declaration wins over what the controller would have said.
+     */
+    public function testADeclarationWinsOverTheResourceController(): void
+    {
+        $translator = $this->translator(
+            null,
+            ['sylius_admin_product_index' => 'app.legacy_product.index'],
+        );
+
+        self::assertSame(
+            ['app.legacy_product.index', 'sylius.product.show'],
+            $translator->translate('catalog_management', false),
+        );
+    }
+
     public function testItKnowsWhichSectionsItCanTranslate(): void
     {
         self::assertTrue($this->translator()->knowsSection('catalog_management'));
@@ -96,9 +128,14 @@ final class LegacySectionPermissionTranslatorTest extends TestCase
 
     /**
      * @param array<string, list<string>>|null $sections
+     * @param array<string, string> $declared
+     * @param array<string, string> $extraRoutes route name => controller
      */
-    private function translator(?array $sections = null): LegacySectionPermissionTranslator
-    {
+    private function translator(
+        ?array $sections = null,
+        array $declared = [],
+        array $extraRoutes = [],
+    ): LegacySectionPermissionTranslator {
         $collection = new RouteCollection();
 
         foreach (self::ROUTES as $name => $controller) {
@@ -108,6 +145,10 @@ final class LegacySectionPermissionTranslatorTest extends TestCase
             ]));
         }
 
+        foreach ($extraRoutes as $name => $controller) {
+            $collection->add($name, new Route('/admin/whatever', ['_controller' => $controller]));
+        }
+
         $router = $this->createMock(RouterInterface::class);
         $router->method('getRouteCollection')->willReturn($collection);
 
@@ -115,6 +156,7 @@ final class LegacySectionPermissionTranslatorTest extends TestCase
             $router,
             new RoutePermissionResolver(),
             $sections ?? self::SECTIONS,
+            $declared,
         );
     }
 }

@@ -24,7 +24,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  *   grid's own model class, exactly as the resource controller resolves them;
  * - anything carrying a route — a `links` action, a custom button — is resolved through the
  *   route map. A `links` action keeps only the destinations that are allowed, and disappears
- *   when none of them is.
+ *   when none of them is. A `link` whose `route` is a map of routes (a toggle switching between
+ *   two) stays as long as one of them is allowed: which one applies is decided per row, which
+ *   only the template can see.
  */
 final readonly class GridActionPermissionFilter
 {
@@ -69,11 +71,41 @@ final readonly class GridActionPermissionFilter
             return;
         }
 
+        $routes = self::routesOf($action);
+
+        if ([] !== $routes) {
+            $action->setEnabled([] !== array_filter($routes, $this->routeAllowed(...)));
+
+            return;
+        }
+
         $permission = $this->permissionOf($action, $groupName, $resourceClass);
 
         if (null !== $permission && !$this->authorizationChecker->isGranted($permission)) {
             $action->setEnabled(false);
         }
+    }
+
+    /**
+     * @return list<string> the routes under `link.route`, one or several
+     */
+    private static function routesOf(Action $action): array
+    {
+        $link = $action->getOptions()['link'] ?? null;
+        $route = is_array($link) ? ($link['route'] ?? null) : null;
+
+        if (is_string($route)) {
+            return [$route];
+        }
+
+        return is_array($route) ? array_values(array_filter($route, is_string(...))) : [];
+    }
+
+    private function routeAllowed(string $route): bool
+    {
+        $permission = $this->routePermissions->permissionFor($route);
+
+        return null === $permission || $this->authorizationChecker->isGranted($permission);
     }
 
     /**
@@ -93,9 +125,7 @@ final readonly class GridActionPermissionFilter
                 return true;
             }
 
-            $permission = $this->routePermissions->permissionFor($link['route']);
-
-            return null === $permission || $this->authorizationChecker->isGranted($permission);
+            return $this->routeAllowed($link['route']);
         });
 
         $options['links'] = $allowed;
@@ -106,13 +136,6 @@ final readonly class GridActionPermissionFilter
 
     private function permissionOf(Action $action, string $groupName, ?string $resourceClass): ?string
     {
-        $link = $action->getOptions()['link'] ?? null;
-        $route = is_array($link) ? ($link['route'] ?? null) : null;
-
-        if (is_string($route)) {
-            return $this->routePermissions->permissionFor($route);
-        }
-
         $operation = self::ACTION_OPERATIONS[$action->getType()] ?? null;
 
         if (null === $operation || null === $resourceClass) {

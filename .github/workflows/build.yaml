@@ -52,6 +52,13 @@ jobs:
                       sylius: "~2.2.0"
                       database: "mysql:8.4"
                       node: "22.x"
+                    # The test application is built by running the migrations, so this job proves
+                    # the PostgreSQL ones still apply.
+                    - php: "8.3"
+                      symfony: "^7.4"
+                      sylius: "~2.2.0"
+                      database: "postgres:16"
+                      node: "22.x"
 
         env:
             APP_ENV: test
